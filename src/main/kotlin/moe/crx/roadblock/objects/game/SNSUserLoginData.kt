@@ -1,0 +1,18 @@
+package moe.crx.roadblock.objects.game
+
+import moe.crx.roadblock.io.sinks.InputSink
+import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.objects.base.RObject
+
+class SNSUserLoginData : RObject {
+
+    var username: String = ""
+
+    override fun read(sink: InputSink) {
+        username = sink.readString()
+    }
+
+    override fun write(sink: OutputSink) {
+        sink.writeString(username)
+    }
+}

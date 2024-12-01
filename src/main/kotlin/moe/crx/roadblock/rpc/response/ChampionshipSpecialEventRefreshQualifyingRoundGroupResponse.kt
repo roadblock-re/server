@@ -1,0 +1,23 @@
+package moe.crx.roadblock.rpc.response
+
+import moe.crx.roadblock.io.ListIO.readList
+import moe.crx.roadblock.io.ListIO.writeList
+import moe.crx.roadblock.io.sinks.InputSink
+import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.objects.game.ChampionshipGroupMemberData
+import moe.crx.roadblock.rpc.base.UpdatesQueueWithRootReactionsResponse
+
+class ChampionshipSpecialEventRefreshQualifyingRoundGroupResponse : UpdatesQueueWithRootReactionsResponse() {
+
+    var members: List<ChampionshipGroupMemberData> = listOf()
+
+    override fun read(sink: InputSink) {
+        super.read(sink)
+        members = sink.readList()
+    }
+
+    override fun write(sink: OutputSink) {
+        super.write(sink)
+        sink.writeList(members)
+    }
+}

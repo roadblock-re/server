@@ -1,0 +1,31 @@
+package moe.crx.roadblock.objects.stats
+
+import moe.crx.roadblock.io.sinks.InputSink
+import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.objects.base.RObject
+
+class TakedownStats : RObject {
+
+    // TODO verify members order
+    var isPolice: Byte = 0
+    var remainingLives: Byte = 0
+    var hasCompletedRace: Byte = 0
+    var eliminatedVictims: Int = 0
+    var remainingTime: Int = 0
+
+    override fun read(sink: InputSink) {
+        isPolice = sink.readByte()
+        remainingLives = sink.readByte()
+        hasCompletedRace = sink.readByte()
+        eliminatedVictims = sink.readInt()
+        remainingTime = sink.readInt()
+    }
+
+    override fun write(sink: OutputSink) {
+        sink.writeByte(isPolice)
+        sink.writeByte(remainingLives)
+        sink.writeByte(hasCompletedRace)
+        sink.writeInt(eliminatedVictims)
+        sink.writeInt(remainingTime)
+    }
+}

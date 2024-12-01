@@ -1,0 +1,24 @@
+package moe.crx.roadblock.objects.tle
+
+import moe.crx.roadblock.io.sinks.InputSink
+import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.objects.base.RObject
+
+class TLEventRaceData : RObject {
+
+    var timeInMicroseconds: Int = 0
+    var carId: Int = 0
+    var carRank: Short = 0
+
+    override fun read(sink: InputSink) {
+        timeInMicroseconds = sink.readInt()
+        carId = sink.readInt()
+        carRank = sink.readShort()
+    }
+
+    override fun write(sink: OutputSink) {
+        sink.writeInt(timeInMicroseconds)
+        sink.writeInt(carId)
+        sink.writeShort(carRank)
+    }
+}

@@ -1,0 +1,35 @@
+package moe.crx.roadblock.objects.seasonpass
+
+import kotlinx.datetime.Clock.System.now
+import kotlinx.datetime.Instant
+import moe.crx.roadblock.io.ListIO.readList
+import moe.crx.roadblock.io.ListIO.writeList
+import moe.crx.roadblock.io.sinks.InputSink
+import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.objects.base.RInt
+import moe.crx.roadblock.objects.base.RObject
+
+class LegendPassBenefitsMultipliers : RObject {
+
+    var timeBetweenBoxes: Int = 0
+    var extraMaintenanceSlots: Short = 0
+    var boosters: List<RInt> = listOf()
+    var hasNextRefillTimePoint: Boolean = false
+    var nextRefillTimePoint: Instant = now()
+
+    override fun read(sink: InputSink) {
+        timeBetweenBoxes = sink.readInt()
+        extraMaintenanceSlots = sink.readShort()
+        boosters = sink.readList()
+        hasNextRefillTimePoint = sink.readBoolean()
+        nextRefillTimePoint = sink.readInstant()
+    }
+
+    override fun write(sink: OutputSink) {
+        sink.writeInt(timeBetweenBoxes)
+        sink.writeShort(extraMaintenanceSlots)
+        sink.writeList(boosters)
+        sink.writeBoolean(hasNextRefillTimePoint)
+        sink.writeInstant(nextRefillTimePoint)
+    }
+}
