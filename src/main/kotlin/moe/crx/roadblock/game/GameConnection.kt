@@ -30,17 +30,14 @@ import java.io.File
 import java.util.concurrent.locks.ReentrantLock
 
 // TODO (De)Serialization:
-// - Special packets
 // - Game database
 // - Client tracking updates
 // - Multiplayer packets
-// - Packet errors
 
 // TODO rewrite packets to variants
 // TODO plugin system
 // TODO UpdatesConsumer for State and it's members (create updates to send, and then apply them to state)
 // TODO Rework GameState members types
-// TODO Idk about SNS, credentials and some auth fields, does it have authorities and fed ids?
 // TODO look through all enums and set the right size where necessary
 
 class GameConnection(val sendBlock: suspend (ByteArray) -> Unit) {
@@ -193,13 +190,7 @@ class GameConnection(val sendBlock: suspend (ByteArray) -> Unit) {
         if (!onlineInformationSent) {
             onlineInformationSent = true
 
-            // TODO Special packets
-            //send(File("C:\\Users\\Mathew\\Desktop\\asphalt9\\39hololivetime\\1677682435020\\1677682437634.in").readBytes())
-            //send(File("C:\\Users\\Mathew\\Desktop\\asphalt9\\39hololivetime\\1677682435020\\1677682437639.in").readBytes())
-            //send(File("C:\\Users\\Mathew\\Desktop\\asphalt9\\39hololivetime\\1677682435020\\1677682437642.in").readBytes())
-            //send(File("C:\\Users\\Mathew\\Desktop\\asphalt9\\39hololivetime\\1677682435020\\1677682437643.in").readBytes())
-            //send(File("C:\\Users\\Mathew\\Desktop\\asphalt9\\39hololivetime\\1677682435020\\1677682437644.in").readBytes())
-            //send(File("C:\\Users\\Mathew\\Desktop\\asphalt9\\39hololivetime\\1677682435020\\1677682437645.in").readBytes())
+            // TODO Send push messages
         }
 
         packetLock.lock()
