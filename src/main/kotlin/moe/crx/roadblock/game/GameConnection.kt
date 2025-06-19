@@ -8,10 +8,14 @@ import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
 import moe.crx.roadblock.io.ObjectIO.readObject
 import moe.crx.roadblock.objects.base.RObject.Companion.bytes
+import moe.crx.roadblock.objects.base.RString
 import moe.crx.roadblock.objects.game.ActionResponseHeader
 import moe.crx.roadblock.objects.game.CompressionType
 import moe.crx.roadblock.objects.game.ConfigData
+import moe.crx.roadblock.objects.game.SerializationVersion
 import moe.crx.roadblock.objects.game.ServerDBSerialization
+import moe.crx.roadblock.objects.tle.OsirisEventData
+import moe.crx.roadblock.push.CalendarEventsLoaded
 import moe.crx.roadblock.rpc.auth.ConnectGameRequest
 import moe.crx.roadblock.rpc.auth.LoginRequest
 import moe.crx.roadblock.rpc.auth.LoginResponse
@@ -27,7 +31,10 @@ import org.fusesource.jansi.Ansi.ansi
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
+import java.io.FileWriter
+import java.io.PrintWriter
 import java.util.concurrent.locks.ReentrantLock
+import kotlin.time.Duration.Companion.days
 
 // TODO (De)Serialization:
 // - Game database
@@ -218,23 +225,58 @@ class GameConnection(val sendBlock: suspend (ByteArray) -> Unit) {
             )
 
             sendConcurrentAccess()
+
+            packetLock.unlock()
+
             return
         }
 
+        val request = runCatching {
+            bytes.sink(layer.ver).readFully(handler.requestClass)
+        }.onFailure { throwable ->
+            LOG.error("[I] Error reading packet with ID {}", header.type.toHexString())
+            throwable.printStackTrace()
 
-        val request = bytes.sink(layer.ver).readFully(handler.requestClass)
+            reportHandlingError(header, bytes, throwable)
+
+            sendConcurrentAccess()
+
+            packetLock.unlock()
+
+            return
+        }.getOrThrow()
 
         runCatching {
             handler.handle(this, request)
         }.onSuccess {
             LOG.info("[I] Handled packet {} (ID {})", request.javaClass.simpleName, request.type.toHexString())
-        }.onFailure {
+        }.onFailure { throwable ->
             LOG.error("[I] Error handling packet {} (ID {})", request.javaClass.simpleName, request.type.toHexString())
-            it.printStackTrace()
+            throwable.printStackTrace()
+
+            reportHandlingError(request, bytes, throwable)
+
             sendConcurrentAccess()
+
+            packetLock.unlock()
+
+            return
         }
 
         packetLock.unlock()
+    }
+
+    fun reportHandlingError(request: RequestPacket, bytes: ByteArray, throwable: Throwable) {
+        File("reports", "${System.currentTimeMillis()}.report").run {
+            parentFile.mkdirs()
+
+            FileWriter(this).use { writer ->
+                writer.write("Error handling packet ${request.javaClass.simpleName} (ID ${request.type.toHexString()}):\n\n")
+                throwable.printStackTrace(PrintWriter(writer))
+                writer.write("\nRequest packet bytes:\n")
+                writer.write(bytes.toHexString())
+            }
+        }
     }
 
     suspend fun sendConcurrentAccess() {

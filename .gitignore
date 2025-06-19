@@ -53,3 +53,4 @@ uploads
 *.out
 *.saved
 /stubs/
+*.report
