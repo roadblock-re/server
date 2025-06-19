@@ -11,6 +11,7 @@ data class PacketHandler(
 
 abstract class PacketLayer(val ver: SerializationVersion) {
 
+    // There are also LoginRequest/LoginRequest at nil index, but it seems to be unused
     var currentId = 1
     var handlers: MutableMap<Byte, PacketHandler?> = mutableMapOf()
 
