@@ -20,4 +20,13 @@ object EnumIO {
     fun <T : Enum<T>> OutputSink.writeEnum8(obj: T) {
         writeByte(obj.ordinal.toByte())
     }
+
+    inline fun <reified T : Enum<T>> InputSink.readEnumString(): T {
+        val stringName = readString()
+        return enumEntries<T>().first { it.name == stringName }
+    }
+
+    fun <T : Enum<T>> OutputSink.writeEnumString(obj: T) {
+        writeString(obj.name)
+    }
 }

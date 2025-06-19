@@ -1,4 +1,4 @@
-package moe.crx.roadblock.push.base
+package moe.crx.roadblock.push
 
 import moe.crx.roadblock.io.OptionalIO.readOptional
 import moe.crx.roadblock.io.OptionalIO.writeOptional

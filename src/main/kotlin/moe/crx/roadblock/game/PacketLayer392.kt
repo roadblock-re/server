@@ -241,4 +241,18 @@ object PacketLayer392 : PacketLayer(SerializationVersion().apply {
         register(::handleLegendFundObtainCheat)
         // 229 packets
     }
+
+    init {
+        //CalendarEventsLoaded
+        //PurgeEventsNotification
+        //BanEventsNotification
+        //MultiplayerSeriesMaintenanceBookingNotification
+        //MultiplayerSeriesMatchmakingFinished
+        //ClubSeasonNotification
+        //ClientConfigLoaded
+        //SeasonPassRefreshNotification
+        //MultiplayerChallengesMatchmakingFinished
+        //BonusPassRefreshNotification
+        //PiggyBankRefreshNotification
+    }
 }
