@@ -22,8 +22,8 @@ class LoginResponse : AuthPacket() {
     var actionResponseParams: ActionResponseHeader = ActionResponseHeader()
     var lastServerActionId: Int = 0
     var updatesQueue: StatusUpdatesQueueWithRootReactions = StatusUpdatesQueueWithRootReactions()
-    var configData: List<ServerDB> = listOf()
-    var serverDBs: List<ServerDB> = listOf()
+    var configData: ConfigData = ConfigData()
+    var serverDBs: ServerDBSerialization = ServerDBSerialization()
     var serverSyslogId: String = ""
     var buildId: String = ""
     var didMaintenanceFreeRefill: Boolean = false
@@ -42,8 +42,8 @@ class LoginResponse : AuthPacket() {
         actionResponseParams = sink.readObject()
         lastServerActionId = sink.readInt()
         updatesQueue = sink.readObject()
-        configData = sink.readList()
-        serverDBs = sink.readList()
+        configData = sink.readObject()
+        serverDBs = sink.readObject()
         serverSyslogId = sink.readString()
         buildId = sink.readString()
         didMaintenanceFreeRefill = sink.readBoolean()
@@ -63,8 +63,8 @@ class LoginResponse : AuthPacket() {
         sink.writeObject(actionResponseParams)
         sink.writeInt(lastServerActionId)
         sink.writeObject(updatesQueue)
-        sink.writeList(configData)
-        sink.writeList(serverDBs)
+        sink.writeObject(configData)
+        sink.writeObject(serverDBs)
         sink.writeString(serverSyslogId)
         sink.writeString(buildId)
         sink.writeBoolean(didMaintenanceFreeRefill)

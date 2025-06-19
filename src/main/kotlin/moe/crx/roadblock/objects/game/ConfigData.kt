@@ -1,5 +1,8 @@
 package moe.crx.roadblock.objects.game
 
+import moe.crx.roadblock.io.EnumIO.readEnum8
+import moe.crx.roadblock.io.EnumIO.writeEnum
+import moe.crx.roadblock.io.EnumIO.writeEnum8
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
@@ -13,26 +16,30 @@ class ConfigData : RObject {
         val compressor: LZ4Compressor = LZ4Factory.fastestInstance().fastCompressor()
     }
 
-    // 1 == Uncompressed, 2 == LZ4
-    var compressionType: Byte = 0
+    var compressionType: CompressionType = CompressionType.UNKNOWN
     var data: ByteArray = ByteArray(0)
 
     override fun read(sink: InputSink) {
-        compressionType = sink.readByte()
+        val one = sink.readLong()
+        check(one == 1L)
+
+        compressionType = sink.readEnum8()
         val bytes = sink.readByteArray()
         val decompressedLength = sink.readLong()
 
-        data = if (compressionType != 2.toByte()) bytes else {
+        data = if (compressionType != CompressionType.LZ4) bytes else {
             decompressor.decompress(bytes, 0, decompressedLength.toInt())
         }
     }
 
     override fun write(sink: OutputSink) {
-        val bytes = if (compressionType != 2.toByte()) data else {
+        sink.writeLong(1)
+
+        val bytes = if (compressionType != CompressionType.LZ4) data else {
             compressor.compress(data)
         }
 
-        sink.writeByte(compressionType)
+        sink.writeEnum8(compressionType)
         sink.writeByteArray(bytes)
         sink.writeLong(data.size.toLong())
     }

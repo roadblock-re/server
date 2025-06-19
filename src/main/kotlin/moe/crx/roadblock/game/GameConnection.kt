@@ -9,8 +9,9 @@ import kotlinx.datetime.Instant
 import moe.crx.roadblock.io.ObjectIO.readObject
 import moe.crx.roadblock.objects.base.RObject.Companion.bytes
 import moe.crx.roadblock.objects.game.ActionResponseHeader
+import moe.crx.roadblock.objects.game.CompressionType
 import moe.crx.roadblock.objects.game.ConfigData
-import moe.crx.roadblock.objects.game.ServerDB
+import moe.crx.roadblock.objects.game.ServerDBSerialization
 import moe.crx.roadblock.rpc.auth.ConnectGameRequest
 import moe.crx.roadblock.rpc.auth.LoginRequest
 import moe.crx.roadblock.rpc.auth.LoginResponse
@@ -171,22 +172,16 @@ class GameConnection(val sendBlock: suspend (ByteArray) -> Unit) {
                 isVipPlayer = false
                 signatureValue = GAME_SIGNATURE
                 serializationVersion = layer.ver
-                configData = listOf(ServerDB().apply {
-                    probablyGameVersionStatusErrorCode = 0
-                    config = ConfigData().apply {
-                        compressionType = 2
-                        data = File("game/clientconfig.json").readBytes()
-                    }
-                    probablyGameDbObsolete = 1
-                })
-                serverDBs = listOf(ServerDB().apply {
-                    probablyGameVersionStatusErrorCode = 0
-                    config = ConfigData().apply {
-                        compressionType = 2
+                configData = ConfigData().apply {
+                    compressionType = CompressionType.LZ4
+                    data = File("game/clientconfig.json").readBytes()
+                }
+                serverDBs = ServerDBSerialization().apply {
+                    gameDb = ConfigData().apply {
+                        compressionType = CompressionType.LZ4
                         data = File("game/A9-business.gdb").readBytes()
                     }
-                    probablyGameDbObsolete = 0
-                })
+                }
                 state = gameState
             }.let {
                 send(it.bytes(layer.ver))
