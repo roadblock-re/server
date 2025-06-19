@@ -5,11 +5,11 @@ import moe.crx.roadblock.io.OptionalIO.writeOptional
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.game.Error
+import moe.crx.roadblock.objects.game.ServerError
 
 class ReconnectionResponse : RObject {
 
-    var error: Error? = null
+    var error: ServerError? = null
     var lastActionId: Int = 0
     var lastCommitedActionId: Int = 0
 

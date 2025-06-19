@@ -6,23 +6,21 @@ import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
 
-class Error : RObject {
+class ServerError : RObject {
 
-    var what: String = ""
-
-    // Let's just hope that every error code enum is int.
     var code: Int = 0
-    var innerError: Error? = null
+    var what: String = ""
+    var innerError: ServerError? = null
 
     override fun read(sink: InputSink) {
-        what = sink.readString()
         code = sink.readInt()
+        what = sink.readString()
         innerError = sink.readOptional()
     }
 
     override fun write(sink: OutputSink) {
-        sink.writeString(what)
         sink.writeInt(code)
+        sink.writeString(what)
         sink.writeOptional(innerError)
     }
 }

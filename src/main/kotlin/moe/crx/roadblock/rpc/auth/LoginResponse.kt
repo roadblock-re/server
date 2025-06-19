@@ -16,7 +16,7 @@ class LoginResponse : AuthPacket() {
         const val GAME_SIGNATURE = 0x47DCEC79
     }
 
-    var error: Error? = null
+    var error: ServerError? = null
     var userSessionId: String = ""
     var revision: String = ""
     var actionResponseParams: ActionResponseHeader = ActionResponseHeader()

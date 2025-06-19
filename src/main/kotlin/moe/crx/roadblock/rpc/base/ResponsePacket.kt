@@ -6,7 +6,7 @@ import moe.crx.roadblock.io.OptionalIO.readOptional
 import moe.crx.roadblock.io.OptionalIO.writeOptional
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
-import moe.crx.roadblock.objects.game.Error
+import moe.crx.roadblock.objects.game.ServerError
 
 open class ResponsePacket() : Packet(PacketDirection.RESPONSE) {
 
@@ -14,7 +14,7 @@ open class ResponsePacket() : Packet(PacketDirection.RESPONSE) {
     var previousRequestSequence: Int = 0
     var timestamp: Instant = now()
     var type: Byte = 0
-    var error: Error? = null
+    var error: ServerError? = null
 
     override fun read(sink: InputSink) {
         super.read(sink)
