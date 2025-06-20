@@ -15,7 +15,7 @@ plugins {
 }
 
 application {
-    mainClass.set("moe.crx.ovrport.ApplicationKt")
+    mainClass.set("moe.crx.roadblock.ApplicationKt")
 }
 
 group = "moe.crx"
