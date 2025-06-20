@@ -87,7 +87,7 @@ fun ApplicationEngine.Configuration.sslConfig(sslPort: Int) {
     val keyAlias = "roadblock"
     val keyStorePassword = "password"
     val privateKeyPassword = "password"
-    val keyStoreFile = File("certs","roadblock.jks")
+    val keyStoreFile = File("certs", "roadblock.jks")
     val pemFile = File("certs", "roadblock.cer")
 
     if (!keyStoreFile.exists()) {

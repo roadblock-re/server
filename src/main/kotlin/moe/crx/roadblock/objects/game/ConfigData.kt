@@ -1,7 +1,6 @@
 package moe.crx.roadblock.objects.game
 
 import moe.crx.roadblock.io.EnumIO.readEnum8
-import moe.crx.roadblock.io.EnumIO.writeEnum
 import moe.crx.roadblock.io.EnumIO.writeEnum8
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink

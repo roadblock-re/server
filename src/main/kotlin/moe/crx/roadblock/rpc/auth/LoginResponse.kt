@@ -1,7 +1,5 @@
 package moe.crx.roadblock.rpc.auth
 
-import moe.crx.roadblock.io.ListIO.readList
-import moe.crx.roadblock.io.ListIO.writeList
 import moe.crx.roadblock.io.ObjectIO.readObject
 import moe.crx.roadblock.io.ObjectIO.writeObject
 import moe.crx.roadblock.io.OptionalIO.readOptional

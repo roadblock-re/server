@@ -3,7 +3,6 @@ package moe.crx.roadblock.game
 import kotlinx.datetime.*
 import kotlinx.datetime.Clock.System.now
 import moe.crx.roadblock.objects.base.RBoolean
-import moe.crx.roadblock.objects.base.RByte
 import moe.crx.roadblock.objects.base.RInt
 import moe.crx.roadblock.objects.base.RObject.Companion.bytes
 import moe.crx.roadblock.objects.base.RString
