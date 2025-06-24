@@ -25,7 +25,7 @@ fun Route.matchmakerQuickLaunch() = post("/rooms/{clientId}/quick_launch") {
                 "gs_connection_info": {
                     "host": "%1",
                     "scheme": "wss",
-                    "port": 4444
+                    "port": 4443
                 },
                 "controller_http_port": 4445,
                 "room_id": "0f65cfc9-620f-4db7-88e6-d33cad87d82d",
