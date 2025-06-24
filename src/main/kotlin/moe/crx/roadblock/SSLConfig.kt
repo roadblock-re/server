@@ -84,6 +84,8 @@ fun generateKeyStore(
 fun ApplicationEngine.Configuration.sslConfig(sslPort: Int) {
     Security.addProvider(BouncyCastleProvider())
 
+    File("certs").mkdirs()
+
     val keyAlias = "roadblock"
     val keyStorePassword = "password"
     val privateKeyPassword = "password"
