@@ -4,6 +4,7 @@ import io.ktor.http.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import moe.crx.roadblock.utils.realRemoteHost
 
 fun Route.eveAbout() = get("/") {
     call.respondText(
@@ -74,6 +75,6 @@ fun Route.configDatacenterUrls() = get("/{clientId}/datacenters/{datacenterId}/u
                     "glclub_web_url": "https://%1/clubconnect.gameloft.com/?",
                     "status": "none"
             }
-        """.trimIndent().replace("%1", call.request.host()).replace("%2", clientId),
+        """.trimIndent().replace("%1", call.realRemoteHost()).replace("%2", clientId),
     )
 }

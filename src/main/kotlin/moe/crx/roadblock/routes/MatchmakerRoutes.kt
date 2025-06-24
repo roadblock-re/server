@@ -4,6 +4,7 @@ import io.ktor.http.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import moe.crx.roadblock.utils.realRemoteHost
 
 fun Route.matchmakerQuickLaunch() = post("/rooms/{clientId}/quick_launch") {
     val clientId = call.parameters["clientId"]
@@ -34,6 +35,6 @@ fun Route.matchmakerQuickLaunch() = post("/rooms/{clientId}/quick_launch") {
                 "controller_host": "%1",
                 "controller_port": 4448
             }
-            """.trimIndent().replace("%1", call.request.host()),
+            """.trimIndent().replace("%1", call.realRemoteHost()),
     )
 }
