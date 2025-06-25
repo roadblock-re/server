@@ -9,10 +9,12 @@ class UseTransferCodeRequest : RequestPacket() {
     var code: String = ""
 
     override fun read(sink: InputSink) {
+        super.read(sink)
         code = sink.readString()
     }
 
     override fun write(sink: OutputSink) {
+        super.write(sink)
         sink.writeString(code)
     }
 }
