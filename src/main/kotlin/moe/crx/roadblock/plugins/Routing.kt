@@ -64,6 +64,7 @@ fun Application.configureApiRouting() {
                     assetsGetAsset()
                     assetsGetAssetMetadata()
                     matchmakerQuickLaunch()
+                    authTokenEncrypt()
                 }
             }
             // Pandora locate -> asset
