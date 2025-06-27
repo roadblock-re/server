@@ -65,3 +65,58 @@ fun decryptDesEcbZeroPadding(encryptedBase64: String, keyString: String): String
 
     return String(unpadded, Charsets.UTF_8)
 }
+
+fun ByteArray.toBigEndianInt(): Int {
+    val bytes = take(4).map { it.toInt() and 0xFF }.reversed()
+    val ch1 = bytes[0]
+    val ch2 = bytes[1] shl 8
+    val ch3 = bytes[2] shl 16
+    val ch4 = bytes[3] shl 24
+    return ch1 or ch2 or ch3 or ch4
+}
+
+fun ByteArray.toLittleEndianInt(): Int {
+    val bytes = take(4).map { it.toInt() and 0xFF }
+    val ch1 = bytes[0]
+    val ch2 = bytes[1] shl 8
+    val ch3 = bytes[2] shl 16
+    val ch4 = bytes[3] shl 24
+    return ch1 or ch2 or ch3 or ch4
+}
+
+fun Int.toBigEndianBytes(): ByteArray {
+    val ch1 = this and 0xFF
+    val ch2 = this ushr 8 and 0xFF
+    val ch3 = this ushr 16 and 0xFF
+    val ch4 = this ushr 24 and 0xFF
+    return byteArrayOf(ch4.toByte(), ch3.toByte(), ch2.toByte(), ch1.toByte())
+}
+
+fun evpBytesToKey(
+    password: ByteArray,
+    salt: ByteArray,
+    keyLen: Int = 32,
+    ivLen: Int = 16,
+    digest: String = "SHA-256",
+    count: Int = 1
+): Pair<ByteArray, ByteArray> {
+    val md = MessageDigest.getInstance(digest)
+    val output = mutableListOf<Byte>()
+    var prev = ByteArray(0)
+
+    while (output.size < keyLen + ivLen) {
+        val data = prev + password + salt
+        var digestResult = md.digest(data)
+
+        repeat(count - 1) {
+            digestResult = md.digest(digestResult)
+        }
+
+        output.addAll(digestResult.toList())
+        prev = digestResult
+    }
+
+    val key = output.take(keyLen).toByteArray()
+    val iv = output.drop(keyLen).take(ivLen).toByteArray()
+    return Pair(key, iv)
+}

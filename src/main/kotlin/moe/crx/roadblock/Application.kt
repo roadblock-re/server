@@ -16,5 +16,6 @@ fun main() {
     AnsiConsole.systemInstall()
 
     httpServer().start(wait = false)
-    webSocketServer().start(wait = true)
+    webSocketServer().start(wait = false)
+    tcpServer(wait = true)
 }

@@ -10,7 +10,7 @@ import io.ktor.server.routing.*
 import moe.crx.roadblock.utils.sha256
 import java.io.File
 
-var downloadResources = false
+val downloadResources = false
 
 fun Route.assetsGetAsset() = get("/assets/{clientId}/{assetId}") {
     val clientId = call.parameters["clientId"]

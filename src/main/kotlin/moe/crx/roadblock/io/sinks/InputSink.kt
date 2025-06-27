@@ -20,7 +20,7 @@ abstract class InputSink(val ver: SerializationVersion) {
         val ch2 = bytes[1] shl 8
         val ch3 = bytes[2] shl 16
         val ch4 = bytes[3] shl 24
-        return ch1 + ch2 + ch3 + ch4
+        return ch1 or ch2 or ch3 or ch4
     }
 
     fun readFloat(): Float {
@@ -31,7 +31,7 @@ abstract class InputSink(val ver: SerializationVersion) {
         val bytes = readBytes(2).map { it.toInt() and 0xFF }
         val ch1 = bytes[0]
         val ch2 = bytes[1] shl 8
-        return (ch1 + ch2).toShort()
+        return (ch1 or ch2).toShort()
     }
 
     fun readLong(): Long {
@@ -44,7 +44,7 @@ abstract class InputSink(val ver: SerializationVersion) {
         val ch6 = bytes[5] shl 40
         val ch7 = bytes[6] shl 48
         val ch8 = bytes[7] shl 56
-        return ch1 + ch2 + ch3 + ch4 + ch5 + ch6 + ch7 + ch8
+        return ch1 or ch2 or ch3 or ch4 or ch5 or ch6 or ch7 or ch8
     }
 
     fun readDouble(): Double {

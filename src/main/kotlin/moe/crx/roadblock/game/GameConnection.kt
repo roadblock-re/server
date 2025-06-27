@@ -42,7 +42,7 @@ import java.util.concurrent.locks.ReentrantLock
 // TODO Rework GameState members types
 // TODO look through all enums and set the right size where necessary
 
-class GameConnection(val sendBlock: suspend (ByteArray) -> Unit) {
+class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend (ByteArray) -> Unit) {
     companion object {
         val LOG: Logger = LoggerFactory.getLogger("roadblock.game")
     }
@@ -141,6 +141,11 @@ class GameConnection(val sendBlock: suspend (ByteArray) -> Unit) {
             return
         }
 
+        if (connectionState == ConnectionState.NOT_INITIALIZED && ignoreConnect) {
+            connectionState = ConnectionState.NOT_AUTHORIZED
+        }
+
+        // TODO Move to WebSocket handler
         if (connectionState == ConnectionState.NOT_INITIALIZED) {
             val handshake = bytes.sink(layer.ver).readFully<ConnectGameRequest>()
             LOG.info("Game connected with fedId {} and roomId {}", handshake.fedId, handshake.roomId)
