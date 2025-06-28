@@ -19,7 +19,6 @@ class LoginRequest : AuthPacket() {
     var typeSystemHash: Long = 0
     var clientId: String = ""
     var datacenterName: String = ""
-
     var clientBuildId: String = ""
     var userToken: String = ""
     var credentials: Credentials = Credentials()

@@ -17,7 +17,6 @@ class State : RObject {
     var multiplayerSeries: MultiplayerSeriesState = MultiplayerSeriesState()
     var playerStats: PlayerStatsState = PlayerStatsState()
     var clubSystem: ClubSystemState = ClubSystemState()
-    // ServerPrivate
     var tlEventsSystem: TLEventsSystemState = TLEventsSystemState()
     var tracking: TrackingState = TrackingState()
     var giftSystem: GiftSystemState = GiftSystemState()
@@ -60,7 +59,9 @@ class State : RObject {
         uberSystem = sink.readObject()
         championshipSystem = sink.readObject()
         seasonPassSystem = sink.readObject()
-        multiplayerChallenges = sink.readObject()
+        if (sink older "24.0.0") {
+            multiplayerChallenges = sink.readObject()
+        }
         inbox = sink.readObject()
         clubWarsSystem = sink.readObject()
         privateLobby = sink.readObject()
@@ -87,7 +88,9 @@ class State : RObject {
         sink.writeObject(uberSystem)
         sink.writeObject(championshipSystem)
         sink.writeObject(seasonPassSystem)
-        sink.writeObject(multiplayerChallenges)
+        if (sink older "24.0.0") {
+            sink.writeObject(multiplayerChallenges)
+        }
         sink.writeObject(inbox)
         sink.writeObject(clubWarsSystem)
         sink.writeObject(privateLobby)
