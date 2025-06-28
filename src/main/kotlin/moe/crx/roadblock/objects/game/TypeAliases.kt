@@ -1,5 +1,8 @@
 package moe.crx.roadblock.objects.game
 
+import moe.crx.roadblock.io.sinks.InputSink
+import moe.crx.roadblock.io.sinks.OutputSink
+
 typealias Uuid = String
 typealias CareerEventId = Int
 typealias CareerFlagId = Int
@@ -76,7 +79,6 @@ typealias ClubWarsRewardIndex = Byte
 typealias SeasonPassId = Int
 typealias SeasonPassExperience = Int
 typealias SeasonPassBenefitBoost = Int
-typealias GachaId = Short // ALU GachaId is Int
 typealias EndRaceAdsOfferId = Int
 typealias MultiplayerRaceConfigId = Int
 typealias MultiplayerSeriesScore = Int

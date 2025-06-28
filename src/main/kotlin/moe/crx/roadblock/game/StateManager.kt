@@ -203,7 +203,7 @@ class StateManager {
                     isLocked = true
                     nextRetentionBoxReadyTime = now()
                     openedGachaBoxes = listOf()
-                    openedEventBoxes = listOf()
+                    openedEventBoxes = mapOf()
                 }
 
                 inventory.apply {

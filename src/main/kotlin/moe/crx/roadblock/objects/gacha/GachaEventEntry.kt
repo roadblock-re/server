@@ -7,17 +7,13 @@ import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
 
 class GachaEventEntry : RObject {
-
-    var eventId: String = ""
     var boxes: List<EventBoxData> = listOf()
 
     override fun read(sink: InputSink) {
-        eventId = sink.readString()
         boxes = sink.readList()
     }
 
     override fun write(sink: OutputSink) {
-        sink.writeString(eventId)
         sink.writeList(boxes)
     }
 }
