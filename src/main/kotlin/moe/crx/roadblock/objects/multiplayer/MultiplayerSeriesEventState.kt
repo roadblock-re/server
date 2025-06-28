@@ -24,7 +24,7 @@ class MultiplayerSeriesEventState : RObject {
     var forceQuarantine: Boolean = false
     var score: Int = 0
     var skippedBonusMilestones: List<RByte> = listOf()
-    //var peakScore: Int = 0
+    var peakScore: Int = 0
 
     override fun read(sink: InputSink) {
         elo = sink.readFloat()
@@ -37,6 +37,9 @@ class MultiplayerSeriesEventState : RObject {
         forceQuarantine = sink.readBoolean()
         score = sink.readInt()
         skippedBonusMilestones = sink.readList()
+        if (sink newer "24.0.0") {
+            peakScore = sink.readInt()
+        }
     }
 
     override fun write(sink: OutputSink) {
@@ -50,5 +53,8 @@ class MultiplayerSeriesEventState : RObject {
         sink.writeBoolean(forceQuarantine)
         sink.writeInt(score)
         sink.writeList(skippedBonusMilestones)
+        if (sink newer "24.0.0") {
+            sink.writeInt(peakScore)
+        }
     }
 }
