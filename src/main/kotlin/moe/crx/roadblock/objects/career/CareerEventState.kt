@@ -1,5 +1,7 @@
 package moe.crx.roadblock.objects.career
 
+import moe.crx.roadblock.io.EnumIO.readEnum
+import moe.crx.roadblock.io.EnumIO.writeEnum
 import moe.crx.roadblock.io.ListIO.readList
 import moe.crx.roadblock.io.ListIO.writeList
 import moe.crx.roadblock.io.OptionalIO.readOptional
@@ -8,24 +10,22 @@ import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RInt
 import moe.crx.roadblock.objects.base.RObject
+import moe.crx.roadblock.objects.game.ProgressState
 
 class CareerEventState : RObject {
 
-    var eventId: Int = 0
-    var state: Int = 0
+    var state: ProgressState = ProgressState.Locked
     var obtainedFlags: List<RInt> = listOf()
     var satelliteRewardState: RInt? = RInt()
 
     override fun read(sink: InputSink) {
-        eventId = sink.readInt()
-        state = sink.readInt()
+        state = sink.readEnum()
         obtainedFlags = sink.readList()
         satelliteRewardState = sink.readOptional()
     }
 
     override fun write(sink: OutputSink) {
-        sink.writeInt(eventId)
-        sink.writeInt(state)
+        sink.writeEnum(state)
         sink.writeList(obtainedFlags)
         sink.writeOptional(satelliteRewardState)
     }

@@ -7,7 +7,6 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
 import moe.crx.roadblock.io.ObjectIO.readObject
-import moe.crx.roadblock.objects.base.RObject.Companion.bytes
 import moe.crx.roadblock.objects.game.ActionResponseHeader
 import moe.crx.roadblock.objects.game.CompressionType
 import moe.crx.roadblock.objects.game.ConfigData
@@ -20,6 +19,7 @@ import moe.crx.roadblock.rpc.base.ReconnectionResponse
 import moe.crx.roadblock.rpc.base.RequestPacket
 import moe.crx.roadblock.rpc.base.ResponsePacket
 import moe.crx.roadblock.rpc.base.SpecialPacket
+import moe.crx.roadblock.utils.bytes
 import moe.crx.roadblock.utils.readFully
 import moe.crx.roadblock.utils.sink
 import moe.crx.roadblock.utils.toHexString

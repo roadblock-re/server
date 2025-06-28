@@ -4,7 +4,6 @@ import kotlinx.datetime.*
 import kotlinx.datetime.Clock.System.now
 import moe.crx.roadblock.objects.base.RBoolean
 import moe.crx.roadblock.objects.base.RInt
-import moe.crx.roadblock.objects.base.RObject.Companion.bytes
 import moe.crx.roadblock.objects.base.RString
 import moe.crx.roadblock.objects.base.RVector2F
 import moe.crx.roadblock.objects.blackmarket.BlackMarketFatigue
@@ -20,6 +19,7 @@ import moe.crx.roadblock.objects.inventory.*
 import moe.crx.roadblock.objects.item.*
 import moe.crx.roadblock.objects.models.*
 import moe.crx.roadblock.objects.settings.Localization
+import moe.crx.roadblock.utils.bytes
 import moe.crx.roadblock.utils.readFully
 import moe.crx.roadblock.utils.sink
 import java.io.File
@@ -189,16 +189,14 @@ class StateManager {
 
                 career.apply {
                     careerFlags = 0
-                    seasons = listOf(CareerSeasonState().apply {
-                        seasonId = 79
-                        state = 1
+                    seasons = mapOf(RInt().apply { value = 79 } to CareerSeasonState().apply {
+                        state = ProgressState.InProgress
                         flags = 0
                     })
-                    events = listOf(CareerEventState().apply {
-                        eventId = 1028
-                        state = 1
+                    events = mapOf(RInt().apply { value = 1028 } to CareerEventState().apply {
+                        state = ProgressState.InProgress
                     })
-                    chapters = listOf()
+                    chapters = mapOf()
                 }
 
                 gachaSystem.apply {
