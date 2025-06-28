@@ -3,11 +3,13 @@ package moe.crx.roadblock.objects.inventory
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
+import moe.crx.roadblock.objects.game.Blueprints
+import moe.crx.roadblock.objects.game.CarUpgradeTier
 
 class WildcardBlueprintState : RObject {
 
-    var upgradeTier: Byte = 0
-    var amount: Int = 0
+    var upgradeTier: CarUpgradeTier = 0
+    var amount: Blueprints = 0
 
     override fun read(sink: InputSink) {
         upgradeTier = sink.readByte()

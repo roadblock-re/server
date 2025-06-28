@@ -9,32 +9,36 @@ import moe.crx.roadblock.io.OptionalIO.writeOptional
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RByte
+import moe.crx.roadblock.objects.base.RInstant
 import moe.crx.roadblock.objects.base.RInt
 import moe.crx.roadblock.objects.base.RObject
 import moe.crx.roadblock.objects.base.RShort
+import moe.crx.roadblock.objects.game.Blueprints
+import moe.crx.roadblock.objects.game.CarUpgradeLevel
+import moe.crx.roadblock.objects.game.CarUpgradeTier
+import moe.crx.roadblock.objects.game.UpgradeItems
 
 class CarState : RObject {
 
-    var carId: Int = 0
-    var blueprints: Int = 0
-    var unlockedTiers: Byte = 0
-    var unlockedLevels: Byte = 0
+    var blueprints: Blueprints = 0
+    var unlockedTiers: CarUpgradeTier = 0
+    var unlockedLevels: CarUpgradeLevel = 0
     var carTuningState: List<CarStatState> = listOf()
-    var epicItems: Int = 0
+    var epicItems: UpgradeItems = 0
     var freeUpgrades: List<RInt> = listOf()
     var maintenanceStats: CarMaintenanceStats = CarMaintenanceStats()
     var usageState: CarUsageStats = CarUsageStats()
     var customizationState: CarCustomizationState = CarCustomizationState()
-    var tierBlueprints: Int = 0
-    var ownedDecalVisuals: List<RInt> = listOf()
+    var tierBlueprints: Blueprints = 0
+    var ownedCustomParts: List<RShort> = listOf()
     var isOwned: Boolean = false
     var isCarKeyOwned: Boolean = false
-    var ownedCustomParts: List<RShort> = listOf()
+    var ownedDecalVisuals: List<RInt> = listOf()
     var currentEvoTier: RByte? = null
-    var evoTierBlueprints: Int = 0
+    var evoTierBlueprints: Blueprints = 0
+    var overclockExpirationDate: RInstant? = null
 
     override fun read(sink: InputSink) {
-        carId = sink.readInt()
         blueprints = sink.readInt()
         unlockedTiers = sink.readByte()
         unlockedLevels = sink.readByte()
@@ -45,16 +49,20 @@ class CarState : RObject {
         usageState = sink.readObject()
         customizationState = sink.readObject()
         tierBlueprints = sink.readInt()
-        ownedCustomParts = sink.readList()
+        ownedDecalVisuals = sink.readList()
         isOwned = sink.readBoolean()
         isCarKeyOwned = sink.readBoolean()
-        ownedDecalVisuals = sink.readList()
-        currentEvoTier = sink.readOptional()
-        evoTierBlueprints = sink.readInt()
+        ownedCustomParts = sink.readList()
+        if (sink older "24.0.0") {
+            currentEvoTier = sink.readOptional()
+            evoTierBlueprints = sink.readInt()
+        }
+        if (sink newer "24.0.0") {
+            overclockExpirationDate = sink.readOptional()
+        }
     }
 
     override fun write(sink: OutputSink) {
-        sink.writeInt(carId)
         sink.writeInt(blueprints)
         sink.writeByte(unlockedTiers)
         sink.writeByte(unlockedLevels)
@@ -65,11 +73,16 @@ class CarState : RObject {
         sink.writeObject(usageState)
         sink.writeObject(customizationState)
         sink.writeInt(tierBlueprints)
-        sink.writeList(ownedCustomParts)
+        sink.writeList(ownedDecalVisuals)
         sink.writeBoolean(isOwned)
         sink.writeBoolean(isCarKeyOwned)
-        sink.writeList(ownedDecalVisuals)
-        sink.writeOptional(currentEvoTier)
-        sink.writeInt(evoTierBlueprints)
+        sink.writeList(ownedCustomParts)
+        if (sink older "24.0.0") {
+            sink.writeOptional(currentEvoTier)
+            sink.writeInt(evoTierBlueprints)
+        }
+        if (sink newer "24.0.0") {
+            sink.writeOptional(overclockExpirationDate)
+        }
     }
 }

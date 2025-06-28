@@ -15,6 +15,7 @@ import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RInt
 import moe.crx.roadblock.objects.base.RObject
 import moe.crx.roadblock.objects.game.EmojisState
+import moe.crx.roadblock.objects.game.OverclockChips
 import moe.crx.roadblock.objects.game.WalletState
 import moe.crx.roadblock.objects.inventory.CarState
 import moe.crx.roadblock.objects.inventory.MaintenanceBooking
@@ -23,7 +24,7 @@ import moe.crx.roadblock.objects.inventory.WildcardBlueprintClassState
 
 class InventoryState : RObject {
 
-    var cars: List<CarState> = listOf()
+    var cars: Map<RInt, CarState> = mapOf()
     var wallets: List<WalletState> = listOf()
     //var iapWallets37: List<WalletState> = listOf()
 
@@ -33,9 +34,10 @@ class InventoryState : RObject {
     var lastActionTime: Instant = now()
     var maintenanceBooking: MaintenanceBooking? = null
     var emojisState: EmojisState = EmojisState()
+    var overclockChips: OverclockChips = 0
 
     override fun read(sink: InputSink) {
-        cars = sink.readList()
+        cars = sink.readMap()
         wallets = sink.readList()
         //iapWallets37 = sink.readList()
         iapWallets39 = sink.readMap()
@@ -44,10 +46,13 @@ class InventoryState : RObject {
         lastActionTime = sink.readInstant()
         maintenanceBooking = sink.readOptional()
         emojisState = sink.readObject()
+        if (sink newer "24.0.0") {
+            overclockChips = sink.readInt()
+        }
     }
 
     override fun write(sink: OutputSink) {
-        sink.writeList(cars)
+        sink.writeMap(cars)
         sink.writeList(wallets)
         //sink.writeList(iapWallets37)
         sink.writeMap(iapWallets39)
@@ -56,5 +61,8 @@ class InventoryState : RObject {
         sink.writeInstant(lastActionTime)
         sink.writeOptional(maintenanceBooking)
         sink.writeObject(emojisState)
+        if (sink newer "24.0.0") {
+            sink.writeInt(overclockChips)
+        }
     }
 }

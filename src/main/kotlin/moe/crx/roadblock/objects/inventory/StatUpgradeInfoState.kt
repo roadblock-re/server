@@ -5,10 +5,11 @@ import moe.crx.roadblock.io.ListIO.writeList
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
+import moe.crx.roadblock.objects.game.Blueprints
 
 class StatUpgradeInfoState : RObject {
 
-    var uncommonItems: Int = 0
+    var uncommonItems: Blueprints = 0
     var classInfo: List<StatClassUpgradeInfoState> = listOf()
 
     override fun read(sink: InputSink) {

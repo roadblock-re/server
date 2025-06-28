@@ -14,7 +14,7 @@ import moe.crx.roadblock.utils.toEnum
 // TODO separate files
 
 suspend fun handleCareerStartRace(session: GameConnection, request: CareerStartRaceRequest) {
-    val car = session.gameState.inventory.cars.find { it.carId == request.carId } ?: return // TODO return server error
+    val car = session.gameState.inventory.cars[RInt(request.carId)] ?: return // TODO return server error
 
     //TODO add LastUsageChanged
     val updates = UpdatesTree(

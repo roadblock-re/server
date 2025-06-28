@@ -207,9 +207,8 @@ class StateManager {
                 }
 
                 inventory.apply {
-                    cars = buildList {
-                        add(CarState().apply {
-                            carId = 0x25 // Lancer
+                    cars = buildMap {
+                        put(RInt(0x25), CarState().apply { // Lancer
                             blueprints = 0
                             unlockedTiers = 1
                             unlockedLevels = 4

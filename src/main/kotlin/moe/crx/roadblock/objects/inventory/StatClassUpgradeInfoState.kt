@@ -6,10 +6,11 @@ import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RInt
 import moe.crx.roadblock.objects.base.RObject
+import moe.crx.roadblock.objects.game.Blueprints
 
 class StatClassUpgradeInfoState : RObject {
 
-    var rareItems: Int = 0
+    var rareItems: Blueprints = 0
     var freeUpgrades: List<RInt> = listOf()
 
     override fun read(sink: InputSink) {

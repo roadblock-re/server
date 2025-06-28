@@ -85,3 +85,4 @@ typealias MultiplayerSeriesScore = Int
 typealias MultiplayerSeriesScoreMilestoneId = Byte
 typealias CarUpgradeItemSlotId = Int
 typealias CalendarEventVersion = Int
+typealias OverclockChips = Int
