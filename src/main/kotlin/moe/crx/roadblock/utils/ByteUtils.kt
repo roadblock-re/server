@@ -1,6 +1,7 @@
 package moe.crx.roadblock.utils
 
 import moe.crx.roadblock.io.ObjectIO.readObject
+import moe.crx.roadblock.io.ObjectIO.writeObject
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.InputStreamSink
 import moe.crx.roadblock.io.sinks.OutputStreamSink
@@ -43,6 +44,12 @@ fun byteOutputSink(ver: SerializationVersion): OutputStreamSink {
 fun OutputStreamSink.bytes(): ByteArray {
     check(output is ByteArrayOutputStream)
     return output.toByteArray()
+}
+
+fun RObject.bytes(ver: SerializationVersion): ByteArray {
+    return byteOutputSink(ver).apply {
+        writeObject(this@bytes)
+    }.bytes()
 }
 
 fun ByteArray.sha256() = MessageDigest.getInstance("SHA-256").digest(this).toHexString()

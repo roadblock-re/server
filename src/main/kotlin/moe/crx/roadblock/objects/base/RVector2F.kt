@@ -3,10 +3,9 @@ package moe.crx.roadblock.objects.base
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 
-class RVector2F : RObject {
+open class RVector2F(var x: Float, var y: Float) : RObject {
 
-    var x: Float = 0f
-    var y: Float = 0f
+    constructor() : this(0f, 0f)
 
     override fun read(sink: InputSink) {
         x = sink.readFloat()

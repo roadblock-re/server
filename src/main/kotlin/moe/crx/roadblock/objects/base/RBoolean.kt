@@ -3,9 +3,9 @@ package moe.crx.roadblock.objects.base
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 
-class RBoolean : RObject {
+open class RBoolean(var value: Boolean) : RObject {
 
-    var value: Boolean = false
+    constructor() : this(false)
 
     override fun read(sink: InputSink) {
         value = sink.readBoolean()

@@ -5,9 +5,9 @@ import kotlinx.datetime.Instant
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 
-class RInstant : RObject {
+open class RInstant(var value: Instant) : RObject {
 
-    var value: Instant = now()
+    constructor() : this(now())
 
     override fun read(sink: InputSink) {
         value = sink.readInstant()

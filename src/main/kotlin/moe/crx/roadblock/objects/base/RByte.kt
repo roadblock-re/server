@@ -3,9 +3,9 @@ package moe.crx.roadblock.objects.base
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 
-class RByte : RObject {
+open class RByte(var value: Byte) : RObject {
 
-    var value: Byte = 0
+    constructor() : this(0)
 
     override fun read(sink: InputSink) {
         value = sink.readByte()
