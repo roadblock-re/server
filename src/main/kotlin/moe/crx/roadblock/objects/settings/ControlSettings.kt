@@ -12,29 +12,33 @@ class ControlSettings : RObject {
 
     var isTouchDriveDisabled: Int = 0
     var touchControl: TouchControlSettings = TouchControlSettings()
-    var isRumbleEnabled: Byte = 0
     var gamepadControls: List<GamepadControlSettings> = listOf()
     var keyboardControl: KeyboardControlSettings = KeyboardControlSettings()
-    var isAutoAccelerationEnabled: Byte = 0
-    var isManualAccelerationTutorialNeeded: Byte = 0
+    var isAutoAccelerationEnabled: Boolean = false
+    var isManualAccelerationTutorialNeeded: Boolean = false
+    var isRumbleEnabled: Boolean = false
 
     override fun read(sink: InputSink) {
         isTouchDriveDisabled = sink.readInt()
         touchControl = sink.readObject()
-        isRumbleEnabled = sink.readByte()
         gamepadControls = sink.readList()
         keyboardControl = sink.readObject()
-        isAutoAccelerationEnabled = sink.readByte()
-        isManualAccelerationTutorialNeeded = sink.readByte()
+        isAutoAccelerationEnabled = sink.readBoolean()
+        isManualAccelerationTutorialNeeded = sink.readBoolean()
+        if (sink newer "24.0.0") {
+            isRumbleEnabled = sink.readBoolean()
+        }
     }
 
     override fun write(sink: OutputSink) {
         sink.writeInt(isTouchDriveDisabled)
         sink.writeObject(touchControl)
-        sink.writeByte(isRumbleEnabled)
         sink.writeList(gamepadControls)
         sink.writeObject(keyboardControl)
-        sink.writeByte(isAutoAccelerationEnabled)
-        sink.writeByte(isManualAccelerationTutorialNeeded)
+        sink.writeBoolean(isAutoAccelerationEnabled)
+        sink.writeBoolean(isManualAccelerationTutorialNeeded)
+        if (sink newer "24.0.0") {
+            sink.writeBoolean(isRumbleEnabled)
+        }
     }
 }

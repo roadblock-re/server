@@ -310,8 +310,8 @@ class StateManager {
                     username = "Driver"
                     gameSettings.apply {
                         cameraType = "Close"
-                        speedUnit = 0
-                        enableKnockdowns = 1
+                        isImperialSpeedUnit = 0
+                        enableKnockdowns = true
                         language = Localization().apply {
                             language = 25966
                             script = 757935405
@@ -323,16 +323,16 @@ class StateManager {
                             touchControl.apply {
                                 touchDriveSensitivity = 0.85f
                                 tappingSensitivity = 0.5f
-                                tappingIconSize = 1.0f
-                                tappingIconOffset1 = RVector2F()
-                                tappingIconOffset2 = RVector2F()
-                                tappingIconOffset3 = RVector2F()
-                                tappingIconOffset4 = RVector2F()
+                                iconsScale = 1.0f
+                                leftNitroOffset = RVector2F()
+                                leftDriftOffset = RVector2F()
+                                rightNitroOffset = RVector2F()
+                                rightDriftOffset = RVector2F()
                                 tiltingSensitivity = 0.5f
-                                isHorizonTiltEnabled = 1
+                                isHorizonTiltEnabled = true
                                 isTiltSteeringEnabled = 1
                             }
-                            isRumbleEnabled = 1
+                            isRumbleEnabled = true
                             gamepadControls = buildList {
                                 //add(RGamepadControlSettings().apply {
                                 //    gamepadId = 1298975476841628627 // ???
@@ -344,18 +344,18 @@ class StateManager {
                                 //})
                             }
                             keyboardControl.apply {
-                                isAutoselectEnabled = 1
+                                isAutoselectEnabled = true
                                 manualSensitivity = 0.5f
                                 isKeyboardAzerty = 0
                             }
-                            isAutoAccelerationEnabled = 1
-                            isManualAccelerationTutorialNeeded = 0
+                            isAutoAccelerationEnabled = true
+                            isManualAccelerationTutorialNeeded = true
                         }
                     }
                     regionChangeCount = 0
                     userAge = 99
                     userAgeTimeBase = now()
-                    userGender = 0
+                    userGender = Gender.Male
                     alias = RString().apply { value = "roadblock" }
                     deviceCountry = RString().apply { value = "US" }
                     claimedEnableSystemNotificationsReward = false

@@ -7,7 +7,7 @@ import moe.crx.roadblock.objects.base.RObject
 class GamepadControlSettings : RObject {
 
     var gamepadId: Long = 0
-    var isAutoselectEnabled: Byte = 0
+    var isAutoselectEnabled: Boolean = false
     var tiltingSensitivity: Float = 0f
     var selectedLayout: Int = 0
     var touchDriveSensitivity: Float = 0f
@@ -15,7 +15,7 @@ class GamepadControlSettings : RObject {
 
     override fun read(sink: InputSink) {
         gamepadId = sink.readLong()
-        isAutoselectEnabled = sink.readByte()
+        isAutoselectEnabled = sink.readBoolean()
         tiltingSensitivity = sink.readFloat()
         selectedLayout = sink.readInt()
         touchDriveSensitivity = sink.readFloat()
@@ -24,7 +24,7 @@ class GamepadControlSettings : RObject {
 
     override fun write(sink: OutputSink) {
         sink.writeLong(gamepadId)
-        sink.writeByte(isAutoselectEnabled)
+        sink.writeBoolean(isAutoselectEnabled)
         sink.writeFloat(tiltingSensitivity)
         sink.writeInt(selectedLayout)
         sink.writeFloat(touchDriveSensitivity)

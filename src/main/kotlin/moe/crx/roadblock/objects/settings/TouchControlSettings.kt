@@ -11,38 +11,41 @@ class TouchControlSettings : RObject {
 
     var touchDriveSensitivity: Float = 0f
     var tappingSensitivity: Float = 0f
-    var tappingIconSize: Float = 0f
-    var tappingIconOffset1: RVector2F = RVector2F()
-    var tappingIconOffset2: RVector2F = RVector2F()
-    var tappingIconOffset3: RVector2F = RVector2F()
-    var tappingIconOffset4: RVector2F = RVector2F()
+    var iconsScale: Float = 0f
+    var leftNitroOffset: RVector2F = RVector2F()
+    var leftDriftOffset: RVector2F = RVector2F()
+    var rightNitroOffset: RVector2F = RVector2F()
+    var rightDriftOffset: RVector2F = RVector2F()
     var tiltingSensitivity: Float = 0f
-    var isHorizonTiltEnabled: Byte = 0
+    var isHorizonTiltEnabled: Boolean = false
     var isTiltSteeringEnabled: Int = 0
+    var isAutoselectEnabled: Boolean = false
 
     override fun read(sink: InputSink) {
         touchDriveSensitivity = sink.readFloat()
         tappingSensitivity = sink.readFloat()
-        tappingIconSize = sink.readFloat()
-        tappingIconOffset1 = sink.readObject()
-        tappingIconOffset2 = sink.readObject()
-        tappingIconOffset3 = sink.readObject()
-        tappingIconOffset4 = sink.readObject()
+        iconsScale = sink.readFloat()
+        leftNitroOffset = sink.readObject()
+        leftDriftOffset = sink.readObject()
+        rightNitroOffset = sink.readObject()
+        rightDriftOffset = sink.readObject()
         tiltingSensitivity = sink.readFloat()
-        isHorizonTiltEnabled = sink.readByte()
+        isHorizonTiltEnabled = sink.readBoolean()
         isTiltSteeringEnabled = sink.readInt()
+        isAutoselectEnabled = sink.readBoolean()
     }
 
     override fun write(sink: OutputSink) {
         sink.writeFloat(touchDriveSensitivity)
         sink.writeFloat(tappingSensitivity)
-        sink.writeFloat(tappingIconSize)
-        sink.writeObject(tappingIconOffset1)
-        sink.writeObject(tappingIconOffset2)
-        sink.writeObject(tappingIconOffset3)
-        sink.writeObject(tappingIconOffset4)
+        sink.writeFloat(iconsScale)
+        sink.writeObject(leftNitroOffset)
+        sink.writeObject(leftDriftOffset)
+        sink.writeObject(rightNitroOffset)
+        sink.writeObject(rightDriftOffset)
         sink.writeFloat(tiltingSensitivity)
-        sink.writeByte(isHorizonTiltEnabled)
+        sink.writeBoolean(isHorizonTiltEnabled)
         sink.writeInt(isTiltSteeringEnabled)
+        sink.writeBoolean(isAutoselectEnabled)
     }
 }
