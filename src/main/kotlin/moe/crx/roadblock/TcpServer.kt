@@ -66,7 +66,7 @@ fun tcpServer(wait: Boolean): Job {
                     }
                 }
 
-                val gameConnection = GameConnection(ignoreConnect = true) { bytes ->
+                val gameConnection = GameConnection(ignoreConnect = true) { bytes, preferDeflated ->
                     // TODO LZ4 support
                     encrypt.processBytes(bytes.copyOf(), 0, bytes.size, bytes, 0)
                     output.write((bytes.size and 0xFFFFFFF).toBigEndianBytes())

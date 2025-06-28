@@ -12,12 +12,16 @@ class PlatformCredentials : RObject {
     var username: String = ""
 
     override fun read(sink: InputSink) {
-        authority = sink.readEnum()
+        if (sink older "24.0.0") {
+            authority = sink.readEnum()
+        }
         username = sink.readString()
     }
 
     override fun write(sink: OutputSink) {
-        sink.writeEnum(authority)
+        if (sink older "24.0.0") {
+            sink.writeEnum(authority)
+        }
         sink.writeString(username)
     }
 }

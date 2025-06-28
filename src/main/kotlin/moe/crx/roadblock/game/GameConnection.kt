@@ -42,7 +42,7 @@ import java.util.concurrent.locks.ReentrantLock
 // TODO Rework GameState members types
 // TODO look through all enums and set the right size where necessary
 
-class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend (ByteArray) -> Unit) {
+class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend (ByteArray, Boolean) -> Unit) {
     companion object {
         val LOG: Logger = LoggerFactory.getLogger("roadblock.game")
     }
@@ -55,7 +55,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
     var onlineInformationSent = false
     val cliJob: Job
     var gameState = StateManager.default()
-    val layer = PacketLayer392
+    val layer = PacketLayer24014
 
     var packetLock: ReentrantLock = ReentrantLock()
     var lastRequestSequence = 0
@@ -103,10 +103,10 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
         }
     }
 
-    suspend fun send(bytes: ByteArray) {
+    suspend fun send(bytes: ByteArray, preferDeflated: Boolean = false) {
         // TODO print received packets ANSI
         //LOG.info("[O] {}", bytes.toHexString())
-        sendBlock(bytes)
+        sendBlock(bytes, preferDeflated)
     }
 
     suspend fun send(response: ResponsePacket, customTimestamp: Instant? = null) {
@@ -188,7 +188,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
                 }
                 state = gameState
             }.let {
-                send(it.bytes(layer.ver))
+                send(it.bytes(layer.ver), true)
             }
 
             return

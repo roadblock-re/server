@@ -17,7 +17,7 @@ fun Application.configureWebSockets() {
 
     routing {
         webSocket("/") {
-            val connection = GameConnection { bytes ->
+            val connection = GameConnection { bytes, preferDeflated ->
                 send(bytes)
             }
 

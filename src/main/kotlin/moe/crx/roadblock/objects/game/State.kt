@@ -17,6 +17,7 @@ class State : RObject {
     var multiplayerSeries: MultiplayerSeriesState = MultiplayerSeriesState()
     var playerStats: PlayerStatsState = PlayerStatsState()
     var clubSystem: ClubSystemState = ClubSystemState()
+    // ServerPrivate
     var tlEventsSystem: TLEventsSystemState = TLEventsSystemState()
     var tracking: TrackingState = TrackingState()
     var giftSystem: GiftSystemState = GiftSystemState()
@@ -26,13 +27,20 @@ class State : RObject {
     var uberSystem: UberSystemState = UberSystemState()
     var championshipSystem: ChampionshipSystemState = ChampionshipSystemState()
     var seasonPassSystem: SeasonPassSystemState = SeasonPassSystemState()
-    var multiplayerChallenges: MultiplayerChallengesState = MultiplayerChallengesState()
+    var multiplayerChallenges: MultiplayerChallengesState = MultiplayerChallengesState() // no in ALU
     var inbox: InboxState = InboxState()
     var clubWarsSystem: ClubWarsSystemState = ClubWarsSystemState()
     var privateLobby: PrivateLobbyState = PrivateLobbyState()
     var bonusPassSystem: BonusPassSystemState = BonusPassSystemState()
     var piggyBankSystem: PiggyBankSystemState = PiggyBankSystemState()
     var legendFundSystem: LegendFundSystemState = LegendFundSystemState() // 3.9+ only (also maybe 3.8)
+    // VaultSystem
+    // SeasonalCurrencySystem
+    // UpsellPopupSystem
+    // OverclockSystem
+    // SponsorshipSystem
+    // GoldenChestSystem
+    // SocialSystem (24.1.0+)
 
     override fun read(sink: InputSink) {
         blackMarket = sink.readObject()

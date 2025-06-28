@@ -20,7 +20,7 @@ class LoginRequest : AuthPacket() {
     var clientId: String = ""
     var datacenterName: String = ""
 
-    //var clientBuildId: String = "" // ALU has it
+    var clientBuildId: String = ""
     var userToken: String = ""
     var credentials: Credentials = Credentials()
     var deviceInfo: DeviceInfo = DeviceInfo()
@@ -32,10 +32,9 @@ class LoginRequest : AuthPacket() {
     var channelName: RString? = null
     var forceLoadEvents: ForceLoadEvents? = null
     var platformCredentials: PlatformCredentials? = null
-
-    //var platformUsername: RString? = null // ALU has it
-    //var psnIssuerId: RString? = null // ALU has it
-    //var serverDeltaTimeMinutes: Int = 0 // ALU has it
+    var platformUsername: RString? = null
+    var psnIssuerId: RString? = null
+    var serverDeltaTimeMinutes: Int = 0
     var clientCachedEvents: List<CachedEventInfo> = listOf()
 
     override fun read(sink: InputSink) {
@@ -44,7 +43,9 @@ class LoginRequest : AuthPacket() {
         typeSystemHash = sink.readLong()
         clientId = sink.readString()
         datacenterName = sink.readString()
-        //clientBuildId = sink.readString()
+        if (sink newer "24.1.0") {
+            clientBuildId = sink.readString()
+        }
         userToken = sink.readString()
         credentials = sink.readObject()
         deviceInfo = sink.readObject()
@@ -56,9 +57,11 @@ class LoginRequest : AuthPacket() {
         channelName = sink.readOptional()
         forceLoadEvents = sink.readOptional()
         platformCredentials = sink.readOptional()
-        //platformUsername = sink.readOptional()
-        //psnIssuerId = sink.readOptional()
-        //serverDeltaTimeMinutes = sink.readInt()
+        if (sink newer "24.0.0") {
+            platformUsername = sink.readOptional()
+            psnIssuerId = sink.readOptional()
+            serverDeltaTimeMinutes = sink.readInt()
+        }
         clientCachedEvents = sink.readList()
     }
 
@@ -68,7 +71,9 @@ class LoginRequest : AuthPacket() {
         sink.writeLong(typeSystemHash)
         sink.writeString(clientId)
         sink.writeString(datacenterName)
-        //sink.writeString(clientBuildId)
+        if (sink newer "24.1.0") {
+            sink.writeString(clientBuildId)
+        }
         sink.writeString(userToken)
         sink.writeObject(credentials)
         sink.writeObject(deviceInfo)
@@ -80,9 +85,11 @@ class LoginRequest : AuthPacket() {
         sink.writeOptional(channelName)
         sink.writeOptional(forceLoadEvents)
         sink.writeOptional(platformCredentials)
-        //sink.writeOptional(platformUsername)
-        //sink.writeOptional(psnIssuerId)
-        //sink.writeInt(serverDeltaTimeMinutes)
+        if (sink newer "24.0.0") {
+            sink.writeOptional(platformUsername)
+            sink.writeOptional(psnIssuerId)
+            sink.writeInt(serverDeltaTimeMinutes)
+        }
         sink.writeList(clientCachedEvents)
     }
 }

@@ -28,6 +28,7 @@ class LoginResponse : AuthPacket() {
     var remindNewGarageLevel: Boolean = false
     var isClientReloadNeeded: Boolean = false
     var isVipPlayer: Boolean = false
+    var isForcedUserName: Boolean = false
     var signatureValue: Int = 0
     var serializationVersion: SerializationVersion = SerializationVersion()
     var state: State = State()
@@ -48,6 +49,9 @@ class LoginResponse : AuthPacket() {
         remindNewGarageLevel = sink.readBoolean()
         isClientReloadNeeded = sink.readBoolean()
         isVipPlayer = sink.readBoolean()
+        if (sink newer "24.0.0") {
+            isForcedUserName = sink.readBoolean()
+        }
         signatureValue = sink.readInt()
         serializationVersion = sink.readObject()
         state = sink.readObject()
@@ -69,6 +73,9 @@ class LoginResponse : AuthPacket() {
         sink.writeBoolean(remindNewGarageLevel)
         sink.writeBoolean(isClientReloadNeeded)
         sink.writeBoolean(isVipPlayer)
+        if (sink newer "24.0.0") {
+            sink.writeBoolean(isForcedUserName)
+        }
         sink.writeInt(signatureValue)
         sink.writeObject(serializationVersion)
         sink.writeObject(state)
