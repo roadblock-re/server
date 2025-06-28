@@ -86,3 +86,4 @@ typealias MultiplayerSeriesScoreMilestoneId = Byte
 typealias CarUpgradeItemSlotId = Int
 typealias CalendarEventVersion = Int
 typealias OverclockChips = Int
+typealias CollectorStage = Short
