@@ -2,11 +2,14 @@ package moe.crx.roadblock.objects.club
 
 import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
+import moe.crx.roadblock.io.EnumIO.readEnum
+import moe.crx.roadblock.io.EnumIO.writeEnum
 import moe.crx.roadblock.io.ObjectIO.readObject
 import moe.crx.roadblock.io.ObjectIO.writeObject
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
+import moe.crx.roadblock.objects.game.ClubMemberRank
 
 class CachedClubInfo : RObject {
 
@@ -14,20 +17,22 @@ class CachedClubInfo : RObject {
     var logo: ClubLogo = ClubLogo()
     var name: String = ""
     var membersCount: Int = 0
-    var membershipType: Int = 0
-    var memberRank: Int = 0
+    var membershipType: ClubMembershipType = ClubMembershipType.Open
+    var memberRank: ClubMemberRank = ClubMemberRank.Manager
     var motto: String = ""
-    //var regionId: Short = 0
-    //var isUGCValidated: Boolean = false
+    var isUGCValidated: Boolean = false
 
     override fun read(sink: InputSink) {
         creationTimestamp = sink.readInstant()
         logo = sink.readObject()
         name = sink.readString()
         membersCount = sink.readInt()
-        membershipType = sink.readInt()
-        memberRank = sink.readInt()
+        membershipType = sink.readEnum()
+        memberRank = sink.readEnum()
         motto = sink.readString()
+        if (sink newer "24.0.0") {
+            isUGCValidated = sink.readBoolean()
+        }
     }
 
     override fun write(sink: OutputSink) {
@@ -35,8 +40,11 @@ class CachedClubInfo : RObject {
         sink.writeObject(logo)
         sink.writeString(name)
         sink.writeInt(membersCount)
-        sink.writeInt(membershipType)
-        sink.writeInt(memberRank)
+        sink.writeEnum(membershipType)
+        sink.writeEnum(memberRank)
         sink.writeString(motto)
+        if (sink newer "24.0.0") {
+            sink.writeBoolean(isUGCValidated)
+        }
     }
 }

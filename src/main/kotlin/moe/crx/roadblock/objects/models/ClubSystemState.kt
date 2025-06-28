@@ -20,6 +20,7 @@ class ClubSystemState : RObject {
     var sentRequest: ClubSentRequestData? = null
     var isLocked: Boolean = false
     var firstClub: FirstClubData = FirstClubData()
+    var donationData: ClubDonationData = ClubDonationData()
     var leaveClubReason: RInt? = null
     var cancelJoinRequest: ClubCancelJoinRequestData? = null
     var clubWars: Map<RString, ClubWarsEventClubState> = mapOf()
@@ -30,6 +31,9 @@ class ClubSystemState : RObject {
         sentRequest = sink.readOptional()
         isLocked = sink.readBoolean()
         firstClub = sink.readObject()
+        if (sink newer "24.0.0") {
+            donationData = sink.readObject()
+        }
         leaveClubReason = sink.readOptional()
         cancelJoinRequest = sink.readOptional()
         clubWars = sink.readMap()
@@ -41,6 +45,9 @@ class ClubSystemState : RObject {
         sink.writeOptional(sentRequest)
         sink.writeBoolean(isLocked)
         sink.writeObject(firstClub)
+        if (sink newer "24.0.0") {
+            sink.writeObject(donationData)
+        }
         sink.writeOptional(leaveClubReason)
         sink.writeOptional(cancelJoinRequest)
         sink.writeMap(clubWars)
