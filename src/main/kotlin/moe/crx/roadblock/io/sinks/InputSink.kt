@@ -3,7 +3,7 @@ package moe.crx.roadblock.io.sinks
 import kotlinx.datetime.Instant
 import moe.crx.roadblock.objects.game.SerializationVersion
 
-abstract class InputSink(ver: SerializationVersion): Sink(ver) {
+abstract class InputSink(ver: SerializationVersion) : Sink(ver) {
 
     fun readByte(): Byte {
         val bytes = readBytes(1)

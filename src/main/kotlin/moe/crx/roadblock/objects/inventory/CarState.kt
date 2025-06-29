@@ -8,11 +8,7 @@ import moe.crx.roadblock.io.OptionalIO.readOptional
 import moe.crx.roadblock.io.OptionalIO.writeOptional
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RByte
-import moe.crx.roadblock.objects.base.RInstant
-import moe.crx.roadblock.objects.base.RInt
-import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.base.RShort
+import moe.crx.roadblock.objects.base.*
 import moe.crx.roadblock.objects.game.Blueprints
 import moe.crx.roadblock.objects.game.CarUpgradeLevel
 import moe.crx.roadblock.objects.game.CarUpgradeTier

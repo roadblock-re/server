@@ -15,7 +15,7 @@ import moe.crx.roadblock.objects.base.RObject
 import moe.crx.roadblock.objects.game.ChampionshipPoints
 
 class ChampionshipFinalsRoundData : RObject {
-    
+
     var attemptCount: Byte = 0
     var bestPracticeRace: ChampionshipRaceData = ChampionshipRaceData()
     var bestRace: ChampionshipRaceData = ChampionshipRaceData()
@@ -25,7 +25,7 @@ class ChampionshipFinalsRoundData : RObject {
     var isDisqualified: Boolean = false
     var state: ChampionshipRoundState = ChampionshipRoundState.Unknown
     var points: ChampionshipPoints = 0
-    
+
     override fun read(sink: InputSink) {
         attemptCount = sink.readByte()
         bestPracticeRace = sink.readObject()

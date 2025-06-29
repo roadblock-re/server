@@ -1,8 +1,5 @@
 package moe.crx.roadblock.objects.game
 
-import moe.crx.roadblock.io.sinks.InputSink
-import moe.crx.roadblock.io.sinks.OutputSink
-
 typealias Uuid = String
 typealias CareerEventId = Int
 typealias CareerFlagId = Int
