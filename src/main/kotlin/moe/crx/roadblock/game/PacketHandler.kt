@@ -6,8 +6,9 @@ import java.io.File
 import kotlin.reflect.KClass
 
 data class PacketHandler(
+    val requestName: String,
     val requestClass: KClass<out RequestPacket>,
-    val handle: suspend (GameConnection, RequestPacket) -> Unit,
+    val handle: (suspend (GameConnection, RequestPacket) -> Unit)?,
 )
 
 abstract class GameLayer(val ver: SerializationVersion) {
@@ -15,13 +16,26 @@ abstract class GameLayer(val ver: SerializationVersion) {
     var currentId = 0
     var handlers: MutableMap<Byte, PacketHandler?> = mutableMapOf()
 
-    fun registerStub() {
-        register<RequestPacket>(null)
+    fun registerStub(requestName: String? = null) {
+        check(!handlers.containsKey(currentId.toByte())) {
+            "Handler with ID $currentId was already registered."
+        }
+
+        handlers.put(
+            currentId.toByte(),
+            PacketHandler(
+                requestName ?: "<unknown name>",
+                RequestPacket::class,
+                null,
+            )
+        )
+
+        ++currentId
     }
 
     @Suppress("UNCHECKED_CAST")
     inline fun <reified T : RequestPacket> register(
-        noinline handle: (suspend (GameConnection, T) -> Unit)?
+        noinline handle: (suspend (GameConnection, T) -> Unit)
     ) {
         check(!handlers.containsKey(currentId.toByte())) {
             "Handler with ID $currentId was already registered."
@@ -29,12 +43,13 @@ abstract class GameLayer(val ver: SerializationVersion) {
 
         handlers.put(
             currentId.toByte(),
-            handle?.let {
-                PacketHandler(
-                    T::class,
-                    it as suspend (GameConnection, RequestPacket) -> Unit,
-                )
-            })
+            PacketHandler(
+                T::class.java.simpleName,
+                T::class,
+                handle as suspend (GameConnection, RequestPacket) -> Unit,
+            )
+        )
+
         ++currentId
     }
 

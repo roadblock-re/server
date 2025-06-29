@@ -9,292 +9,292 @@ object GameLayer24014 : GameLayer(SerializationVersion().apply {
 }) {
 
     init {
-        registerStub() //LoginRequest
-        registerStub() //NotifyShutdownRequest
-        registerStub() //CareerStartRaceRequest
-        registerStub() //CareerFinishRaceRequest
-        registerStub() //CareerCancelRaceRequest
-        registerStub() //ClaimSatelliteRewardRequest
-        registerStub() //CompleteCareerSeasonCheatRequest
-        registerStub() //GainEventFlagCheatRequest
-        registerStub() //UnlockAllChaptersCheatRequest
-        registerStub() //UnlockAllSeasonsCheatRequest
-        registerStub() //BuyCarRequest
-        registerStub() //SetPreferredCarVisualRequest
-        registerStub() //MaintenanceStartRefillRequest
-        registerStub() //MaintenanceSkipRefillWithTokensRequest
-        registerStub() //MaintenanceSkipRefillWithBonusPassBenefitRequest
-        registerStub() //MaintenanceValidateRefillRequest
-        registerStub() //UnlockUpgradeTierRequest
-        registerStub() //UpgradeCarStatLevelRequest
-        registerStub() //FreeUpgradeCarStatLevelRequest
-        registerStub() //InstallUpgradeItemRequest
-        registerStub() //ConvertWildcardBlueprintsRequest
-        registerStub() //TrashItemRequest
-        registerStub() //GainAllCarItemsCheatRequest
-        registerStub() //GainAllCarsCheatRequest
-        registerStub() //GainCurrencyCheatRequest
-        registerStub() //GainCarBlueprintsCheatRequest
-        registerStub() //GainWildcardBlueprintsCheatRequest
-        registerStub() //SaveEmojiConfigurationRequest
-        registerStub() //BuyGachaBoxRequest
-        registerStub() //BuyTimeLimitedGachaBoxRequest
-        registerStub() //ClaimSponsorshipGachaBoxRequest
-        registerStub() //ClaimLevelUpGachaBoxesRequest
-        registerStub() //ClaimMissionRewardRequest
-        registerStub() //TutorialFinishRaceRequest
-        registerStub() //ChangeMenuTutorialStateRequest
-        registerStub() //ChangeGameplayTutorialStateRequest
-        registerStub() //GainGarageLevelCheatRequest
-        registerStub() //GainGarageValueCheatRequest
-        registerStub() //ClaimAllFreePremiumGachasCheatRequest
-        registerStub() //BlackMarketGetStatusRequest
-        registerStub() //BlackMarketBuyRequest
-        registerStub() //BlackMarketRefreshRequest
-        registerStub() //MultiplayerSeriesCancelMatchmakingRequest
-        registerStub() //MultiplayerSeriesCancelRaceRequest
-        registerStub() //MultiplayerSeriesClaimRewardsRequest
-        registerStub() //MultiplayerSeriesFinishRaceRequest
-        registerStub() //MultiplayerSeriesRefreshClaimStateRequest
-        registerStub() //MultiplayerSeriesRequestRevertOfMaintenanceBookingRequest
-        registerStub() //MultiplayerSeriesResetCurrentEventCheatRequest
-        registerStub() //MultiplayerSeriesResetMaxTierCheatRequest
-        registerStub() //MultiplayerSeriesSetEloCheatRequest
-        registerStub() //MultiplayerSeriesStartMatchmakingRequest
-        registerStub() //MultiplayerSeriesStartRaceRequest
-        registerStub() //MultiplayerSeriesSyncRacesRequest
-        registerStub() //MultiplayerSeriesReportUserRequest
-        registerStub() //CreateClubRequest
-        registerStub() //EditClubRequest
-        registerStub() //LeaveClubRequest
-        registerStub() //RequestJoinClubRequest
-        registerStub() //AcceptClubRequestRequest
-        registerStub() //RejectClubRequestRequest
-        registerStub() //PromoteClubMemberRequest
-        registerStub() //DemoteClubMemberRequest
-        registerStub() //KickClubMemberRequest
-        registerStub() //ClaimClubSeasonMilestoneRequest
-        registerStub() //ClaimCurrentClubSeasonRequest
-        registerStub() //ClaimPreviousClubSeasonsRequest
-        registerStub() //RefreshClubStateRequest
-        registerStub() //FindOnlineUserByAliasRequest
-        registerStub() //InviteUserRequest
-        registerStub() //AcceptClubInvitationRequest
-        registerStub() //DeclineClubInvitationRequest
-        registerStub() //RequestClubDonationRequest
-        registerStub() //GiveClubDonationRequest
-        registerStub() //GetClubDonationsRequest
-        registerStub() //SetClubUGCValidatedCheatRequest
-        registerStub() //ClubRaceCancelRaceRequest
-        registerStub() //ClubRaceCreateRoomRequest
-        registerStub() //ClubRaceFinishRaceRequest
-        registerStub() //ClubRaceJoinRoomRequest
-        registerStub() //ClubRaceNotifyRoomJoinedRequest
-        registerStub() //ClubRaceNotifyRoomJoinFailedRequest
-        registerStub() //ClubRaceNotifyRoomLeftRequest
-        registerStub() //ClubRaceStartRaceRequest
-        registerStub() //MiscellaneousSetUserNameRequest
-        registerStub() //MiscellaneousSetUserAgeAndGenderRequest
-        registerStub() //MiscellaneousSetUserOnlinePrivacyPolicyRequest
-        registerStub() //MiscellaneousSetUnderageDisclaimerShownRequest
-        registerStub() //SaveGameSettingsRequest
-        registerStub() //MiscellaneousSetPlatformRequest
-        registerStub() //MiscellaneousSetCrossplayPlatformFilterRequest
-        registerStub() //SaveAdsMinigameResultRequest
-        registerStub() //PerformCheatRequest
-        registerStub() //PurchaseOfflineProductRequest
-        registerStub() //IAPFakePurchaseCheatRequest
-        registerStub() //ProcessPendingSeshatAdTransactionRequest
-        registerStub() //ProcessPendingSeshatGiftTransactionRequest
-        registerStub() //ProcessPendingSeshatIAPTransactionRequest
-        registerStub() //ProcessPendingSeshatRefundTransactionRequest
-        registerStub() //ProcessPendingSeshatTransactionsRequest
-        registerStub() //ClaimAdClientSideRewardsRequest
-        registerStub() //CurrencyPackValidatePurchaseRequest
-        registerStub() //PromotionValidatePurchaseRequest
-        registerStub() //TLETicketsCheatRequest
-        registerStub() //TLEventCancelRaceRequest
-        registerStub() //TLEventClaimClubRewardRequest
-        registerStub() //TLEventClaimRankRewardsRequest
-        registerStub() //TLEventCompleteCheatRequest
-        registerStub() //TLEventFinishRaceRequest
-        registerStub() //TLEventRefillTicketsRequest
-        registerStub() //TLEventRefreshClaimStateRequest
-        registerStub() //TLEventSkipClubRewardConditionRequest
-        registerStub() //TLEventSkipSoloRewardConditionRequest
-        registerStub() //TLEventStartRaceRequest
-        registerStub() //TLEventClaimPreviousSpecialEventRequest
-        registerStub() //TimeLimitedSpecialEventClaimProgressionRewardRequest
-        registerStub() //TLEventAutoclaimRewardsRequest
-        registerStub() //TLEventResetNitroGhostRequest
-        registerStub() //TLEventResetCheatRequest
-        registerStub() //RetrievePlaybackCheatRequest
-        registerStub() //ForceConfigRefreshRequest
-        registerStub() //GetRemoteAccountConflictDataRequest
-        registerStub() //ClaimGiftRequest
-        registerStub() //ClaimIrisRedeemCodeRequest
-        registerStub() //ClaimDynamicRewardRequest
-        registerStub() //ResetUserStateRequest
-        registerStub() //ClaimEnableNotificationsRewardRequest
-        registerStub() //ClaimDailyTasksRequest
-        registerStub() //DailyTasksResetRequest
-        registerStub() //BuyRelayOfferTierRequest
-        registerStub() //ValidateIAPRelayOfferPurchaseRequest
-        registerStub() //QuickRaceFinishRaceRequest
-        registerStub() //SplitScreenStartRaceRequest
-        registerStub() //SplitScreenEndRaceRequest
-        registerStub() //UberSpecialEventDiscoverMissionCarsRequest
-        registerStub() //UberSpecialEventStartRaceRequest
-        registerStub() //UberSpecialEventCancelRaceRequest
-        registerStub() //UberSpecialEventRegisterFinishRaceRequest
-        registerStub() //UberSpecialEventRetryRaceRequest
-        registerStub() //UberSpecialEventCommitResultsRaceRequest
-        registerStub() //UberSpecialEventSkipMissionRequest
-        registerStub() //UberSpecialEventCleanHazardRequest
-        registerStub() //UberSpecialEventMarketBuyRequest
-        registerStub() //UberSpecialEventFinalClaimRequest
-        registerStub() //ChampionshipSpecialEventStartQualifyingPracticeRaceRequest
-        registerStub() //ChampionshipSpecialEventFinishQualifyingPracticeRaceRequest
-        registerStub() //ChampionshipSpecialEventStartQualifyingRaceRequest
-        registerStub() //ChampionshipSpecialEventFinishQualifyingRaceRequest
-        registerStub() //ChampionshipSpecialEventStartFinalsPracticeRaceRequest
-        registerStub() //ChampionshipSpecialEventFinishFinalsPracticeRaceRequest
-        registerStub() //ChampionshipSpecialEventStartFinalsRaceRequest
-        registerStub() //ChampionshipSpecialEventFinishFinalsRaceRequest
-        registerStub() //ChampionshipSpecialEventCancelRaceRequest
-        registerStub() //ChampionshipSpecialEventRefreshQualifyingRoundGroupRequest
-        registerStub() //ChampionshipSpecialEventRefreshQualifyingRoundStateRequest
-        registerStub() //ChampionshipSpecialEventRefreshFinalsGroupRequest
-        registerStub() //ChampionshipSpecialEventRefreshFinalsRoundStateRequest
-        registerStub() //ChampionshipSpecialEventSkipRewardRequest
-        registerStub() //ChampionshipSpecialEventBuyQualificationRequest
-        registerStub() //ChampionshipSpecialEventRefreshClaimStateRequest
-        registerStub() //ChampionshipSpecialEventClaimRankRewardsRequest
-        registerStub() //ChampionshipSpecialEventClaimFreePackRequest
-        registerStub() //ChampionshipSpecialEventSyncServicesRequest
-        registerStub() //ChampionshipSpecialEventResetNitroGhostRequest
-        registerStub() //SeasonPassBuyTierRequest
-        registerStub() //SeasonPassClaimPendingRewardsRequest
-        registerStub() //SeasonPassClaimEpisodePartialCompletionRewardsRequest
-        registerStub() //SeasonPassClaimEpisodesCompletionRewardsRequest
-        registerStub() //SeasonPassValidateProductPurchaseRequest
-        registerStub() //SeasonPassSetPlayedOnboardingCheatRequest
-        registerStub() //ClubWarsRegisterRequest
-        registerStub() //ClubWarsRefreshRegistrationRequest
-        registerStub() //ClubWarsProcessMatchmakingRequest
-        registerStub() //ClubWarsDefenseStartRaceRequest
-        registerStub() //ClubWarsDefenseFinishRaceRequest
-        registerStub() //ClubWarsDefenseCancelRaceRequest
-        registerStub() //ClubWarsDefenseAssignCarRequest
-        registerStub() //ClubWarsDefenseOccupyNodeRequest
-        registerStub() //ClubWarsDefenseUnassignCarRequest
-        registerStub() //ClubWarsDefenseVacateNodeRequest
-        registerStub() //ClubWarsPracticeStartRaceRequest
-        registerStub() //ClubWarsPracticeFinishRaceRequest
-        registerStub() //ClubWarsPracticeCancelRaceRequest
-        registerStub() //ClubWarsAttackStartRaceRequest
-        registerStub() //ClubWarsAttackFinishRaceRequest
-        registerStub() //ClubWarsAttackCancelRaceRequest
-        registerStub() //ClubWarsAttackConquerNodeRequest
-        registerStub() //ClubWarsAttackSelectEntryPointRequest
-        registerStub() //ClubWarsRefreshRegionsRequest
-        registerStub() //ClubWarsRefreshNodesRequest
-        registerStub() //ClubWarsFinishRoundRequest
-        registerStub() //ClubWarsClaimRoundRequest
-        registerStub() //ClubWarsRefreshClaimStateRequest
-        registerStub() //ClubWarsClaimRewardsRequest
-        registerStub() //ClubWarsMarketBuyRequest
-        registerStub() //ClubWarsMarketRefreshRequest
-        registerStub() //InboxMarkAsReadRequest
-        registerStub() //PartyCreateRoomRequest
-        registerStub() //PartyJoinRoomRequest
-        registerStub() //PartyJoinByPartyIdRequest
-        registerStub() //PartyFindRoomByAccessCodeRequest
-        registerStub() //PartyStartRaceRequest
-        registerStub() //PartyFinishRaceRequest
-        registerStub() //PartyCancelRaceRequest
-        registerStub() //PartyCancelRaceSpectatorRequest
-        registerStub() //PartyStartRaceSpectatorRequest
-        registerStub() //PartyLeaveRoomRequest
-        registerStub() //PartyKickUserRequest
-        registerStub() //PartyLaunchRoomRequest
-        registerStub() //PartyUpdateUserDataRequest
-        registerStub() //PartyUpdateRoomDataRequest
-        registerStub() //PartyChangeUserRoleRequest
-        registerStub() //PartySendPartyInvitationRequest
-        registerStub() //PartySetNativeSessionRequest
-        registerStub() //SendTrackingEventsRequest
-        registerStub() //GetPlatformIdsRequest
-        registerStub() //GetOnlineUserInfoRequest
-        registerStub() //ReportUserRequest
-        registerStub() //XboxLiveOnlyEnableRequest
-        registerStub() //BlockUserRequest
-        registerStub() //UnblockUserRequest
-        registerStub() //GetBlockedUsersRequest
-        registerStub() //BonusPassBuyPassRequest
-        registerStub() //BonusPassValidateProductPurchaseRequest
-        registerStub() //BonusPassBundleValidateProductPurchaseRequest
-        registerStub() //BonusPassFinishPassRequest
-        registerStub() //PiggyBankValidateProductPurchaseRequest
-        registerStub() //PiggyBankClaimFreeTierRequest
-        registerStub() //PiggyBankExpireTierRequest
-        registerStub() //PiggyBankAddMoneyToBankCheatRequest
-        registerStub() //LegendFundValidateProductPurchaseRequest
-        registerStub() //LegendFundClaimMilestoneRequest
-        registerStub() //LegendFundResetCheatRequest
-        registerStub() //LegendFundObtainCheatRequest
-        registerStub() //IncreaseVaultTicketCheatRequest
-        registerStub() //ConsumeVaultTicketCheatRequest
-        registerStub() //TriggerRefillVaultTicketByTimeCheatRequest
-        registerStub() //VaultCompleteStageCheatRequest
-        registerStub() //VaultRefillTicketsRequest
-        registerStub() //VaultOccupySlotRequest
-        registerStub() //VaultDeoccupySlotRequest
-        registerStub() //VaultEventStartRaceRequest
-        registerStub() //VaultEventFinishRaceRequest
-        registerStub() //VaultEventCancelRaceRequest
-        registerStub() //VaultEventClaimProgressionRewardsRequest
-        registerStub() //VaultExtendEventRequest
-        registerStub() //VaultEventSkipSoloRewardConditionsRequest
-        registerStub() //VaultGetRemoteVaultEventStateRequest
-        registerStub() //VaultCleanCorruptSlotRequest
-        registerStub() //VaultNotifyAccomplishedEventRequest
-        registerStub() //SeasonalCurrencyConvertCurrencyRequest
-        registerStub() //UpsellPopupBuyOfferRequest
-        registerStub() //UpsellPopupValidateProductPurchaseRequest
-        registerStub() //OverclockExpireEventRequest
-        registerStub() //OverclockPurchaseOverclockForCarRequest
-        registerStub() //OverclockExpireCarRequest
-        registerStub() //OverclockRemoveOverclockOfCarCheatRequest
-        registerStub() //OverclockGainOverclockChipsCheatRequest
-        registerStub() //OverclockResetOverclockChipsCheatRequest
-        registerStub() //SponsorshipSelectContractRequest
-        registerStub() //SponsorshipContractClaimRequest
-        registerStub() //SponsorshipContractFailRequest
-        registerStub() //ProcessSponsorshipDailyLoginRequest
-        registerStub() //SaveObtainedAdsRewardDataIntoServerStateRequest
-        registerStub() //ClearAllObtainedAdsRewardDataInServerStateRequest
-        registerStub() //CreateTransferCodeRequest
-        registerStub() //LinkAccountWithTransferCodeRequest
-        registerStub() //LinkAccountWithCredentialRequest
-        registerStub() //ConfirmLinkingOperationRequest
-        registerStub() //PostLoginSocialUpdateRequest
-        registerStub() //UpdateStatusLineRequest
-        registerStub() //ListGameFriendsRequest
-        registerStub() //RequestGameFriendRequest
-        registerStub() //RemoveGameFriendRequest
-        registerStub() //ListGameFriendRequestsRequest
-        registerStub() //AcceptGameFriendRequestRequest
-        registerStub() //RejectGameFriendRequestRequest
-        registerStub() //CancelSentGameFriendRequestRequest
-        registerStub() //SearchGameFriendRequest
-        registerStub() //ListOneWayConnectionsRequest
-        registerStub() //AddOneWayConnectionRequest
-        registerStub() //DeleteOneWayConnectionRequest
-        registerStub() //BatchFilterExistingUsersRequest
-        registerStub() //GetCredentialsForConsoleUsersRequest
-        registerStub() //AcceptAllFriendRequestsRequest
-        registerStub() //RejectAllFriendRequestsRequest
-        registerStub() //ProcessDLCIAPTransactionRequest
+        registerStub("ActionLoginRequest")
+        registerStub("NotifyShutdownRequest")
+        registerStub("CareerStartRaceRequest")
+        registerStub("CareerFinishRaceRequest")
+        registerStub("CareerCancelRaceRequest")
+        registerStub("ClaimSatelliteRewardRequest")
+        registerStub("CompleteCareerSeasonCheatRequest")
+        registerStub("GainEventFlagCheatRequest")
+        registerStub("UnlockAllChaptersCheatRequest")
+        registerStub("UnlockAllSeasonsCheatRequest")
+        registerStub("BuyCarRequest")
+        registerStub("SetPreferredCarVisualRequest")
+        registerStub("MaintenanceStartRefillRequest")
+        registerStub("MaintenanceSkipRefillWithTokensRequest")
+        registerStub("MaintenanceSkipRefillWithBonusPassBenefitRequest")
+        registerStub("MaintenanceValidateRefillRequest")
+        registerStub("UnlockUpgradeTierRequest")
+        registerStub("UpgradeCarStatLevelRequest")
+        registerStub("FreeUpgradeCarStatLevelRequest")
+        registerStub("InstallUpgradeItemRequest")
+        registerStub("ConvertWildcardBlueprintsRequest")
+        registerStub("TrashItemRequest")
+        registerStub("GainAllCarItemsCheatRequest")
+        registerStub("GainAllCarsCheatRequest")
+        registerStub("GainCurrencyCheatRequest")
+        registerStub("GainCarBlueprintsCheatRequest")
+        registerStub("GainWildcardBlueprintsCheatRequest")
+        registerStub("SaveEmojiConfigurationRequest")
+        registerStub("BuyGachaBoxRequest")
+        registerStub("BuyTimeLimitedGachaBoxRequest")
+        registerStub("ClaimSponsorshipGachaBoxRequest")
+        registerStub("ClaimLevelUpGachaBoxesRequest")
+        registerStub("ClaimMissionRewardRequest")
+        registerStub("TutorialFinishRaceRequest")
+        registerStub("ChangeMenuTutorialStateRequest")
+        registerStub("ChangeGameplayTutorialStateRequest")
+        registerStub("GainGarageLevelCheatRequest")
+        registerStub("GainGarageValueCheatRequest")
+        registerStub("ClaimAllFreePremiumGachasCheatRequest")
+        registerStub("BlackMarketGetStatusRequest")
+        registerStub("BlackMarketBuyRequest")
+        registerStub("BlackMarketRefreshRequest")
+        registerStub("MultiplayerSeriesCancelMatchmakingRequest")
+        registerStub("MultiplayerSeriesCancelRaceRequest")
+        registerStub("MultiplayerSeriesClaimRewardsRequest")
+        registerStub("MultiplayerSeriesFinishRaceRequest")
+        registerStub("MultiplayerSeriesRefreshClaimStateRequest")
+        registerStub("MultiplayerSeriesRequestRevertOfMaintenanceBookingRequest")
+        registerStub("MultiplayerSeriesResetCurrentEventCheatRequest")
+        registerStub("MultiplayerSeriesResetMaxTierCheatRequest")
+        registerStub("MultiplayerSeriesSetEloCheatRequest")
+        registerStub("MultiplayerSeriesStartMatchmakingRequest")
+        registerStub("MultiplayerSeriesStartRaceRequest")
+        registerStub("MultiplayerSeriesSyncRacesRequest")
+        registerStub("MultiplayerSeriesReportUserRequest")
+        registerStub("CreateClubRequest")
+        registerStub("EditClubRequest")
+        registerStub("LeaveClubRequest")
+        registerStub("RequestJoinClubRequest")
+        registerStub("AcceptClubRequestRequest")
+        registerStub("RejectClubRequestRequest")
+        registerStub("PromoteClubMemberRequest")
+        registerStub("DemoteClubMemberRequest")
+        registerStub("KickClubMemberRequest")
+        registerStub("ClaimClubSeasonMilestoneRequest")
+        registerStub("ClaimCurrentClubSeasonRequest")
+        registerStub("ClaimPreviousClubSeasonsRequest")
+        registerStub("RefreshClubStateRequest")
+        registerStub("FindOnlineUserByAliasRequest")
+        registerStub("InviteUserRequest")
+        registerStub("AcceptClubInvitationRequest")
+        registerStub("DeclineClubInvitationRequest")
+        registerStub("RequestClubDonationRequest")
+        registerStub("GiveClubDonationRequest")
+        registerStub("GetClubDonationsRequest")
+        registerStub("SetClubUGCValidatedCheatRequest")
+        registerStub("ClubRaceCancelRaceRequest")
+        registerStub("ClubRaceCreateRoomRequest")
+        registerStub("ClubRaceFinishRaceRequest")
+        registerStub("ClubRaceJoinRoomRequest")
+        registerStub("ClubRaceNotifyRoomJoinedRequest")
+        registerStub("ClubRaceNotifyRoomJoinFailedRequest")
+        registerStub("ClubRaceNotifyRoomLeftRequest")
+        registerStub("ClubRaceStartRaceRequest")
+        registerStub("MiscellaneousSetUserNameRequest")
+        registerStub("MiscellaneousSetUserAgeAndGenderRequest")
+        registerStub("MiscellaneousSetUserOnlinePrivacyPolicyRequest")
+        registerStub("MiscellaneousSetUnderageDisclaimerShownRequest")
+        registerStub("SaveGameSettingsRequest")
+        registerStub("MiscellaneousSetPlatformRequest")
+        registerStub("MiscellaneousSetCrossplayPlatformFilterRequest")
+        registerStub("SaveAdsMinigameResultRequest")
+        registerStub("PerformCheatRequest")
+        registerStub("PurchaseOfflineProductRequest")
+        registerStub("IAPFakePurchaseCheatRequest")
+        registerStub("ProcessPendingSeshatAdTransactionRequest")
+        registerStub("ProcessPendingSeshatGiftTransactionRequest")
+        registerStub("ProcessPendingSeshatIAPTransactionRequest")
+        registerStub("ProcessPendingSeshatRefundTransactionRequest")
+        registerStub("ProcessPendingSeshatTransactionsRequest")
+        registerStub("ClaimAdClientSideRewardsRequest")
+        registerStub("CurrencyPackValidatePurchaseRequest")
+        registerStub("PromotionValidatePurchaseRequest")
+        registerStub("TLETicketsCheatRequest")
+        registerStub("TLEventCancelRaceRequest")
+        registerStub("TLEventClaimClubRewardRequest")
+        registerStub("TLEventClaimRankRewardsRequest")
+        registerStub("TLEventCompleteCheatRequest")
+        registerStub("TLEventFinishRaceRequest")
+        registerStub("TLEventRefillTicketsRequest")
+        registerStub("TLEventRefreshClaimStateRequest")
+        registerStub("TLEventSkipClubRewardConditionRequest")
+        registerStub("TLEventSkipSoloRewardConditionRequest")
+        registerStub("TLEventStartRaceRequest")
+        registerStub("TLEventClaimPreviousSpecialEventRequest")
+        registerStub("TimeLimitedSpecialEventClaimProgressionRewardRequest")
+        registerStub("TLEventAutoclaimRewardsRequest")
+        registerStub("TLEventResetNitroGhostRequest")
+        registerStub("TLEventResetCheatRequest")
+        registerStub("RetrievePlaybackCheatRequest")
+        registerStub("ForceConfigRefreshRequest")
+        registerStub("GetRemoteAccountConflictDataRequest")
+        registerStub("ClaimGiftRequest")
+        registerStub("ClaimIrisRedeemCodeRequest")
+        registerStub("ClaimDynamicRewardRequest")
+        registerStub("ResetUserStateRequest")
+        registerStub("ClaimEnableNotificationsRewardRequest")
+        registerStub("ClaimDailyTasksRequest")
+        registerStub("DailyTasksResetRequest")
+        registerStub("BuyRelayOfferTierRequest")
+        registerStub("ValidateIAPRelayOfferPurchaseRequest")
+        registerStub("QuickRaceFinishRaceRequest")
+        registerStub("SplitScreenStartRaceRequest")
+        registerStub("SplitScreenEndRaceRequest")
+        registerStub("UberSpecialEventDiscoverMissionCarsRequest")
+        registerStub("UberSpecialEventStartRaceRequest")
+        registerStub("UberSpecialEventCancelRaceRequest")
+        registerStub("UberSpecialEventRegisterFinishRaceRequest")
+        registerStub("UberSpecialEventRetryRaceRequest")
+        registerStub("UberSpecialEventCommitResultsRaceRequest")
+        registerStub("UberSpecialEventSkipMissionRequest")
+        registerStub("UberSpecialEventCleanHazardRequest")
+        registerStub("UberSpecialEventMarketBuyRequest")
+        registerStub("UberSpecialEventFinalClaimRequest")
+        registerStub("ChampionshipSpecialEventStartQualifyingPracticeRaceRequest")
+        registerStub("ChampionshipSpecialEventFinishQualifyingPracticeRaceRequest")
+        registerStub("ChampionshipSpecialEventStartQualifyingRaceRequest")
+        registerStub("ChampionshipSpecialEventFinishQualifyingRaceRequest")
+        registerStub("ChampionshipSpecialEventStartFinalsPracticeRaceRequest")
+        registerStub("ChampionshipSpecialEventFinishFinalsPracticeRaceRequest")
+        registerStub("ChampionshipSpecialEventStartFinalsRaceRequest")
+        registerStub("ChampionshipSpecialEventFinishFinalsRaceRequest")
+        registerStub("ChampionshipSpecialEventCancelRaceRequest")
+        registerStub("ChampionshipSpecialEventRefreshQualifyingRoundGroupRequest")
+        registerStub("ChampionshipSpecialEventRefreshQualifyingRoundStateRequest")
+        registerStub("ChampionshipSpecialEventRefreshFinalsGroupRequest")
+        registerStub("ChampionshipSpecialEventRefreshFinalsRoundStateRequest")
+        registerStub("ChampionshipSpecialEventSkipRewardRequest")
+        registerStub("ChampionshipSpecialEventBuyQualificationRequest")
+        registerStub("ChampionshipSpecialEventRefreshClaimStateRequest")
+        registerStub("ChampionshipSpecialEventClaimRankRewardsRequest")
+        registerStub("ChampionshipSpecialEventClaimFreePackRequest")
+        registerStub("ChampionshipSpecialEventSyncServicesRequest")
+        registerStub("ChampionshipSpecialEventResetNitroGhostRequest")
+        registerStub("SeasonPassBuyTierRequest")
+        registerStub("SeasonPassClaimPendingRewardsRequest")
+        registerStub("SeasonPassClaimEpisodePartialCompletionRewardsRequest")
+        registerStub("SeasonPassClaimEpisodesCompletionRewardsRequest")
+        registerStub("SeasonPassValidateProductPurchaseRequest")
+        registerStub("SeasonPassSetPlayedOnboardingCheatRequest")
+        registerStub("ClubWarsRegisterRequest")
+        registerStub("ClubWarsRefreshRegistrationRequest")
+        registerStub("ClubWarsProcessMatchmakingRequest")
+        registerStub("ClubWarsDefenseStartRaceRequest")
+        registerStub("ClubWarsDefenseFinishRaceRequest")
+        registerStub("ClubWarsDefenseCancelRaceRequest")
+        registerStub("ClubWarsDefenseAssignCarRequest")
+        registerStub("ClubWarsDefenseOccupyNodeRequest")
+        registerStub("ClubWarsDefenseUnassignCarRequest")
+        registerStub("ClubWarsDefenseVacateNodeRequest")
+        registerStub("ClubWarsPracticeStartRaceRequest")
+        registerStub("ClubWarsPracticeFinishRaceRequest")
+        registerStub("ClubWarsPracticeCancelRaceRequest")
+        registerStub("ClubWarsAttackStartRaceRequest")
+        registerStub("ClubWarsAttackFinishRaceRequest")
+        registerStub("ClubWarsAttackCancelRaceRequest")
+        registerStub("ClubWarsAttackConquerNodeRequest")
+        registerStub("ClubWarsAttackSelectEntryPointRequest")
+        registerStub("ClubWarsRefreshRegionsRequest")
+        registerStub("ClubWarsRefreshNodesRequest")
+        registerStub("ClubWarsFinishRoundRequest")
+        registerStub("ClubWarsClaimRoundRequest")
+        registerStub("ClubWarsRefreshClaimStateRequest")
+        registerStub("ClubWarsClaimRewardsRequest")
+        registerStub("ClubWarsMarketBuyRequest")
+        registerStub("ClubWarsMarketRefreshRequest")
+        registerStub("InboxMarkAsReadRequest")
+        registerStub("PartyCreateRoomRequest")
+        registerStub("PartyJoinRoomRequest")
+        registerStub("PartyJoinByPartyIdRequest")
+        registerStub("PartyFindRoomByAccessCodeRequest")
+        registerStub("PartyStartRaceRequest")
+        registerStub("PartyFinishRaceRequest")
+        registerStub("PartyCancelRaceRequest")
+        registerStub("PartyCancelRaceSpectatorRequest")
+        registerStub("PartyStartRaceSpectatorRequest")
+        registerStub("PartyLeaveRoomRequest")
+        registerStub("PartyKickUserRequest")
+        registerStub("PartyLaunchRoomRequest")
+        registerStub("PartyUpdateUserDataRequest")
+        registerStub("PartyUpdateRoomDataRequest")
+        registerStub("PartyChangeUserRoleRequest")
+        registerStub("PartySendPartyInvitationRequest")
+        registerStub("PartySetNativeSessionRequest")
+        registerStub("SendTrackingEventsRequest")
+        registerStub("GetPlatformIdsRequest")
+        registerStub("GetOnlineUserInfoRequest")
+        registerStub("ReportUserRequest")
+        registerStub("XboxLiveOnlyEnableRequest")
+        registerStub("BlockUserRequest")
+        registerStub("UnblockUserRequest")
+        registerStub("GetBlockedUsersRequest")
+        registerStub("BonusPassBuyPassRequest")
+        registerStub("BonusPassValidateProductPurchaseRequest")
+        registerStub("BonusPassBundleValidateProductPurchaseRequest")
+        registerStub("BonusPassFinishPassRequest")
+        registerStub("PiggyBankValidateProductPurchaseRequest")
+        registerStub("PiggyBankClaimFreeTierRequest")
+        registerStub("PiggyBankExpireTierRequest")
+        registerStub("PiggyBankAddMoneyToBankCheatRequest")
+        registerStub("LegendFundValidateProductPurchaseRequest")
+        registerStub("LegendFundClaimMilestoneRequest")
+        registerStub("LegendFundResetCheatRequest")
+        registerStub("LegendFundObtainCheatRequest")
+        registerStub("IncreaseVaultTicketCheatRequest")
+        registerStub("ConsumeVaultTicketCheatRequest")
+        registerStub("TriggerRefillVaultTicketByTimeCheatRequest")
+        registerStub("VaultCompleteStageCheatRequest")
+        registerStub("VaultRefillTicketsRequest")
+        registerStub("VaultOccupySlotRequest")
+        registerStub("VaultDeoccupySlotRequest")
+        registerStub("VaultEventStartRaceRequest")
+        registerStub("VaultEventFinishRaceRequest")
+        registerStub("VaultEventCancelRaceRequest")
+        registerStub("VaultEventClaimProgressionRewardsRequest")
+        registerStub("VaultExtendEventRequest")
+        registerStub("VaultEventSkipSoloRewardConditionsRequest")
+        registerStub("VaultGetRemoteVaultEventStateRequest")
+        registerStub("VaultCleanCorruptSlotRequest")
+        registerStub("VaultNotifyAccomplishedEventRequest")
+        registerStub("SeasonalCurrencyConvertCurrencyRequest")
+        registerStub("UpsellPopupBuyOfferRequest")
+        registerStub("UpsellPopupValidateProductPurchaseRequest")
+        registerStub("OverclockExpireEventRequest")
+        registerStub("OverclockPurchaseOverclockForCarRequest")
+        registerStub("OverclockExpireCarRequest")
+        registerStub("OverclockRemoveOverclockOfCarCheatRequest")
+        registerStub("OverclockGainOverclockChipsCheatRequest")
+        registerStub("OverclockResetOverclockChipsCheatRequest")
+        registerStub("SponsorshipSelectContractRequest")
+        registerStub("SponsorshipContractClaimRequest")
+        registerStub("SponsorshipContractFailRequest")
+        registerStub("ProcessSponsorshipDailyLoginRequest")
+        registerStub("SaveObtainedAdsRewardDataIntoServerStateRequest")
+        registerStub("ClearAllObtainedAdsRewardDataInServerStateRequest")
+        registerStub("CreateTransferCodeRequest")
+        registerStub("LinkAccountWithTransferCodeRequest")
+        registerStub("LinkAccountWithCredentialRequest")
+        registerStub("ConfirmLinkingOperationRequest")
+        registerStub("PostLoginSocialUpdateRequest")
+        registerStub("UpdateStatusLineRequest")
+        registerStub("ListGameFriendsRequest")
+        registerStub("RequestGameFriendRequest")
+        registerStub("RemoveGameFriendRequest")
+        registerStub("ListGameFriendRequestsRequest")
+        registerStub("AcceptGameFriendRequestRequest")
+        registerStub("RejectGameFriendRequestRequest")
+        registerStub("CancelSentGameFriendRequestRequest")
+        registerStub("SearchGameFriendRequest")
+        registerStub("ListOneWayConnectionsRequest")
+        registerStub("AddOneWayConnectionRequest")
+        registerStub("DeleteOneWayConnectionRequest")
+        registerStub("BatchFilterExistingUsersRequest")
+        registerStub("GetCredentialsForConsoleUsersRequest")
+        registerStub("AcceptAllFriendRequestsRequest")
+        registerStub("RejectAllFriendRequestsRequest")
+        registerStub("ProcessDLCIAPTransactionRequest")
     }
 }

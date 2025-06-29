@@ -215,11 +215,13 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
             )
         }
 
-        val handler = layer.mapPacket(header.type)
+        val handlerEntry = layer.mapPacket(header.type)
+        val handler = handlerEntry?.handle
 
-        if (handler == null) {
+        if (handlerEntry == null || handler == null) {
             LOG.warn(
-                ansi().fgBrightYellow().a("[I] Unknown packet with ID {} {}").reset().toString(),
+                ansi().fgBrightYellow().a("[I] Unknown packet {} (ID {}) {}").reset().toString(),
+                handlerEntry?.requestName ?: "<unknown name>",
                 header.type.toHexString(),
                 bytes.toHexString()
             )
@@ -232,9 +234,9 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
         }
 
         val request = runCatching {
-            bytes.sink(layer.ver).readFully(handler.requestClass)
+            bytes.sink(layer.ver).readFully(handlerEntry.requestClass)
         }.onFailure { throwable ->
-            LOG.error("[I] Error reading packet with ID {}", header.type.toHexString())
+            LOG.error("[I] Error reading packet {} (ID {})", handlerEntry.requestName, header.type.toHexString())
             throwable.printStackTrace()
 
             reportHandlingError(header, bytes, throwable)
@@ -247,7 +249,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
         }.getOrThrow()
 
         runCatching {
-            handler.handle(this, request)
+            handler(this, request)
         }.onSuccess {
             LOG.info("[I] Handled packet {} (ID {})", request.javaClass.simpleName, request.type.toHexString())
         }.onFailure { throwable ->
