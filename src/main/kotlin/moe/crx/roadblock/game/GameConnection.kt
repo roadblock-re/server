@@ -126,6 +126,10 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
     }
 
     suspend fun receive(bytes: ByteArray) {
+        if (connectionState == ConnectionState.NOT_INITIALIZED && ignoreConnect) {
+            connectionState = ConnectionState.NOT_AUTHORIZED
+        }
+
         // TODO handle reconnect packet properly
         if (bytes.first().toInt() == 2 && connectionState == ConnectionState.NOT_AUTHORIZED) {
             connectionState = ConnectionState.AUTHORIZED
@@ -139,10 +143,6 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
                 lastCommitedActionId = lastRequestSequence
             }.bytes(layer.ver))
             return
-        }
-
-        if (connectionState == ConnectionState.NOT_INITIALIZED && ignoreConnect) {
-            connectionState = ConnectionState.NOT_AUTHORIZED
         }
 
         // TODO Move to WebSocket handler
