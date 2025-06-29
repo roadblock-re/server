@@ -6,11 +6,11 @@ import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
 import moe.crx.roadblock.objects.base.RString
-import moe.crx.roadblock.objects.privatelobby.PrivateLobbyEventState
+import moe.crx.roadblock.objects.privatelobby.PrivateLobbyEventData
 
 class PrivateLobbyState : RObject {
 
-    var events: Map<RString, PrivateLobbyEventState> = mapOf()
+    var events: Map<RString, PrivateLobbyEventData> = mapOf()
 
     override fun read(sink: InputSink) {
         events = sink.readMap()
