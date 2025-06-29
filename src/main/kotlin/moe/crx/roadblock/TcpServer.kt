@@ -75,10 +75,20 @@ fun tcpServer(wait: Boolean): Job {
                 }
 
                 while (!client.isClosed) {
-                    val header = input.readNBytes(4).toBigEndianInt()
+                    var headerBytes = ByteArray(0)
+
+                    while (headerBytes.size < 4) {
+                        headerBytes += input.readNBytes(4 - headerBytes.size)
+                    }
+
+                    val header = headerBytes.toBigEndianInt()
                     val length = header and 0xFFFFFFF
                     val type = header ushr 0x1C
-                    var bytes = input.readNBytes(length)
+                    var bytes = ByteArray(0)
+
+                    while (bytes.size < length) {
+                        bytes += input.readNBytes(length - bytes.size)
+                    }
 
                     decrypt.processBytes(bytes.copyOf(), 0, bytes.size, bytes, 0)
 

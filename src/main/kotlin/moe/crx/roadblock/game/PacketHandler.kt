@@ -13,16 +13,16 @@ data class PacketHandler(
 
 abstract class GameLayer(val ver: SerializationVersion) {
 
-    var currentId = 0
-    var handlers: MutableMap<Byte, PacketHandler?> = mutableMapOf()
+    var currentId: Short = 0
+    var handlers: MutableMap<Short, PacketHandler?> = mutableMapOf()
 
     fun registerStub(requestName: String? = null) {
-        check(!handlers.containsKey(currentId.toByte())) {
+        check(!handlers.containsKey(currentId)) {
             "Handler with ID $currentId was already registered."
         }
 
         handlers.put(
-            currentId.toByte(),
+            currentId,
             PacketHandler(
                 requestName ?: "<unknown name>",
                 RequestPacket::class,
@@ -37,12 +37,12 @@ abstract class GameLayer(val ver: SerializationVersion) {
     inline fun <reified T : RequestPacket> register(
         noinline handle: (suspend (GameConnection, T) -> Unit)
     ) {
-        check(!handlers.containsKey(currentId.toByte())) {
+        check(!handlers.containsKey(currentId)) {
             "Handler with ID $currentId was already registered."
         }
 
         handlers.put(
-            currentId.toByte(),
+            currentId,
             PacketHandler(
                 T::class.java.simpleName,
                 T::class,
@@ -61,5 +61,5 @@ abstract class GameLayer(val ver: SerializationVersion) {
         return File(File("game", "${ver.major}.${ver.minor}.${ver.build}"), "A9-business.gdb")
     }
 
-    fun mapPacket(type: Byte) = handlers[type]
+    fun mapPacket(type: Short) = handlers[type]
 }

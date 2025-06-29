@@ -13,7 +13,7 @@ open class ResponsePacket() : Packet(PacketDirection.RESPONSE) {
     var responseSequence: Int = 0
     var previousRequestSequence: Int = 0
     var timestamp: Instant = now()
-    var type: Byte = 0
+    var type: Short = 0
     var error: ServerError? = null
 
     override fun read(sink: InputSink) {
@@ -21,7 +21,11 @@ open class ResponsePacket() : Packet(PacketDirection.RESPONSE) {
         responseSequence = sink.readInt()
         previousRequestSequence = sink.readInt()
         timestamp = sink.readInstant()
-        type = sink.readByte()
+        type = if (sink newer "24.0.0") {
+            sink.readShort()
+        } else {
+            sink.readByte().toShort()
+        }
         error = sink.readOptional()
     }
 
@@ -30,7 +34,11 @@ open class ResponsePacket() : Packet(PacketDirection.RESPONSE) {
         sink.writeInt(responseSequence)
         sink.writeInt(previousRequestSequence)
         sink.writeInstant(timestamp)
-        sink.writeByte(type)
+        if (sink newer "24.0.0") {
+            sink.writeShort(type)
+        } else {
+            sink.writeByte(type.toByte())
+        }
         sink.writeOptional(error)
     }
 }

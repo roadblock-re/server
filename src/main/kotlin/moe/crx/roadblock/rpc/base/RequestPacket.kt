@@ -7,19 +7,27 @@ open class RequestPacket() : Packet(PacketDirection.REQUEST) {
 
     var sequence: Int = 0
     var fedId: String = ""
-    var type: Byte = 0
+    var type: Short = 0
 
     override fun read(sink: InputSink) {
         super.read(sink)
         sequence = sink.readInt()
         fedId = sink.readString()
-        type = sink.readByte()
+        type = if (sink newer "24.0.0") {
+            sink.readShort()
+        } else {
+            sink.readByte().toShort()
+        }
     }
 
     override fun write(sink: OutputSink) {
         super.write(sink)
         sink.writeInt(sequence)
         sink.writeString(fedId)
-        sink.writeByte(type)
+        if (sink newer "24.0.0") {
+            sink.writeShort(type)
+        } else {
+            sink.writeByte(type.toByte())
+        }
     }
 }

@@ -11,6 +11,7 @@ import moe.crx.roadblock.objects.game.ActionResponseHeader
 import moe.crx.roadblock.objects.game.CompressionType
 import moe.crx.roadblock.objects.game.ConfigData
 import moe.crx.roadblock.objects.game.ServerDBSerialization
+import moe.crx.roadblock.push.PushMessagePacket
 import moe.crx.roadblock.rpc.auth.ConnectGameRequest
 import moe.crx.roadblock.rpc.auth.LoginRequest
 import moe.crx.roadblock.rpc.auth.LoginResponse
@@ -18,7 +19,6 @@ import moe.crx.roadblock.rpc.auth.LoginResponse.Companion.GAME_SIGNATURE
 import moe.crx.roadblock.rpc.base.ReconnectionResponse
 import moe.crx.roadblock.rpc.base.RequestPacket
 import moe.crx.roadblock.rpc.base.ResponsePacket
-import moe.crx.roadblock.rpc.base.SpecialPacket
 import moe.crx.roadblock.utils.bytes
 import moe.crx.roadblock.utils.readFully
 import moe.crx.roadblock.utils.sink
@@ -60,7 +60,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
     var packetLock: ReentrantLock = ReentrantLock()
     var lastRequestSequence = 0
     var requestSequence = 0
-    var requestType: Byte = 0
+    var requestType: Short = 0
 
     init {
         LOG.info("Game connection created")
@@ -93,10 +93,10 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
                 }
 
                 runCatching { bytes.sink(layer.ver).readObject<ResponsePacket>().type }.getOrNull()?.let { id ->
-                    LOG.info("Sending response packet with ID {}", id.toHexString())
+                    LOG.info("Sending response packet with ID {}", id)
                 }
-                runCatching { bytes.sink(layer.ver).readObject<SpecialPacket>().type }.getOrNull()?.let { id ->
-                    LOG.info("Sending special packet with ID {}", id.toHexString())
+                runCatching { bytes.sink(layer.ver).readObject<PushMessagePacket>().type }.getOrNull()?.let { id ->
+                    LOG.info("Sending push message packet with ID {}", id)
                 }
                 send(bytes)
             }
@@ -126,6 +126,8 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
     }
 
     suspend fun receive(bytes: ByteArray) {
+        // TODO Rewrite handling of packet header types
+
         if (connectionState == ConnectionState.NOT_INITIALIZED && ignoreConnect) {
             connectionState = ConnectionState.NOT_AUTHORIZED
         }
@@ -145,6 +147,20 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
             return
         }
 
+        if (bytes.first().toInt() == 4) {
+            // TODO
+            LOG.info("AlertControlRequest")
+            send(bytes)
+            return
+        }
+
+        if (bytes.first().toInt() == 1) {
+            // TODO
+            LOG.info("ResetStateRequest")
+            send(bytes)
+            return
+        }
+
         // TODO Move to WebSocket handler
         if (connectionState == ConnectionState.NOT_INITIALIZED) {
             val handshake = bytes.sink(layer.ver).readFully<ConnectGameRequest>()
@@ -154,7 +170,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
         }
 
         // TODO preserve game state, so it won't require auth on reconnect
-        if (connectionState == ConnectionState.NOT_AUTHORIZED) {
+        if (bytes.first().toInt() == 0) {
             bytes.sink(layer.ver).readFully<LoginRequest>()
             LOG.info("[I] Game authorized")
             connectionState = ConnectionState.AUTHORIZED
@@ -194,7 +210,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
             return
         }
 
-        if (!onlineInformationSent) {
+        if (!onlineInformationSent && connectionState == ConnectionState.AUTHORIZED) {
             onlineInformationSent = true
 
             // TODO Send push messages
@@ -222,7 +238,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
             LOG.warn(
                 ansi().fgBrightYellow().a("[I] Unknown packet {} (ID {}) {}").reset().toString(),
                 handlerEntry?.requestName ?: "<unknown name>",
-                header.type.toHexString(),
+                header.type,
                 bytes.toHexString()
             )
 
@@ -236,7 +252,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
         val request = runCatching {
             bytes.sink(layer.ver).readFully(handlerEntry.requestClass)
         }.onFailure { throwable ->
-            LOG.error("[I] Error reading packet {} (ID {})", handlerEntry.requestName, header.type.toHexString())
+            LOG.error("[I] Error reading packet {} (ID {})", handlerEntry.requestName, header.type)
             throwable.printStackTrace()
 
             reportHandlingError(header, bytes, throwable)
@@ -251,9 +267,9 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
         runCatching {
             handler(this, request)
         }.onSuccess {
-            LOG.info("[I] Handled packet {} (ID {})", request.javaClass.simpleName, request.type.toHexString())
+            LOG.info("[I] Handled packet {} (ID {})", request.javaClass.simpleName, request.type)
         }.onFailure { throwable ->
-            LOG.error("[I] Error handling packet {} (ID {})", request.javaClass.simpleName, request.type.toHexString())
+            LOG.error("[I] Error handling packet {} (ID {})", request.javaClass.simpleName, request.type)
             throwable.printStackTrace()
 
             reportHandlingError(request, bytes, throwable)
@@ -273,7 +289,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
             parentFile.mkdirs()
 
             FileWriter(this).use { writer ->
-                writer.write("Error handling packet ${request.javaClass.simpleName} (ID ${request.type.toHexString()}):\n\n")
+                writer.write("Error handling packet ${request.javaClass.simpleName} (ID ${request.type}):\n\n")
                 throwable.printStackTrace(PrintWriter(writer))
                 writer.write("\nRequest packet bytes:\n")
                 writer.write(bytes.toHexString())

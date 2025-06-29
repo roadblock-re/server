@@ -8,20 +8,28 @@ import moe.crx.roadblock.objects.game.ServerError
 import moe.crx.roadblock.rpc.base.Packet
 import moe.crx.roadblock.rpc.base.PacketDirection
 
-open class PushMessagePacket() : Packet(PacketDirection.SPECIAL) {
+open class PushMessagePacket() : Packet(PacketDirection.PUSH) {
 
-    var type: Byte = 0
+    var type: Short = 0
     var error: ServerError? = null
 
     override fun read(sink: InputSink) {
         super.read(sink)
-        type = sink.readByte()
+        type = if (sink newer "24.0.0") {
+            sink.readShort()
+        } else {
+            sink.readByte().toShort()
+        }
         error = sink.readOptional()
     }
 
     override fun write(sink: OutputSink) {
         super.write(sink)
-        sink.writeByte(type)
+        if (sink newer "24.0.0") {
+            sink.writeShort(type)
+        } else {
+            sink.writeByte(type.toByte())
+        }
         sink.writeOptional(error)
     }
 }
