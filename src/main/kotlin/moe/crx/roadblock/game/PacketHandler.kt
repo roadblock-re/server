@@ -2,6 +2,7 @@ package moe.crx.roadblock.game
 
 import moe.crx.roadblock.objects.game.SerializationVersion
 import moe.crx.roadblock.rpc.base.RequestPacket
+import java.io.File
 import kotlin.reflect.KClass
 
 data class PacketHandler(
@@ -9,7 +10,7 @@ data class PacketHandler(
     val handle: suspend (GameConnection, RequestPacket) -> Unit,
 )
 
-abstract class PacketLayer(val ver: SerializationVersion) {
+abstract class GameLayer(val ver: SerializationVersion) {
 
     // There are also LoginRequest/LoginRequest at nil index, but it seems to be unused
     var currentId = 1
@@ -36,6 +37,14 @@ abstract class PacketLayer(val ver: SerializationVersion) {
                 )
             })
         ++currentId
+    }
+
+    fun getConfig(): File {
+        return File(File("game", "${ver.major}.${ver.minor}.${ver.build}"), "clientconfig.json")
+    }
+
+    fun getGameDb(): File {
+        return File(File("game", "${ver.major}.${ver.minor}.${ver.build}"), "A9-business.gdb")
     }
 
     fun mapPacket(type: Byte) = handlers[type]

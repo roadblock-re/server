@@ -55,7 +55,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
     var onlineInformationSent = false
     val cliJob: Job
     var gameState = StateManager.default()
-    val layer = PacketLayer24014
+    val layer = GameLayer24_0_14
 
     var packetLock: ReentrantLock = ReentrantLock()
     var lastRequestSequence = 0
@@ -178,12 +178,12 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
                 serializationVersion = layer.ver
                 configData = ConfigData().apply {
                     compressionType = CompressionType.LZ4
-                    data = File("game/clientconfig.json").readBytes()
+                    data = layer.getConfig().readBytes()
                 }
                 serverDBs = ServerDBSerialization().apply {
                     gameDb = ConfigData().apply {
                         compressionType = CompressionType.LZ4
-                        data = File("game/A9-business.gdb").readBytes()
+                        data = layer.getGameDb().readBytes()
                     }
                 }
                 state = gameState
