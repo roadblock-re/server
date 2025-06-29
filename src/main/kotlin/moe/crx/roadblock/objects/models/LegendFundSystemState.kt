@@ -9,17 +9,16 @@ import moe.crx.roadblock.objects.base.RShort
 
 class LegendFundSystemState : RObject {
 
-    // TODO is this byte, short, or optional<short>?
-    var ownedTierCount: Byte = 0
+    var ownedTierCount: Short = 0
     var claimedMilestones: List<RShort> = listOf()
 
     override fun read(sink: InputSink) {
-        ownedTierCount = sink.readByte()
+        ownedTierCount = sink.readShort()
         claimedMilestones = sink.readList()
     }
 
     override fun write(sink: OutputSink) {
-        sink.writeByte(ownedTierCount)
+        sink.writeShort(ownedTierCount)
         sink.writeList(claimedMilestones)
     }
 }
