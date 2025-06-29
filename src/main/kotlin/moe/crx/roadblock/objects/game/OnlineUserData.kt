@@ -28,6 +28,8 @@ class OnlineUserData : RObject {
     var platformUsername: RString? = null
     var allCredentials: CredentialsList? = null
     var isOnline: RBoolean? = null
+    var allowsSocialFeatures: RBoolean? = null
+    var collectorStage: RShort? = null
 
     override fun read(sink: InputSink) {
         federationCredential = sink.readObject()
@@ -48,6 +50,10 @@ class OnlineUserData : RObject {
         platformUsername = sink.readOptional()
         allCredentials = sink.readOptional()
         isOnline = sink.readOptional()
+        if (sink newer "24.0.0") { // TODO or 24.1.0?
+            allowsSocialFeatures = sink.readOptional()
+            collectorStage = sink.readOptional()
+        }
     }
 
     override fun write(sink: OutputSink) {
@@ -69,5 +75,9 @@ class OnlineUserData : RObject {
         sink.writeOptional(platformUsername)
         sink.writeOptional(allCredentials)
         sink.writeOptional(isOnline)
+        if (sink newer "24.0.0") { // TODO or 24.1.0?
+            sink.writeOptional(allowsSocialFeatures)
+            sink.writeOptional(collectorStage)
+        }
     }
 }

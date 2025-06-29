@@ -88,3 +88,4 @@ typealias VaultTicket = Int
 typealias VaultSlotId = Short
 typealias VaultEventId = Int
 typealias SponsorshipContractId = Short
+typealias FriendRequestId = String

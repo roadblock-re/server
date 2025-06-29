@@ -1,5 +1,7 @@
 package moe.crx.roadblock.game
 
+import moe.crx.roadblock.game.handlers.handleGetBlockedUsers
+import moe.crx.roadblock.game.handlers.handlePostLoginSocialUpdate
 import moe.crx.roadblock.objects.game.SerializationVersion
 
 object GameLayer24014 : GameLayer(SerializationVersion().apply {
@@ -47,7 +49,7 @@ object GameLayer24014 : GameLayer(SerializationVersion().apply {
         registerStub("ChangeGameplayTutorialStateRequest")
         registerStub("GainGarageLevelCheatRequest")
         registerStub("GainGarageValueCheatRequest")
-        registerStub("ClaimAllFreePremiumGachasCheatRequest")
+        //registerStub("ClaimAllFreePremiumGachasCheatRequest") // Not supported on 24.0.1f (but supported on 24.0.6)
         registerStub("BlackMarketGetStatusRequest")
         registerStub("BlackMarketBuyRequest")
         registerStub("BlackMarketRefreshRequest")
@@ -230,7 +232,7 @@ object GameLayer24014 : GameLayer(SerializationVersion().apply {
         registerStub("XboxLiveOnlyEnableRequest")
         registerStub("BlockUserRequest")
         registerStub("UnblockUserRequest")
-        registerStub("GetBlockedUsersRequest")
+        register(::handleGetBlockedUsers)
         registerStub("BonusPassBuyPassRequest")
         registerStub("BonusPassValidateProductPurchaseRequest")
         registerStub("BonusPassBundleValidateProductPurchaseRequest")
@@ -278,7 +280,7 @@ object GameLayer24014 : GameLayer(SerializationVersion().apply {
         registerStub("LinkAccountWithTransferCodeRequest")
         registerStub("LinkAccountWithCredentialRequest")
         registerStub("ConfirmLinkingOperationRequest")
-        registerStub("PostLoginSocialUpdateRequest")
+        register(::handlePostLoginSocialUpdate)
         registerStub("UpdateStatusLineRequest")
         registerStub("ListGameFriendsRequest")
         registerStub("RequestGameFriendRequest")

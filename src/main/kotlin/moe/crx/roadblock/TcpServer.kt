@@ -9,6 +9,7 @@ import moe.crx.roadblock.game.GameConnection
 import moe.crx.roadblock.utils.evpBytesToKey
 import moe.crx.roadblock.utils.toBigEndianBytes
 import moe.crx.roadblock.utils.toBigEndianInt
+import moe.crx.roadblock.utils.toHexString
 import moe.crx.roadblock.utils.toLittleEndianInt
 import net.jpountz.lz4.LZ4Factory
 import net.jpountz.lz4.LZ4SafeDecompressor
@@ -91,6 +92,24 @@ fun tcpServer(wait: Boolean): Job {
                     }
 
                     decrypt.processBytes(bytes.copyOf(), 0, bytes.size, bytes, 0)
+
+                    // MessageTypes from server to client:
+                    //    None,
+                    //    Normal,
+                    //    KeepaliveMsg,
+                    //    KeepaliveRsp,
+
+                    if (type == 15) {
+                        // TODO
+                        println("AsioKeepalive ${bytes.toHexString()}")
+                        continue
+                    }
+
+                    if (type == 14) {
+                        // TODO
+                        println("KeepaliveRsp ${bytes.toHexString()}")
+                        continue
+                    }
 
                     if (type == 1) {
                         val hash = bytes.take(4).toByteArray().toBigEndianInt()

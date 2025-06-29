@@ -61,6 +61,7 @@ fun Application.configureApiRouting() {
                     authUsersMe()
                 }
                 route("/v1") {
+                    socialMeRequests()
                     assetsGetAsset()
                     assetsGetAssetMetadata()
                     matchmakerQuickLaunch()
