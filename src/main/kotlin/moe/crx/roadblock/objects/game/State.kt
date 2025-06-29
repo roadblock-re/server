@@ -39,7 +39,7 @@ class State : RObject {
     var overclockSystem: OverclockSystemState = OverclockSystemState()
     var sponsorshipSystem: SponsorshipSystemState = SponsorshipSystemState()
     var goldenChestSystem: GoldenChestSystemState = GoldenChestSystemState()
-    // SocialSystemState (24.1.0+)
+    var socialSystem: SocialSystemState = SocialSystemState()
 
     override fun read(sink: InputSink) {
         blackMarket = sink.readObject()
@@ -75,6 +75,9 @@ class State : RObject {
             overclockSystem = sink.readObject()
             sponsorshipSystem = sink.readObject()
             goldenChestSystem = sink.readObject()
+        }
+        if (sink newer "24.1.0") {
+            socialSystem = sink.readObject()
         }
     }
 
@@ -112,6 +115,9 @@ class State : RObject {
             sink.writeObject(overclockSystem)
             sink.writeObject(sponsorshipSystem)
             sink.writeObject(goldenChestSystem)
+        }
+        if (sink newer "24.1.0") {
+            sink.writeObject(socialSystem)
         }
     }
 }
