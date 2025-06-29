@@ -6,7 +6,6 @@ import moe.crx.roadblock.rpc.base.RequestPacket
 
 class GainAllCarsCheatRequest : RequestPacket() {
 
-    // TODO I'm not sure if it should be here
     var placeholder: Int = 0
 
     override fun read(sink: InputSink) {

@@ -64,7 +64,7 @@ class StateManager {
                             item = BlackMarketItemVariant().apply {
                                 variant = UpgradeItem().apply {
                                     variant = UncommonUpgradeItem().apply {
-                                        partType = 2
+                                        partType = CarStatType.Handling
                                     }
                                 }
                             }
@@ -92,8 +92,8 @@ class StateManager {
                             item = BlackMarketItemVariant().apply {
                                 variant = UpgradeItem().apply {
                                     variant = RareUpgradeItem().apply {
-                                        partType = 2
-                                        partClass = 2
+                                        partType = CarStatType.Handling
+                                        partClass = CarClass.C
                                     }
                                 }
                             }
@@ -134,8 +134,8 @@ class StateManager {
                             item = BlackMarketItemVariant().apply {
                                 variant = UpgradeItem().apply {
                                     variant = RareUpgradeItem().apply {
-                                        partType = 3
-                                        partClass = 2
+                                        partType = CarStatType.Nitro
+                                        partClass = CarClass.C
                                     }
                                 }
                             }

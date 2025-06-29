@@ -6,7 +6,6 @@ import moe.crx.roadblock.objects.base.RObject
 
 class TimeAttackStats : RObject {
 
-    // TODO verify members order
     var timeLeft: Int = 0
     var highestCheckpointReached: Int = 0
     var hasFinishedRace: Byte = 0

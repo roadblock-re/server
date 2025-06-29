@@ -6,12 +6,11 @@ import moe.crx.roadblock.objects.base.RObject
 
 class TakedownStats : RObject {
 
-    // TODO verify members order
-    var isPolice: Byte = 0
-    var remainingLives: Byte = 0
     var hasCompletedRace: Byte = 0
     var eliminatedVictims: Int = 0
     var remainingTime: Int = 0
+    var isPolice: Byte = 0
+    var remainingLives: Byte = 0
 
     override fun read(sink: InputSink) {
         isPolice = sink.readByte()

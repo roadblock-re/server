@@ -12,7 +12,7 @@ class InventoryCarCustomizationLocksChanged : RObject {
 
     var carId: CarId = 0
     var section: CarCustomizationLockableSection =
-        CarCustomizationLockableSection.Customization // TODO is it byte or int?
+        CarCustomizationLockableSection.Customization
     var oldState: Boolean = false
     var newState: Boolean = false
 

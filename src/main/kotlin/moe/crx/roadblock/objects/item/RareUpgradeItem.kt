@@ -1,22 +1,25 @@
 package moe.crx.roadblock.objects.item
 
+import moe.crx.roadblock.io.EnumIO.readEnum
+import moe.crx.roadblock.io.EnumIO.writeEnum
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
+import moe.crx.roadblock.objects.game.CarClass
+import moe.crx.roadblock.objects.game.CarStatType
 
 class RareUpgradeItem : RObject {
 
-    // TODO Check if it's int or byte
-    var partType: Int = 0
-    var partClass: Int = 0
+    var partType: CarStatType = CarStatType.TopSpeed
+    var partClass: CarClass = CarClass.A
 
     override fun read(sink: InputSink) {
-        partType = sink.readInt()
-        partClass = sink.readInt()
+        partType = sink.readEnum()
+        partClass = sink.readEnum()
     }
 
     override fun write(sink: OutputSink) {
-        sink.writeInt(partType)
-        sink.writeInt(partClass)
+        sink.writeEnum(partType)
+        sink.writeEnum(partClass)
     }
 }

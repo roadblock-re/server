@@ -1,24 +1,25 @@
 package moe.crx.roadblock.objects.item
 
+import moe.crx.roadblock.io.EnumIO.readEnum
+import moe.crx.roadblock.io.EnumIO.writeEnum
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
+import moe.crx.roadblock.objects.game.CarClass
+import moe.crx.roadblock.objects.game.CarUpgradeTier
 
 class WildcardBlueprint : RObject {
 
-    // TODO check if it's int or byte
-    var carClass: Int = 0
-
-    // TODO check if it's int or byte
-    var tier: Byte = 0
+    var carClass: CarClass = CarClass.A
+    var tier: CarUpgradeTier = 0
 
     override fun read(sink: InputSink) {
-        carClass = sink.readInt()
+        carClass = sink.readEnum()
         tier = sink.readByte()
     }
 
     override fun write(sink: OutputSink) {
-        sink.writeInt(carClass)
+        sink.writeEnum(carClass)
         sink.writeByte(tier)
     }
 }

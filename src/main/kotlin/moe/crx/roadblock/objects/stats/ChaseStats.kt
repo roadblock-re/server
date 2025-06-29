@@ -6,7 +6,6 @@ import moe.crx.roadblock.objects.base.RObject
 
 class ChaseStats : RObject {
 
-    // TODO verify members order
     var timeLeft: Int = 0
     var hasEscaped: Byte = 0
 

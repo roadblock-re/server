@@ -6,7 +6,6 @@ import moe.crx.roadblock.objects.base.RObject
 
 class MoneyRunStats : RObject {
 
-    // TODO verify members order
     var isDisqualified: Byte = 0
     var achievedMoney: Int = 0
     var hasEnoughMoney: Byte = 0
