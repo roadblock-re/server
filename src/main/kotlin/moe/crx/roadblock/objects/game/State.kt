@@ -35,10 +35,10 @@ class State : RObject {
     var legendFundSystem: LegendFundSystemState = LegendFundSystemState() // 3.9+ only (also maybe 3.8)
     var vaultSystem: VaultSystemState = VaultSystemState()
     var seasonalCurrencySystem: SeasonalCurrencySystemState = SeasonalCurrencySystemState()
-    // UpsellPopupSystemState
-    // OverclockSystemState
-    // SponsorshipSystemState
-    // GoldenChestSystemState
+    var upsellPopupSystem: UpsellPopupSystemState = UpsellPopupSystemState()
+    var overclockSystem: OverclockSystemState = OverclockSystemState()
+    var sponsorshipSystem: SponsorshipSystemState = SponsorshipSystemState()
+    var goldenChestSystem: GoldenChestSystemState = GoldenChestSystemState()
     // SocialSystemState (24.1.0+)
 
     override fun read(sink: InputSink) {
@@ -71,6 +71,10 @@ class State : RObject {
         if (sink newer "24.0.0") {
             vaultSystem = sink.readObject()
             seasonalCurrencySystem = sink.readObject()
+            upsellPopupSystem = sink.readObject()
+            overclockSystem = sink.readObject()
+            sponsorshipSystem = sink.readObject()
+            goldenChestSystem = sink.readObject()
         }
     }
 
@@ -104,6 +108,10 @@ class State : RObject {
         if (sink newer "24.0.0") {
             sink.writeObject(vaultSystem)
             sink.writeObject(seasonalCurrencySystem)
+            sink.writeObject(upsellPopupSystem)
+            sink.writeObject(overclockSystem)
+            sink.writeObject(sponsorshipSystem)
+            sink.writeObject(goldenChestSystem)
         }
     }
 }
