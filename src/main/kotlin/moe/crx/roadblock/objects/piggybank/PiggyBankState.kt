@@ -11,6 +11,7 @@ import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RInstant
 import moe.crx.roadblock.objects.base.RInt
 import moe.crx.roadblock.objects.base.RObject
+import moe.crx.roadblock.objects.game.Money
 
 class PiggyBankState : RObject {
 
@@ -20,6 +21,7 @@ class PiggyBankState : RObject {
     var currentProgress: Int = 0
     var bankFilledTimestamp: RInstant? = null
     var tiers: Map<RInt, PiggyBankTierState> = mapOf()
+    var totalProgress: Money = 0
 
     override fun read(sink: InputSink) {
         startDate = sink.readInstant()
@@ -28,6 +30,9 @@ class PiggyBankState : RObject {
         currentProgress = sink.readInt()
         bankFilledTimestamp = sink.readOptional()
         tiers = sink.readMap()
+        if (sink newer "24.0.0") {
+            totalProgress = sink.readInt()
+        }
     }
 
     override fun write(sink: OutputSink) {
@@ -37,5 +42,8 @@ class PiggyBankState : RObject {
         sink.writeInt(currentProgress)
         sink.writeOptional(bankFilledTimestamp)
         sink.writeMap(tiers)
+        if (sink newer "24.0.0") {
+            sink.writeInt(totalProgress)
+        }
     }
 }
