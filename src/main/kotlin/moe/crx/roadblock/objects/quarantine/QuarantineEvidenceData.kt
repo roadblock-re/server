@@ -1,15 +1,29 @@
 package moe.crx.roadblock.objects.quarantine
 
+import kotlinx.datetime.Clock.System.now
+import kotlinx.datetime.Instant
+import moe.crx.roadblock.io.ListIO.readList
+import moe.crx.roadblock.io.ListIO.writeList
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.objects.base.RInt
 import moe.crx.roadblock.objects.base.RObject
 
 class QuarantineEvidenceData : RObject {
+
+    var sources: List<RInt> = listOf()
+    var mostRecentTimePoint: Instant = now()
+    var numberOfOccurrences: Int = 0
+
     override fun read(sink: InputSink) {
-        TODO("Not yet implemented")
+        sources = sink.readList()
+        mostRecentTimePoint = sink.readInstant()
+        numberOfOccurrences = sink.readInt()
     }
 
     override fun write(sink: OutputSink) {
-        TODO("Not yet implemented")
+        sink.writeList(sources)
+        sink.writeInstant(mostRecentTimePoint)
+        sink.writeInt(numberOfOccurrences)
     }
 }

@@ -1,15 +1,31 @@
 package moe.crx.roadblock.objects.quarantine
 
+import kotlinx.datetime.Clock.System.now
+import kotlinx.datetime.Instant
+import moe.crx.roadblock.io.EnumIO.readEnum
+import moe.crx.roadblock.io.EnumIO.writeEnum
+import moe.crx.roadblock.io.MapIO.readMap
+import moe.crx.roadblock.io.MapIO.writeMap
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.objects.base.RInt
 import moe.crx.roadblock.objects.base.RObject
 
 class QuarantineExitData : RObject {
+
+    var timePoint: Instant = now()
+    var reason: QuarantineExitReason = QuarantineExitReason.Cheat
+    var evidences: Map<RInt, QuarantineEvidenceData> = mapOf()
+
     override fun read(sink: InputSink) {
-        TODO("Not yet implemented")
+        timePoint = sink.readInstant()
+        reason = sink.readEnum()
+        evidences = sink.readMap()
     }
 
     override fun write(sink: OutputSink) {
-        TODO("Not yet implemented")
+        sink.writeInstant(timePoint)
+        sink.writeEnum(reason)
+        sink.writeMap(evidences)
     }
 }
