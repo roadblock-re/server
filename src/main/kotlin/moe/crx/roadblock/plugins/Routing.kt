@@ -12,6 +12,8 @@ fun Application.configureApiRouting() {
         rateLimit {
             // Eve server
             eveAbout()
+            octConnectionStatus()
+
             route("/config") {
                 configDatacenterUrls()
                 configDatacenters()
@@ -66,6 +68,7 @@ fun Application.configureApiRouting() {
                     assetsGetAssetMetadata()
                     matchmakerQuickLaunch()
                     authTokenEncrypt()
+                    messageMe()
                 }
             }
             // Pandora locate -> asset

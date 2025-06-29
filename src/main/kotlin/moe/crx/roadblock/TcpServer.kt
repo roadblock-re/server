@@ -10,7 +10,9 @@ import moe.crx.roadblock.utils.evpBytesToKey
 import moe.crx.roadblock.utils.toBigEndianBytes
 import moe.crx.roadblock.utils.toBigEndianInt
 import moe.crx.roadblock.utils.toHexString
+import moe.crx.roadblock.utils.toLittleEndianBytes
 import moe.crx.roadblock.utils.toLittleEndianInt
+import net.jpountz.lz4.LZ4Compressor
 import net.jpountz.lz4.LZ4Factory
 import net.jpountz.lz4.LZ4SafeDecompressor
 import net.jpountz.xxhash.XXHash32
@@ -23,6 +25,7 @@ import java.io.InputStreamReader
 import java.net.ServerSocket
 
 val safeDecompressor: LZ4SafeDecompressor = LZ4Factory.fastestInstance().safeDecompressor()
+val highCompressor: LZ4Compressor = LZ4Factory.fastestInstance().highCompressor()
 val xxHash32: XXHash32 = XXHashFactory.fastestInstance().hash32()
 
 val clientSalt = byteArrayOf(0x63, 0x6C, 0x69, 0x65, 0x6E, 0x74, 0x00, 0x00) // "client\0\0"
@@ -67,12 +70,32 @@ fun tcpServer(wait: Boolean): Job {
                     }
                 }
 
-                val gameConnection = GameConnection(ignoreConnect = true) { bytes, preferDeflated ->
-                    // TODO LZ4 support
+                fun sendPacket(bytes: ByteArray, type: Int) {
+                    val trimmedLength = bytes.size and 0xFFFFFFF
+                    check(trimmedLength == bytes.size)
+
+                    val shiftedType = type shl 0x1C
+                    val header = trimmedLength or shiftedType
+
                     encrypt.processBytes(bytes.copyOf(), 0, bytes.size, bytes, 0)
-                    output.write((bytes.size and 0xFFFFFFF).toBigEndianBytes())
+
+                    output.write(header.toBigEndianBytes())
                     output.write(bytes)
                     output.flush()
+                }
+
+                val gameConnection = GameConnection(ignoreConnect = true) { payloadBytes, preferDeflated ->
+                    var (bytes, type) = if (preferDeflated) {
+                        var compressed = highCompressor.compress(payloadBytes)
+                        val hash = xxHash32.hash(compressed, 0, compressed.size, payloadBytes.size)
+
+                        val finalBytes = hash.toBigEndianBytes() + payloadBytes.size.toLittleEndianBytes() + compressed
+                        finalBytes to 1
+                    } else {
+                        payloadBytes to 0
+                    }
+
+                    sendPacket(bytes, type)
                 }
 
                 while (!client.isClosed) {
@@ -93,21 +116,17 @@ fun tcpServer(wait: Boolean): Job {
 
                     decrypt.processBytes(bytes.copyOf(), 0, bytes.size, bytes, 0)
 
-                    // MessageTypes from server to client:
-                    //    None,
-                    //    Normal,
-                    //    KeepaliveMsg,
-                    //    KeepaliveRsp,
-
+                    // Asio keepalive request
                     if (type == 15) {
-                        // TODO
-                        println("AsioKeepalive ${bytes.toHexString()}")
+                        // Bytes are seem to be a sequence number but string.
+                        sendPacket(bytes, 14)
                         continue
                     }
 
+                    // Asio keepalive response
                     if (type == 14) {
-                        // TODO
-                        println("KeepaliveRsp ${bytes.toHexString()}")
+                        // Is used when server requests keepalive.
+                        println("KeepaliveRsp received: ${bytes.toHexString()}")
                         continue
                     }
 

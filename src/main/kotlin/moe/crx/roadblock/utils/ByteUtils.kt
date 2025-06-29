@@ -73,15 +73,6 @@ fun decryptDesEcbZeroPadding(encryptedBase64: String, keyString: String): String
     return String(unpadded, Charsets.UTF_8)
 }
 
-fun ByteArray.toBigEndianInt(): Int {
-    val bytes = take(4).map { it.toInt() and 0xFF }.reversed()
-    val ch1 = bytes[0]
-    val ch2 = bytes[1] shl 8
-    val ch3 = bytes[2] shl 16
-    val ch4 = bytes[3] shl 24
-    return ch1 or ch2 or ch3 or ch4
-}
-
 fun ByteArray.toLittleEndianInt(): Int {
     val bytes = take(4).map { it.toInt() and 0xFF }
     val ch1 = bytes[0]
@@ -91,12 +82,20 @@ fun ByteArray.toLittleEndianInt(): Int {
     return ch1 or ch2 or ch3 or ch4
 }
 
-fun Int.toBigEndianBytes(): ByteArray {
+fun Int.toLittleEndianBytes(): ByteArray {
     val ch1 = this and 0xFF
     val ch2 = this ushr 8 and 0xFF
     val ch3 = this ushr 16 and 0xFF
     val ch4 = this ushr 24 and 0xFF
-    return byteArrayOf(ch4.toByte(), ch3.toByte(), ch2.toByte(), ch1.toByte())
+    return byteArrayOf(ch1.toByte(), ch2.toByte(), ch3.toByte(), ch4.toByte())
+}
+
+fun ByteArray.toBigEndianInt(): Int {
+    return reversed().toByteArray().toLittleEndianInt()
+}
+
+fun Int.toBigEndianBytes(): ByteArray {
+    return toLittleEndianBytes().reversed().toByteArray()
 }
 
 fun evpBytesToKey(

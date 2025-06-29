@@ -14,22 +14,18 @@ abstract class OutputSink(ver: SerializationVersion) : Sink(ver) {
         writeByte(if (b) 1 else 0)
     }
 
+    fun writeShort(v: Short) {
+        val ch1 = v.toInt() and 0xFF
+        val ch2 = v.toInt() ushr 8 and 0xFF
+        writeBytes(ch1, ch2)
+    }
+
     fun writeInt(v: Int) {
         val ch1 = v and 0xFF
         val ch2 = v ushr 8 and 0xFF
         val ch3 = v ushr 16 and 0xFF
         val ch4 = v ushr 24 and 0xFF
         writeBytes(ch1, ch2, ch3, ch4)
-    }
-
-    fun writeFloat(v: Float) {
-        writeInt(v.toRawBits())
-    }
-
-    fun writeShort(v: Short) {
-        val ch1 = v.toInt() and 0xFF
-        val ch2 = v.toInt() ushr 8 and 0xFF
-        writeBytes(ch1, ch2)
     }
 
     fun writeLong(v: Long) {
@@ -42,6 +38,10 @@ abstract class OutputSink(ver: SerializationVersion) : Sink(ver) {
         val ch7 = v ushr 48 and 0xFF
         val ch8 = v ushr 56 and 0xFF
         writeBytes(ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8)
+    }
+
+    fun writeFloat(v: Float) {
+        writeInt(v.toRawBits())
     }
 
     fun writeDouble(v: Double) {
