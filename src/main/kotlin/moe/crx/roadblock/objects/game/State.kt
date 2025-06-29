@@ -34,7 +34,7 @@ class State : RObject {
     var piggyBankSystem: PiggyBankSystemState = PiggyBankSystemState()
     var legendFundSystem: LegendFundSystemState = LegendFundSystemState() // 3.9+ only (also maybe 3.8)
     var vaultSystem: VaultSystemState = VaultSystemState()
-    // SeasonalCurrencySystemState
+    var seasonalCurrencySystem: SeasonalCurrencySystemState = SeasonalCurrencySystemState()
     // UpsellPopupSystemState
     // OverclockSystemState
     // SponsorshipSystemState
@@ -70,6 +70,7 @@ class State : RObject {
         legendFundSystem = sink.readObject()
         if (sink newer "24.0.0") {
             vaultSystem = sink.readObject()
+            seasonalCurrencySystem = sink.readObject()
         }
     }
 
@@ -102,6 +103,7 @@ class State : RObject {
         sink.writeObject(legendFundSystem)
         if (sink newer "24.0.0") {
             sink.writeObject(vaultSystem)
+            sink.writeObject(seasonalCurrencySystem)
         }
     }
 }
