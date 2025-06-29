@@ -3,13 +3,14 @@ package moe.crx.roadblock.game
 import moe.crx.roadblock.game.handlers.*
 import moe.crx.roadblock.objects.game.SerializationVersion
 
-object GameLayer3_9_2 : GameLayer(SerializationVersion().apply {
+object GameLayer392 : GameLayer(SerializationVersion().apply {
     major = 3
     minor = 9
     build = 2
 }) {
 
     init {
+        register(::handleActionLogin)
         register(::handleCareerStartRace)
         register(::handleCareerFinishRace)
         register(::handleCareerCancelRace)

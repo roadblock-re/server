@@ -12,8 +12,7 @@ data class PacketHandler(
 
 abstract class GameLayer(val ver: SerializationVersion) {
 
-    // There are also LoginRequest/LoginRequest at nil index, but it seems to be unused
-    var currentId = 1
+    var currentId = 0
     var handlers: MutableMap<Byte, PacketHandler?> = mutableMapOf()
 
     fun registerStub() {

@@ -55,7 +55,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
     var onlineInformationSent = false
     val cliJob: Job
     var gameState = StateManager.default()
-    val layer = GameLayer24_0_14
+    val layer = GameLayer24014
 
     var packetLock: ReentrantLock = ReentrantLock()
     var lastRequestSequence = 0

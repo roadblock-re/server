@@ -13,6 +13,10 @@ import moe.crx.roadblock.utils.toEnum
 
 // TODO separate files
 
+suspend fun handleActionLogin(session: GameConnection, request: ActionLoginRequest) {
+    session.send(ActionLoginResponse())
+}
+
 suspend fun handleCareerStartRace(session: GameConnection, request: CareerStartRaceRequest) {
     val car = session.gameState.inventory.cars[RInt(request.carId)] ?: return // TODO return server error
 
