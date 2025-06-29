@@ -11,11 +11,15 @@ class MultiplayerSeriesTierInfo : RObject {
 
     override fun read(sink: InputSink) {
         tierId = sink.readByte()
-        subTierIndex = sink.readByte()
+        if (sink newer "24.0.0") {
+            subTierIndex = sink.readByte()
+        }
     }
 
     override fun write(sink: OutputSink) {
         sink.writeByte(tierId)
-        sink.writeByte(subTierIndex)
+        if (sink newer "24.0.0") {
+            sink.writeByte(subTierIndex)
+        }
     }
 }

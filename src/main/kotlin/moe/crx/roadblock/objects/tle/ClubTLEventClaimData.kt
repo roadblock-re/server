@@ -1,7 +1,9 @@
 package moe.crx.roadblock.objects.tle
 
 import moe.crx.roadblock.io.EnumIO.readEnum
+import moe.crx.roadblock.io.EnumIO.readEnum8
 import moe.crx.roadblock.io.EnumIO.writeEnum
+import moe.crx.roadblock.io.EnumIO.writeEnum8
 import moe.crx.roadblock.io.ListIO.readList
 import moe.crx.roadblock.io.ListIO.writeList
 import moe.crx.roadblock.io.sinks.InputSink
@@ -16,13 +18,21 @@ class ClubTLEventClaimData : RObject {
     var claimableRewards: List<RByte> = listOf()
 
     override fun read(sink: InputSink) {
-        state = sink.readEnum()
+        state = if (sink newer "24.0.0") {
+            sink.readEnum()
+        } else {
+            sink.readEnum8()
+        }
         finalProgress = sink.readList()
         claimableRewards = sink.readList()
     }
 
     override fun write(sink: OutputSink) {
-        sink.writeEnum(state)
+        if (sink newer "24.0.0") {
+            sink.writeEnum(state)
+        } else {
+            sink.writeEnum8(state)
+        }
         sink.writeList(finalProgress)
         sink.writeList(claimableRewards)
     }

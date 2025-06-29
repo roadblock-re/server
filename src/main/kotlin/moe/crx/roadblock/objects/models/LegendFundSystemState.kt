@@ -13,12 +13,20 @@ class LegendFundSystemState : RObject {
     var claimedMilestones: List<RShort> = listOf()
 
     override fun read(sink: InputSink) {
-        ownedTierCount = sink.readShort()
+        ownedTierCount = if (sink newer "24.0.0") {
+            sink.readShort()
+        } else {
+            sink.readByte().toShort()
+        }
         claimedMilestones = sink.readList()
     }
 
     override fun write(sink: OutputSink) {
-        sink.writeShort(ownedTierCount)
+        if (sink newer "24.0.0") {
+            sink.writeShort(ownedTierCount)
+        } else {
+            sink.writeByte(ownedTierCount.toByte())
+        }
         sink.writeList(claimedMilestones)
     }
 }
