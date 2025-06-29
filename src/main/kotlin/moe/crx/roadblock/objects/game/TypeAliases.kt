@@ -87,3 +87,6 @@ typealias CarUpgradeItemSlotId = Int
 typealias CalendarEventVersion = Int
 typealias OverclockChips = Int
 typealias CollectorStage = Short
+typealias VaultTicket = Int
+typealias VaultSlotId = Short
+typealias VaultEventId = Int

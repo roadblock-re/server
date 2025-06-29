@@ -33,13 +33,13 @@ class State : RObject {
     var bonusPassSystem: BonusPassSystemState = BonusPassSystemState()
     var piggyBankSystem: PiggyBankSystemState = PiggyBankSystemState()
     var legendFundSystem: LegendFundSystemState = LegendFundSystemState() // 3.9+ only (also maybe 3.8)
-    // VaultSystem
-    // SeasonalCurrencySystem
-    // UpsellPopupSystem
-    // OverclockSystem
-    // SponsorshipSystem
-    // GoldenChestSystem
-    // SocialSystem (24.1.0+)
+    var vaultSystem: VaultSystemState = VaultSystemState()
+    // SeasonalCurrencySystemState
+    // UpsellPopupSystemState
+    // OverclockSystemState
+    // SponsorshipSystemState
+    // GoldenChestSystemState
+    // SocialSystemState (24.1.0+)
 
     override fun read(sink: InputSink) {
         blackMarket = sink.readObject()
@@ -68,6 +68,9 @@ class State : RObject {
         bonusPassSystem = sink.readObject()
         piggyBankSystem = sink.readObject()
         legendFundSystem = sink.readObject()
+        if (sink newer "24.0.0") {
+            vaultSystem = sink.readObject()
+        }
     }
 
     override fun write(sink: OutputSink) {
@@ -97,5 +100,8 @@ class State : RObject {
         sink.writeObject(bonusPassSystem)
         sink.writeObject(piggyBankSystem)
         sink.writeObject(legendFundSystem)
+        if (sink newer "24.0.0") {
+            sink.writeObject(vaultSystem)
+        }
     }
 }
