@@ -1,6 +1,11 @@
 package moe.crx.roadblock.game
 
+import moe.crx.roadblock.game.handlers.handleChangeGameplayTutorialState
+import moe.crx.roadblock.game.handlers.handleClubWarsMarketRefresh
+import moe.crx.roadblock.game.handlers.handleDailyTasksReset
 import moe.crx.roadblock.game.handlers.handleGetBlockedUsers
+import moe.crx.roadblock.game.handlers.handleGetCredentialsForConsoleUsers
+import moe.crx.roadblock.game.handlers.handleMiscellaneousSetPlatform
 import moe.crx.roadblock.game.handlers.handlePostLoginSocialUpdate
 import moe.crx.roadblock.objects.game.SerializationVersion
 
@@ -46,7 +51,7 @@ object GameLayer24014 : GameLayer(SerializationVersion().apply {
         registerStub("ClaimMissionRewardRequest")
         registerStub("TutorialFinishRaceRequest")
         registerStub("ChangeMenuTutorialStateRequest")
-        registerStub("ChangeGameplayTutorialStateRequest")
+        register(::handleChangeGameplayTutorialState)
         registerStub("GainGarageLevelCheatRequest")
         registerStub("GainGarageValueCheatRequest")
         //registerStub("ClaimAllFreePremiumGachasCheatRequest") // Not supported on 24.0.1f (but supported on 24.0.6)
@@ -100,7 +105,7 @@ object GameLayer24014 : GameLayer(SerializationVersion().apply {
         registerStub("MiscellaneousSetUserOnlinePrivacyPolicyRequest")
         registerStub("MiscellaneousSetUnderageDisclaimerShownRequest")
         registerStub("SaveGameSettingsRequest")
-        registerStub("MiscellaneousSetPlatformRequest")
+        register(::handleMiscellaneousSetPlatform)
         registerStub("MiscellaneousSetCrossplayPlatformFilterRequest")
         registerStub("SaveAdsMinigameResultRequest")
         registerStub("PerformCheatRequest")
@@ -139,7 +144,7 @@ object GameLayer24014 : GameLayer(SerializationVersion().apply {
         registerStub("ResetUserStateRequest")
         registerStub("ClaimEnableNotificationsRewardRequest")
         registerStub("ClaimDailyTasksRequest")
-        registerStub("DailyTasksResetRequest")
+        register(::handleDailyTasksReset)
         registerStub("BuyRelayOfferTierRequest")
         registerStub("ValidateIAPRelayOfferPurchaseRequest")
         registerStub("QuickRaceFinishRaceRequest")
@@ -206,7 +211,7 @@ object GameLayer24014 : GameLayer(SerializationVersion().apply {
         registerStub("ClubWarsRefreshClaimStateRequest")
         registerStub("ClubWarsClaimRewardsRequest")
         registerStub("ClubWarsMarketBuyRequest")
-        registerStub("ClubWarsMarketRefreshRequest")
+        register(::handleClubWarsMarketRefresh)
         registerStub("InboxMarkAsReadRequest")
         registerStub("PartyCreateRoomRequest")
         registerStub("PartyJoinRoomRequest")
@@ -294,7 +299,7 @@ object GameLayer24014 : GameLayer(SerializationVersion().apply {
         registerStub("AddOneWayConnectionRequest")
         registerStub("DeleteOneWayConnectionRequest")
         registerStub("BatchFilterExistingUsersRequest")
-        registerStub("GetCredentialsForConsoleUsersRequest")
+        register(::handleGetCredentialsForConsoleUsers)
         registerStub("AcceptAllFriendRequestsRequest")
         registerStub("RejectAllFriendRequestsRequest")
         registerStub("ProcessDLCIAPTransactionRequest")

@@ -20,4 +20,7 @@ enum class GameplayTutorialType {
     SteeringLeft,
     SteeringRight,
     Accelerate,
+    Brake,
+    ManualNeedToAccelerate,
+    AutoAccelerate,
 }
