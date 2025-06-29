@@ -8,6 +8,7 @@ import moe.crx.roadblock.io.OptionalIO.readOptional
 import moe.crx.roadblock.io.OptionalIO.writeOptional
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.objects.base.RInstant
 import moe.crx.roadblock.objects.base.RInt
 import moe.crx.roadblock.objects.base.RObject
 
@@ -17,7 +18,7 @@ class PiggyBankState : RObject {
     var eventId: Int = 0
     var currentTier: Int = 0
     var currentProgress: Int = 0
-    var bankFilledTimestamp: moe.crx.roadblock.objects.base.RInstant? = null
+    var bankFilledTimestamp: RInstant? = null
     var tiers: Map<RInt, PiggyBankTierState> = mapOf()
 
     override fun read(sink: InputSink) {
