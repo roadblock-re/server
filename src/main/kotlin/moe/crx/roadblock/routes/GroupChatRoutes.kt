@@ -16,7 +16,7 @@ fun Route.groupChatRoomsSubscribe() = post("/chat/rooms/{channel}/subscribe") {
     val accessToken = form["access_token"]
     val language = form["language"]
 
-    checkNotNull(accessToken)
+    //checkNotNull(accessToken)
     checkNotNull(language)
 
     call.respondText(
@@ -36,12 +36,14 @@ fun Route.groupChatListenChatPost() = post("/chat/rooms/{channel}") {
     // Append {"type":"disconnect","reason":"Replaced by a new connection"} for disconnect
     // also should have leading empty line as I see
     // TODO Keep-Alive
-    call.respondFile(File("stubs/groupchat.json"))
+    //call.respondFile(File("stubs/groupchat.json"))
+    call.respondText("")
 }
 
 fun Route.groupChatListenChatGet() = get("/chat/rooms/{channel}") {
     // Append {"type":"disconnect","reason":"Replaced by a new connection"} for disconnect
     // also should have leading empty line as I see
     // TODO Keep-Alive
-    call.respondFile(File("stubs/groupchat.json"))
+    //call.respondFile(File("stubs/groupchat.json"))
+    call.respondText("")
 }

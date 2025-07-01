@@ -70,4 +70,7 @@ enum class MenuTutorialType {
     PiggyBankShop,
     OnboardingSeasonPassClaim,
     OnboardingSeasonPassUpsell,
+    EpilepsyDisclaimer,
+    MainMenuSponsorship,
+    MultiplayerSeriesTakedownMode,
 }

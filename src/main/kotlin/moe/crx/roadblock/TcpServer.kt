@@ -46,111 +46,113 @@ fun tcpServer(wait: Boolean): Job {
 
                 val slot = "aaaa"
 
-                output.write("{\"action\":\"create connection\",\"success\":\"True\",\"nonce\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}\n".toByteArray())
-                output.flush()
-
-                // Contains action, room_id, access_token
-                val roomId = BufferedReader(InputStreamReader(input)).readLine()
-                    .let { Json.parseToJsonElement(it) }.jsonObject["room_id"]?.jsonPrimitive?.contentOrNull
-                checkNotNull(roomId)
-
-                output.write("{\"slot\":\"$slot\",\"success\":true,\"action\":\"connect game\"}\n".toByteArray())
-                output.flush()
-
-                val decrypt = evpBytesToKey((roomId + slot).toByteArray(), clientSalt).let { (key, iv) ->
-                    ChaCha7539Engine().apply {
-                        init(false, ParametersWithIV(KeyParameter(key), iv.takeLast(12).toByteArray()))
-                        skip((iv.take(4).toByteArray().toLittleEndianInt().toLong() and 0xFFFFFFFFL) * 64.toLong())
-                    }
-                }
-                val encrypt = evpBytesToKey((roomId + slot).toByteArray(), serverSalt).let { (key, iv) ->
-                    ChaCha7539Engine().apply {
-                        init(true, ParametersWithIV(KeyParameter(key), iv.takeLast(12).toByteArray()))
-                        skip((iv.take(4).toByteArray().toLittleEndianInt().toLong() and 0xFFFFFFFFL) * 64.toLong())
-                    }
-                }
-
-                fun sendPacket(bytes: ByteArray, type: Int) {
-                    val trimmedLength = bytes.size and 0xFFFFFFF
-                    check(trimmedLength == bytes.size)
-
-                    val shiftedType = type shl 0x1C
-                    val header = trimmedLength or shiftedType
-
-                    encrypt.processBytes(bytes.copyOf(), 0, bytes.size, bytes, 0)
-
-                    output.write(header.toBigEndianBytes())
-                    output.write(bytes)
+                runCatching {
+                    output.write("{\"action\":\"create connection\",\"success\":\"True\",\"nonce\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}\n".toByteArray())
                     output.flush()
+
+                    // Contains action, room_id, access_token
+                    val roomId = BufferedReader(InputStreamReader(input)).readLine()
+                        .let { Json.parseToJsonElement(it) }.jsonObject["room_id"]?.jsonPrimitive?.contentOrNull
+                    checkNotNull(roomId)
+
+                    output.write("{\"slot\":\"$slot\",\"success\":true,\"action\":\"connect game\"}\n".toByteArray())
+                    output.flush()
+
+                    val decrypt = evpBytesToKey((roomId + slot).toByteArray(), clientSalt).let { (key, iv) ->
+                        ChaCha7539Engine().apply {
+                            init(false, ParametersWithIV(KeyParameter(key), iv.takeLast(12).toByteArray()))
+                            skip((iv.take(4).toByteArray().toLittleEndianInt().toLong() and 0xFFFFFFFFL) * 64.toLong())
+                        }
+                    }
+                    val encrypt = evpBytesToKey((roomId + slot).toByteArray(), serverSalt).let { (key, iv) ->
+                        ChaCha7539Engine().apply {
+                            init(true, ParametersWithIV(KeyParameter(key), iv.takeLast(12).toByteArray()))
+                            skip((iv.take(4).toByteArray().toLittleEndianInt().toLong() and 0xFFFFFFFFL) * 64.toLong())
+                        }
+                    }
+
+                    fun sendPacket(bytes: ByteArray, type: Int) {
+                        val trimmedLength = bytes.size and 0xFFFFFFF
+                        check(trimmedLength == bytes.size)
+
+                        val shiftedType = type shl 0x1C
+                        val header = trimmedLength or shiftedType
+
+                        encrypt.processBytes(bytes.copyOf(), 0, bytes.size, bytes, 0)
+
+                        output.write(header.toBigEndianBytes())
+                        output.write(bytes)
+                        output.flush()
+                    }
+
+                    val gameConnection = GameConnection(ignoreConnect = true) { payloadBytes, preferDeflated ->
+                        var (bytes, type) = if (preferDeflated) {
+                            var compressed = highCompressor.compress(payloadBytes)
+                            val hash = xxHash32.hash(compressed, 0, compressed.size, payloadBytes.size)
+
+                            val finalBytes = hash.toBigEndianBytes() + payloadBytes.size.toLittleEndianBytes() + compressed
+                            finalBytes to 1
+                        } else {
+                            payloadBytes to 0
+                        }
+
+                        sendPacket(bytes, type)
+                    }
+
+                    while (!client.isClosed) {
+                        var headerBytes = ByteArray(0)
+
+                        while (headerBytes.size < 4) {
+                            headerBytes += input.readNBytes(4 - headerBytes.size)
+                        }
+
+                        val header = headerBytes.toBigEndianInt()
+                        val length = header and 0xFFFFFFF
+                        val type = header ushr 0x1C
+                        var bytes = ByteArray(0)
+
+                        while (bytes.size < length) {
+                            bytes += input.readNBytes(length - bytes.size)
+                        }
+
+                        decrypt.processBytes(bytes.copyOf(), 0, bytes.size, bytes, 0)
+
+                        // Asio keepalive request
+                        if (type == 15) {
+                            // Bytes are seem to be a sequence number but string.
+                            sendPacket(bytes, 14)
+                            continue
+                        }
+
+                        // Asio keepalive response
+                        if (type == 14) {
+                            // Is used when server requests keepalive.
+                            println("KeepaliveRsp received: ${bytes.toHexString()}")
+                            continue
+                        }
+
+                        if (type == 1) {
+                            val hash = bytes.take(4).toByteArray().toBigEndianInt()
+                            val decompressedLength = bytes.drop(4).take(4).toByteArray().toBigEndianInt()
+                            val compressedBytes = bytes.drop(8).toByteArray()
+
+                            val calculatedHash = xxHash32.hash(compressedBytes, 0, compressedBytes.size, decompressedLength)
+                            check(hash == calculatedHash)
+
+                            bytes = safeDecompressor.decompress(compressedBytes, decompressedLength)
+                        }
+
+                        runCatching {
+                            gameConnection.receive(bytes)
+                        }.onFailure {
+                            it.printStackTrace()
+                            client.close()
+                        }
+                    }
+
+                    output.close()
+                    input.close()
                 }
-
-                val gameConnection = GameConnection(ignoreConnect = true) { payloadBytes, preferDeflated ->
-                    var (bytes, type) = if (preferDeflated) {
-                        var compressed = highCompressor.compress(payloadBytes)
-                        val hash = xxHash32.hash(compressed, 0, compressed.size, payloadBytes.size)
-
-                        val finalBytes = hash.toBigEndianBytes() + payloadBytes.size.toLittleEndianBytes() + compressed
-                        finalBytes to 1
-                    } else {
-                        payloadBytes to 0
-                    }
-
-                    sendPacket(bytes, type)
-                }
-
-                while (!client.isClosed) {
-                    var headerBytes = ByteArray(0)
-
-                    while (headerBytes.size < 4) {
-                        headerBytes += input.readNBytes(4 - headerBytes.size)
-                    }
-
-                    val header = headerBytes.toBigEndianInt()
-                    val length = header and 0xFFFFFFF
-                    val type = header ushr 0x1C
-                    var bytes = ByteArray(0)
-
-                    while (bytes.size < length) {
-                        bytes += input.readNBytes(length - bytes.size)
-                    }
-
-                    decrypt.processBytes(bytes.copyOf(), 0, bytes.size, bytes, 0)
-
-                    // Asio keepalive request
-                    if (type == 15) {
-                        // Bytes are seem to be a sequence number but string.
-                        sendPacket(bytes, 14)
-                        continue
-                    }
-
-                    // Asio keepalive response
-                    if (type == 14) {
-                        // Is used when server requests keepalive.
-                        println("KeepaliveRsp received: ${bytes.toHexString()}")
-                        continue
-                    }
-
-                    if (type == 1) {
-                        val hash = bytes.take(4).toByteArray().toBigEndianInt()
-                        val decompressedLength = bytes.drop(4).take(4).toByteArray().toBigEndianInt()
-                        val compressedBytes = bytes.drop(8).toByteArray()
-
-                        val calculatedHash = xxHash32.hash(compressedBytes, 0, compressedBytes.size, decompressedLength)
-                        check(hash == calculatedHash)
-
-                        bytes = safeDecompressor.decompress(compressedBytes, decompressedLength)
-                    }
-
-                    runCatching {
-                        gameConnection.receive(bytes)
-                    }.onFailure {
-                        it.printStackTrace()
-                        client.close()
-                    }
-                }
-
-                output.close()
-                input.close()
             }
         }
     }

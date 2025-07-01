@@ -68,5 +68,5 @@ enum class PacketDirection(val byteValue: Byte) {
     LOGIN(0),
     REQUEST(3),
     RESPONSE(7),
-    PUSH(6),
+    PUSH(6), // TODO Check ID and push messages types
 }

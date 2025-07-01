@@ -144,7 +144,7 @@ object GameLayer24014 : GameLayer(SerializationVersion().apply {
         registerStub("ResetUserStateRequest")
         registerStub("ClaimEnableNotificationsRewardRequest")
         registerStub("ClaimDailyTasksRequest")
-        register(::handleDailyTasksReset)
+        registerStub("DailyTasksResetRequest")
         registerStub("BuyRelayOfferTierRequest")
         registerStub("ValidateIAPRelayOfferPurchaseRequest")
         registerStub("QuickRaceFinishRaceRequest")
