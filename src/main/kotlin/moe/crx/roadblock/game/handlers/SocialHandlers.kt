@@ -10,6 +10,9 @@ suspend fun handlePostLoginSocialUpdate(session: GameConnection, request: PostLo
     session.send(PostLoginSocialUpdateResponse())
 }
 
-suspend fun handleGetCredentialsForConsoleUsers(session: GameConnection, request: GetCredentialsForConsoleUsersRequest) {
+suspend fun handleGetCredentialsForConsoleUsers(
+    session: GameConnection,
+    request: GetCredentialsForConsoleUsersRequest
+) {
     session.send(GetCredentialsForConsoleUsersResponse())
 }

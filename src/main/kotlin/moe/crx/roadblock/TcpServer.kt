@@ -6,12 +6,7 @@ import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import moe.crx.roadblock.game.GameConnection
-import moe.crx.roadblock.utils.evpBytesToKey
-import moe.crx.roadblock.utils.toBigEndianBytes
-import moe.crx.roadblock.utils.toBigEndianInt
-import moe.crx.roadblock.utils.toHexString
-import moe.crx.roadblock.utils.toLittleEndianBytes
-import moe.crx.roadblock.utils.toLittleEndianInt
+import moe.crx.roadblock.utils.*
 import net.jpountz.lz4.LZ4Compressor
 import net.jpountz.lz4.LZ4Factory
 import net.jpountz.lz4.LZ4SafeDecompressor
@@ -90,7 +85,8 @@ fun tcpServer(wait: Boolean): Job {
                             var compressed = highCompressor.compress(payloadBytes)
                             val hash = xxHash32.hash(compressed, 0, compressed.size, payloadBytes.size)
 
-                            val finalBytes = hash.toBigEndianBytes() + payloadBytes.size.toLittleEndianBytes() + compressed
+                            val finalBytes =
+                                hash.toBigEndianBytes() + payloadBytes.size.toLittleEndianBytes() + compressed
                             finalBytes to 1
                         } else {
                             payloadBytes to 0
@@ -136,7 +132,8 @@ fun tcpServer(wait: Boolean): Job {
                             val decompressedLength = bytes.drop(4).take(4).toByteArray().toBigEndianInt()
                             val compressedBytes = bytes.drop(8).toByteArray()
 
-                            val calculatedHash = xxHash32.hash(compressedBytes, 0, compressedBytes.size, decompressedLength)
+                            val calculatedHash =
+                                xxHash32.hash(compressedBytes, 0, compressedBytes.size, decompressedLength)
                             check(hash == calculatedHash)
 
                             bytes = safeDecompressor.decompress(compressedBytes, decompressedLength)

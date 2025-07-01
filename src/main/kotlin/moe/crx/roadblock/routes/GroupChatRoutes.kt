@@ -5,7 +5,6 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import moe.crx.roadblock.utils.realRemoteHost
-import java.io.File
 
 fun Route.groupChatRoomsSubscribe() = post("/chat/rooms/{channel}/subscribe") {
     val channel = call.parameters["channel"]

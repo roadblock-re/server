@@ -10,7 +10,7 @@ abstract class RVariant(vararg clazz: KClass<out RObject>) : RObject {
 
     constructor(clazz: List<KClass<out RObject>>) : this(*clazz.toTypedArray())
 
-    private val classes: Array<out KClass<out RObject>> = clazz
+    val classes: Array<out KClass<out RObject>> = clazz
     var variant: RObject = RVoid()
 
     override fun read(sink: InputSink) {

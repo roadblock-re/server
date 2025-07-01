@@ -1,12 +1,6 @@
 package moe.crx.roadblock.game
 
-import moe.crx.roadblock.game.handlers.handleChangeGameplayTutorialState
-import moe.crx.roadblock.game.handlers.handleClubWarsMarketRefresh
-import moe.crx.roadblock.game.handlers.handleDailyTasksReset
-import moe.crx.roadblock.game.handlers.handleGetBlockedUsers
-import moe.crx.roadblock.game.handlers.handleGetCredentialsForConsoleUsers
-import moe.crx.roadblock.game.handlers.handleMiscellaneousSetPlatform
-import moe.crx.roadblock.game.handlers.handlePostLoginSocialUpdate
+import moe.crx.roadblock.game.handlers.*
 import moe.crx.roadblock.objects.game.SerializationVersion
 
 object GameLayer24014 : GameLayer(SerializationVersion().apply {
