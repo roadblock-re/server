@@ -1,36 +1,51 @@
 package moe.crx.roadblock.updates.groups
 
 import moe.crx.roadblock.objects.base.RVariant
+import moe.crx.roadblock.objects.game.SerializationVersion
 
-class StatusUpdateGroup : RVariant(
-    BlackMarketStatusUpdateGroup::class,
-    BonusPassSystemStatusUpdateGroup::class,
-    CareerStatusUpdateGroup::class, //0x02!!
-    ChampionshipSystemStatusUpdateGroup::class,
-    ClubRaceStatusUpdateGroup::class,
-    ClubSystemStatusUpdateGroup::class, //0x05!!
-    ClubWarsStatusUpdateGroup::class,
-    DailyTasksStatusUpdateGroup::class,
-    GachaSystemStatusUpdateGroup::class,
-    //GoldenChestSystemStatusUpdateGroup::class, //ALU
-    InboxStatusUpdateGroup::class,
-    InventoryStatusUpdateGroup::class, //0x0A!!
-    LegendFundSystemStatusUpdateGroup::class,
-    MiscellaneousStatusUpdateGroup::class,
-    MultiplayerChallengesStatusUpdateGroup::class, // removed in ALU
-    MultiplayerSeriesStatusUpdateGroup::class, //0x0E
-    //OverclockSystemStatusUpdateGroup::class, //ALU
-    PiggyBankSystemStatusUpdateGroup::class,
-    PlayerStatsStatusUpdateGroup::class, //0x10!!
-    PrivateLobbyStatusUpdateGroup::class,
-    QuarantineStatusUpdateGroup::class,
-    RelayOfferSystemStatusUpdateGroup::class,
-    SeasonPassSystemStatusUpdateGroup::class,
-    //SeasonalCurrencySystemStatusUpdateGroup::class, //ALU
-    //SocialSystemStatusUpdateGroup::class, //ALU
-    //SponsorshipSystemStatusUpdateGroup::class, //ALU
-    TLEventsSystemStatusUpdateGroup::class,
-    UberSystemStatusUpdateGroup::class,
-    //UpsellPopupSystemStatusUpdateGroup::class, //ALU
-    //VaultSystemStatusUpdateGroup::class, //ALU
-)
+class StatusUpdateGroup(ver: SerializationVersion) : RVariant(buildList {
+    add(BlackMarketStatusUpdateGroup::class)
+    add(BonusPassSystemStatusUpdateGroup::class)
+    add(CareerStatusUpdateGroup::class)
+    add(ChampionshipSystemStatusUpdateGroup::class)
+    add(ClubRaceStatusUpdateGroup::class)
+    add(ClubSystemStatusUpdateGroup::class)
+    add(ClubWarsStatusUpdateGroup::class)
+    add(DailyTasksStatusUpdateGroup::class)
+    add(GachaSystemStatusUpdateGroup::class)
+    if (ver newer "24.0.0") {
+        add(GoldenChestSystemStatusUpdateGroup::class)
+    }
+    add(InboxStatusUpdateGroup::class)
+    add(InventoryStatusUpdateGroup::class)
+    add(LegendFundSystemStatusUpdateGroup::class)
+    add(MiscellaneousStatusUpdateGroup::class)
+    if (ver older "24.0.0") {
+        add(MultiplayerChallengesStatusUpdateGroup::class)
+    }
+    add(MultiplayerSeriesStatusUpdateGroup::class)
+    if (ver newer "24.0.0") {
+        add(OverclockSystemStatusUpdateGroup::class)
+    }
+    add(PiggyBankSystemStatusUpdateGroup::class)
+    add(PlayerStatsStatusUpdateGroup::class)
+    add(PrivateLobbyStatusUpdateGroup::class)
+    add(QuarantineStatusUpdateGroup::class)
+    add(RelayOfferSystemStatusUpdateGroup::class)
+    add(SeasonPassSystemStatusUpdateGroup::class)
+    if (ver newer "24.0.0") {
+        add(SeasonalCurrencySystemStatusUpdateGroup::class)
+    }
+    if (ver newer "24.1.0") {
+        add(SocialSystemStatusUpdateGroup::class)
+    }
+    if (ver newer "24.0.0") {
+        add(SponsorshipSystemStatusUpdateGroup::class)
+    }
+    add(TLEventsSystemStatusUpdateGroup::class)
+    add(UberSystemStatusUpdateGroup::class)
+    if (ver newer "24.0.0") {
+        add(UpsellPopupSystemStatusUpdateGroup::class)
+        add(VaultSystemStatusUpdateGroup::class)
+    }
+})

@@ -15,6 +15,7 @@ object GameLayer24014 : GameLayer(SerializationVersion().apply {
     build = 14
 }) {
 
+    // TODO Make unified list of packets, but fill it based on SerializationVersion, like RVariants
     init {
         registerStub("ActionLoginRequest")
         registerStub("NotifyShutdownRequest")

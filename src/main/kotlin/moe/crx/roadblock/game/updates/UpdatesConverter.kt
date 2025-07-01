@@ -1,6 +1,7 @@
 package moe.crx.roadblock.game.updates
 
 import moe.crx.roadblock.objects.base.RObject
+import moe.crx.roadblock.objects.game.SerializationVersion
 import moe.crx.roadblock.updates.blackmarket.*
 import moe.crx.roadblock.updates.bonuspass.*
 import moe.crx.roadblock.updates.career.*
@@ -36,8 +37,10 @@ import moe.crx.roadblock.updates.tle.*
 import moe.crx.roadblock.updates.uber.*
 
 object UpdatesConverter {
-    fun RObject.toStatusUpdateGroup(): StatusUpdateGroup {
-        return StatusUpdateGroup().apply {
+
+    // TODO Rewrite this utilising reflection, please.
+    fun RObject.toStatusUpdateGroup(ver: SerializationVersion): StatusUpdateGroup {
+        return StatusUpdateGroup(ver).apply {
             variant = when (this@toStatusUpdateGroup::class) {
                 BlackMarketLockedStateChanged::class,
                 BlackMarketSlotsRefreshed::class,
@@ -230,7 +233,7 @@ object UpdatesConverter {
                 InventoryMuteEmojisChanged::class,
                 InventoryAutoTrashStatusUpdate::class,
                 InventoryUpgradeItemsStatusUpdate::class -> {
-                    InventoryStatusUpdateGroup().apply {
+                    InventoryStatusUpdateGroup(ver).apply {
                         variant = this@toStatusUpdateGroup
                     }
                 }

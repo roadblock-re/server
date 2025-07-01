@@ -13,6 +13,9 @@ object VariantIO {
             "DESERIALIZATION ISSUE: Empty variant list."
         }
         val type = readByte().toInt()
+        check(type < clazz.size) {
+            "DESERIALIZATION ISSUE: Wrong type number: $type."
+        }
         return readObject(clazz[type])
     }
 

@@ -29,13 +29,13 @@ suspend fun handleCareerStartRace(session: GameConnection, request: CareerStartR
                 newSlots = (car.maintenanceStats.maintenanceSlots - 1).toShort()
             }
         )
-    ).flatten()
+    )
 
     car.maintenanceStats.maintenanceSlots = (car.maintenanceStats.maintenanceSlots - 1).toShort()
 
     session.saveState()
 
-    session.send(CareerStartRaceResponse().apply { updatesQueue = updates })
+    session.send(CareerStartRaceResponse().apply { updatesQueue = updates.flatten(session.ver) })
 }
 
 suspend fun handleCareerFinishRace(session: GameConnection, request: CareerFinishRaceRequest) {
@@ -177,7 +177,7 @@ suspend fun handleChangeMenuTutorialState(session: GameConnection, request: Chan
                 newState = request.tutorialState
             }
         )
-    ).flatten()
+    )
 
     session.gameState.playerStats.apply {
         menuTutorials = menuTutorials.toMutableList().apply {
@@ -189,7 +189,7 @@ suspend fun handleChangeMenuTutorialState(session: GameConnection, request: Chan
 
     session.saveState()
 
-    session.send(ChangeMenuTutorialStateResponse().apply { updatesQueue = updates })
+    session.send(ChangeMenuTutorialStateResponse().apply { updatesQueue = updates.flatten(session.ver) })
 }
 
 suspend fun handleChangeGameplayTutorialState(session: GameConnection, request: ChangeGameplayTutorialStateRequest) {
@@ -202,7 +202,7 @@ suspend fun handleChangeGameplayTutorialState(session: GameConnection, request: 
                 newState = request.tutorialState
             }
         )
-    ).flatten()
+    )
 
     session.gameState.playerStats.apply {
         gameplayTutorials = gameplayTutorials.toMutableList().apply {
@@ -214,7 +214,7 @@ suspend fun handleChangeGameplayTutorialState(session: GameConnection, request: 
 
     session.saveState()
 
-    session.send(ChangeGameplayTutorialStateResponse().apply { updatesQueue = updates })
+    session.send(ChangeGameplayTutorialStateResponse().apply { updatesQueue = updates.flatten(session.ver) })
 }
 
 suspend fun handleGainGarageLevelCheat(session: GameConnection, request: GainGarageLevelCheatRequest) {

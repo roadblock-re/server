@@ -10,9 +10,9 @@ import moe.crx.roadblock.objects.base.RInt
 import moe.crx.roadblock.objects.base.RObject
 import moe.crx.roadblock.updates.groups.StatusUpdateGroup
 
-class StatusUpdatesQueueNode : RObject {
+class StatusUpdatesQueueNode(ver: SerializationVersion) : RObject {
 
-    var statusUpdate: StatusUpdateGroup = StatusUpdateGroup()
+    var statusUpdate: StatusUpdateGroup = StatusUpdateGroup(ver)
     var reactions: List<RInt> = listOf() // UpdateReaction
 
     override fun read(sink: InputSink) {

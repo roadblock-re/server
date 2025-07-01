@@ -10,6 +10,7 @@ import moe.crx.roadblock.io.ObjectIO.readObject
 import moe.crx.roadblock.objects.game.ActionResponseHeader
 import moe.crx.roadblock.objects.game.CompressionType
 import moe.crx.roadblock.objects.game.ConfigData
+import moe.crx.roadblock.objects.game.SerializationVersion
 import moe.crx.roadblock.objects.game.ServerDBSerialization
 import moe.crx.roadblock.push.PushMessagePacket
 import moe.crx.roadblock.rpc.auth.ConnectGameRequest
@@ -56,6 +57,8 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
     val cliJob: Job
     var gameState = StateManager.default()
     val layer = GameLayer24014
+    val ver: SerializationVersion
+        get() = layer.ver
 
     var packetLock: ReentrantLock = ReentrantLock()
     var lastRequestSequence = 0
