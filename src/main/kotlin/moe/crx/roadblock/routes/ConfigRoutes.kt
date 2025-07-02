@@ -57,7 +57,7 @@ fun Route.configDatacenterUrls() = get("/{clientId}/datacenters/{datacenterId}/u
                     "federation-internal": "https://%1/federation-asa-int.gameloft.com",
                     "game_portal": "https://%1/gameportal",
                     "gdid": "https://%1/gdid",
-                    "glid": "https://%1/id.gameloft.com",
+                    "glid": "https://%1/glid",
                     "gllive-asa": "https://%1/gllive-asa.gameloft.com/ope",
                     "gllive-bdc": "https://%1/gllive-bdc.gameloft.com/ope",
                     "gllive-ope": "https://%1/gllive.gameloft.com/ope",

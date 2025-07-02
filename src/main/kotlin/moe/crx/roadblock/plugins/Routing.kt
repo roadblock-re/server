@@ -55,6 +55,7 @@ fun Application.configureApiRouting() {
             // Eve config -> game_portal
             route("/gameportal") {
                 gameportalMigrate()
+                gameportalAuthToken()
             }
             // Eve config -> federation
             route("/federation") {
@@ -120,6 +121,10 @@ fun Application.configureApiRouting() {
                 leaderboardRankingsMeLocation()
                 leaderboardRankingsMeClans()
                 leaderboardRankingsFedId()
+            }
+            route("/glid") {
+                glidAuthorize()
+                glidUserInfo()
             }
         }
     }

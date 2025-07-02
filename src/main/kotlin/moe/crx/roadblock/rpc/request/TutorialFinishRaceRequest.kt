@@ -17,6 +17,7 @@ class TutorialFinishRaceRequest : RequestPacket() {
     var raceTimeMicroseconds: Int = 0
     var startReason: TutorialStartReason = TutorialStartReason.Automatic
     var controlType: ControlSchemeType = ControlSchemeType.TouchScreenSmartDrive
+    var trackDefId: EventTrackDefId = 0
 
     override fun read(sink: InputSink) {
         super.read(sink)
@@ -26,6 +27,9 @@ class TutorialFinishRaceRequest : RequestPacket() {
         raceTimeMicroseconds = sink.readInt()
         startReason = sink.readEnum()
         controlType = sink.readEnum()
+        if (sink newer "24.0.0") {
+            trackDefId = sink.readInt()
+        }
     }
 
     override fun write(sink: OutputSink) {
@@ -36,5 +40,8 @@ class TutorialFinishRaceRequest : RequestPacket() {
         sink.writeInt(raceTimeMicroseconds)
         sink.writeEnum(startReason)
         sink.writeEnum(controlType)
+        if (sink newer "24.0.0") {
+            sink.writeInt(trackDefId)
+        }
     }
 }

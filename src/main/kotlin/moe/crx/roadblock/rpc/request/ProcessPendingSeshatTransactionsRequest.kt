@@ -7,6 +7,7 @@ import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RInt
 import moe.crx.roadblock.objects.base.RString
 import moe.crx.roadblock.objects.game.DynamicGiftTransactionInfo
+import moe.crx.roadblock.objects.game.EntitlementQueryResponse
 import moe.crx.roadblock.objects.game.IAPTransactionInfo
 import moe.crx.roadblock.rpc.base.RequestPacket
 
@@ -21,6 +22,7 @@ class ProcessPendingSeshatTransactionsRequest : RequestPacket() {
     var dynamicGiftTransactionInfo: DynamicGiftTransactionInfo? = null
     var calendarEventId: RString? = null // CalendarEventId
     var relayOfferTierId: RInt? = null // RelayOfferTierId
+    var entitlementQueryResponse: EntitlementQueryResponse? = null
 
     override fun read(sink: InputSink) {
         super.read(sink)
@@ -33,6 +35,9 @@ class ProcessPendingSeshatTransactionsRequest : RequestPacket() {
         dynamicGiftTransactionInfo = sink.readOptional()
         calendarEventId = sink.readOptional()
         relayOfferTierId = sink.readOptional()
+        if (sink newer "24.0.0") {
+            entitlementQueryResponse = sink.readOptional()
+        }
     }
 
     override fun write(sink: OutputSink) {
@@ -46,5 +51,8 @@ class ProcessPendingSeshatTransactionsRequest : RequestPacket() {
         sink.writeOptional(dynamicGiftTransactionInfo)
         sink.writeOptional(calendarEventId)
         sink.writeOptional(relayOfferTierId)
+        if (sink newer "24.0.0") {
+            sink.writeOptional(entitlementQueryResponse)
+        }
     }
 }

@@ -12,7 +12,7 @@ fun Route.groupChatRoomsSubscribe() = post("/chat/rooms/{channel}/subscribe") {
     checkNotNull(channel)
 
     val form = call.receiveParameters()
-    val accessToken = form["access_token"]
+    form["access_token"]
     val language = form["language"]
 
     //checkNotNull(accessToken)

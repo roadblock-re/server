@@ -385,6 +385,7 @@ class StateManager {
                     }
                     garageValue = 2860 // Lancer 1* garage value
                     tutorialOrderTracking = listOf()
+                    // TODO Amount of tutorials depends on game version
                     menuTutorials = buildList { repeat(MenuTutorialType.entries.size) { add(RInt()) } }
                     gameplayTutorials = buildList { repeat(GameplayTutorialType.entries.size) { add(RInt()) } }
                     rewardForLevelUpClaimed = true

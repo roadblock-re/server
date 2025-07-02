@@ -1,8 +1,11 @@
 package moe.crx.roadblock.routes
 
 import io.ktor.http.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonObject
 
 fun Route.gameportalMigrate() = post("/orchestrator/migrate") {
     // Contains form-data
@@ -62,5 +65,22 @@ fun Route.gameportalMigrate() = post("/orchestrator/migrate") {
                 ]
             }
         """.trimIndent()
+    )
+}
+
+fun Route.gameportalAuthToken() = post("/auth/token/") {
+    Json.parseToJsonElement(call.receiveText()).jsonObject
+
+    call.respondText(
+        """
+        {
+            "id_token": "very_long_string_for_id_token",
+            "access_token": "even_very_very_longer_string_for_access_token",
+            "expires_in": 3600,
+            "token_type": "bearer",
+            "scope": "openid",
+            "refresh_token": "cccccccccccccccccccccccccccccccccccccccc"
+        }
+    """.trimIndent()
     )
 }
