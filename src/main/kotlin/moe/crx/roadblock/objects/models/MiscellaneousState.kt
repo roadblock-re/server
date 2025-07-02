@@ -5,7 +5,9 @@ import kotlinx.datetime.Instant
 import moe.crx.roadblock.io.EnumIO.readEnum
 import moe.crx.roadblock.io.EnumIO.writeEnum
 import moe.crx.roadblock.io.ListIO.readList
+import moe.crx.roadblock.io.ListIO.writeList
 import moe.crx.roadblock.io.MapIO.readMap
+import moe.crx.roadblock.io.MapIO.writeMap
 import moe.crx.roadblock.io.ObjectIO.readObject
 import moe.crx.roadblock.io.ObjectIO.writeObject
 import moe.crx.roadblock.io.OptionalIO.readOptional
@@ -109,6 +111,18 @@ class MiscellaneousState : RObject {
         sink.writeOptional(xboxLiveOnlyEnabled)
         if (sink older "24.0.0") {
             sink.writeOptional(uniqueUserNameChangeCount)
+        }
+        if (sink newer "24.0.0") {
+            sink.writeList(hiddenEndRaceAdsOfferIds)
+            sink.writeInstant(lastLoginTimestamp)
+            sink.writeInstant(lastAdWatchedTimestamp)
+            sink.writeBoolean(underageDisclaimerShown)
+            sink.writeEnum(xboxCrossplayPlatformFilter)
+            sink.writeEnum(psCrossplayPlatformFilter)
+            sink.writeList(claimedDLCs)
+            sink.writeBoolean(hasUserChangedName)
+            sink.writeBoolean(isUserNameForced)
+            sink.writeMap(offlinePurchasedAmounts)
         }
     }
 }
