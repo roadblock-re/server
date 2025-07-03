@@ -39,8 +39,6 @@ fun tcpServer(wait: Boolean): Job {
                 val output = client.outputStream
                 val input = client.inputStream
 
-                val slot = "aaaa"
-
                 runCatching {
                     output.write("{\"action\":\"create connection\",\"success\":\"True\",\"nonce\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}\n".toByteArray())
                     output.flush()
@@ -50,6 +48,7 @@ fun tcpServer(wait: Boolean): Job {
                         .let { Json.parseToJsonElement(it) }.jsonObject["room_id"]?.jsonPrimitive?.contentOrNull
                     checkNotNull(roomId)
 
+                    val slot = "aaaa"
                     output.write("{\"slot\":\"$slot\",\"success\":true,\"action\":\"connect game\"}\n".toByteArray())
                     output.flush()
 
