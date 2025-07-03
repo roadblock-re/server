@@ -51,6 +51,17 @@ fun Route.authAuthorize() = post("/authorize") {
 }
 
 fun Route.authUsersAuthorize() = post("/users/{userId}/authorize") {
+    //call.respondText(
+    //    status = HttpStatusCode.Forbidden,
+    //    contentType = ContentType.Application.Json,
+    //    text = """
+    //    {
+    //        "error": "Target account is disabled",
+    //        "reason": "{\"asset_name\":\"ban_tool_custom_messages\",\"text_id\":\"game_temp_ban_7_days\"}"
+    //    }
+    //""".trimIndent())
+    //return@post
+
     val userId = call.parameters["userId"]
 
     checkNotNull(userId)

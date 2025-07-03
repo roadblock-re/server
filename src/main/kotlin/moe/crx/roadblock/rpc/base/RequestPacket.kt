@@ -1,18 +1,20 @@
 package moe.crx.roadblock.rpc.base
 
+import moe.crx.roadblock.io.ObjectIO.readObject
+import moe.crx.roadblock.io.ObjectIO.writeObject
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.objects.base.RObject
+import moe.crx.roadblock.objects.game.ActionRequestHeader
 
-open class RequestPacket() : Packet(PacketDirection.REQUEST) {
+open class RequestPacket : RObject {
 
-    var sequence: Int = 0
-    var fedId: String = ""
+    var header: ActionRequestHeader = ActionRequestHeader()
     var type: Short = 0
 
     override fun read(sink: InputSink) {
-        super.read(sink)
-        sequence = sink.readInt()
-        fedId = sink.readString()
+        check(sink.readByte() == 3.toByte())
+        header = sink.readObject()
         type = if (sink newer "24.0.0") {
             sink.readShort()
         } else {
@@ -21,9 +23,8 @@ open class RequestPacket() : Packet(PacketDirection.REQUEST) {
     }
 
     override fun write(sink: OutputSink) {
-        super.write(sink)
-        sink.writeInt(sequence)
-        sink.writeString(fedId)
+        sink.writeByte(3)
+        sink.writeObject(header)
         if (sink newer "24.0.0") {
             sink.writeShort(type)
         } else {

@@ -4,17 +4,20 @@ import moe.crx.roadblock.io.OptionalIO.readOptional
 import moe.crx.roadblock.io.OptionalIO.writeOptional
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.objects.base.RObject
 import moe.crx.roadblock.objects.game.ServerError
-import moe.crx.roadblock.rpc.base.Packet
-import moe.crx.roadblock.rpc.base.PacketDirection
 
-open class PushMessagePacket() : Packet(PacketDirection.PUSH) {
+open class PushMessagePacket : RObject {
 
     var type: Short = 0
     var error: ServerError? = null
 
     override fun read(sink: InputSink) {
-        super.read(sink)
+        if (sink newer "24.0.0") {
+            check(sink.readByte() == 10.toByte())
+        } else {
+            check(sink.readByte() == 6.toByte())
+        }
         type = if (sink newer "24.0.0") {
             sink.readShort()
         } else {
@@ -24,7 +27,11 @@ open class PushMessagePacket() : Packet(PacketDirection.PUSH) {
     }
 
     override fun write(sink: OutputSink) {
-        super.write(sink)
+        if (sink newer "24.0.0") {
+            sink.writeByte(10)
+        } else {
+            sink.writeByte(6)
+        }
         if (sink newer "24.0.0") {
             sink.writeShort(type)
         } else {

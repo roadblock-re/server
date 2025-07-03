@@ -6,10 +6,10 @@ import moe.crx.roadblock.io.OptionalIO.readOptional
 import moe.crx.roadblock.io.OptionalIO.writeOptional
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.objects.base.RObject
 import moe.crx.roadblock.objects.game.*
-import moe.crx.roadblock.rpc.base.AuthPacket
 
-class LoginResponse : AuthPacket() {
+class LoginResponse : RObject {
     companion object {
         const val GAME_SIGNATURE = 0x47DCEC79
     }
@@ -34,7 +34,7 @@ class LoginResponse : AuthPacket() {
     var state: State = State()
 
     override fun read(sink: InputSink) {
-        super.read(sink)
+        check(sink.readByte() == 0.toByte())
         error = sink.readOptional()
         userSessionId = sink.readString()
         revision = sink.readString()
@@ -58,7 +58,7 @@ class LoginResponse : AuthPacket() {
     }
 
     override fun write(sink: OutputSink) {
-        super.write(sink)
+        sink.writeByte(0)
         sink.writeOptional(error)
         sink.writeString(userSessionId)
         sink.writeString(revision)

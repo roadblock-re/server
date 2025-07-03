@@ -9,11 +9,11 @@ import moe.crx.roadblock.io.OptionalIO.writeOptional
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RInt
+import moe.crx.roadblock.objects.base.RObject
 import moe.crx.roadblock.objects.base.RString
 import moe.crx.roadblock.objects.game.*
-import moe.crx.roadblock.rpc.base.AuthPacket
 
-class LoginRequest : AuthPacket() {
+class LoginRequest : RObject {
 
     var gameVersion: String = ""
     var typeSystemHash: Long = 0
@@ -37,7 +37,7 @@ class LoginRequest : AuthPacket() {
     var clientCachedEvents: List<CachedEventInfo> = listOf()
 
     override fun read(sink: InputSink) {
-        super.read(sink)
+        check(sink.readByte() == 0.toByte())
         gameVersion = sink.readString()
         typeSystemHash = sink.readLong()
         clientId = sink.readString()
@@ -65,7 +65,7 @@ class LoginRequest : AuthPacket() {
     }
 
     override fun write(sink: OutputSink) {
-        super.write(sink)
+        sink.writeByte(0)
         sink.writeString(gameVersion)
         sink.writeLong(typeSystemHash)
         sink.writeString(clientId)

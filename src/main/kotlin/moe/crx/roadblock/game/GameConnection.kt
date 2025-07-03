@@ -57,7 +57,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
         get() = layer.ver
 
     var packetLock: ReentrantLock = ReentrantLock()
-    var lastRequestSequence = 0
+    var lastRequestSequence = -2
     var requestSequence = 0
     var requestType: Short = 0
 
@@ -112,9 +112,9 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
         check(requestType.toInt() != 0)
 
         response.apply {
-            responseSequence = requestSequence + 1
-            previousRequestSequence = lastRequestSequence
-            timestamp = customTimestamp ?: now()
+            header.nextActionId = requestSequence + 2
+            header.lastCommitedActionId = lastRequestSequence
+            header.clientTime = customTimestamp ?: now()
             type = requestType
         }
 
@@ -148,14 +148,15 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
 
         if (bytes.first().toInt() == 4) {
             // TODO
-            LOG.info("AlertControlRequest")
+            LOG.info("TODO AlertControlRequest")
+            bytes[0] = 9
             send(bytes)
             return
         }
 
         if (bytes.first().toInt() == 1) {
             // TODO
-            LOG.info("ResetStateRequest")
+            LOG.info("TODO ResetStateRequest")
             send(bytes)
             return
         }
@@ -219,10 +220,10 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
 
         val header = bytes.sink(layer.ver).readObject<RequestPacket>()
 
-        requestSequence = header.sequence
+        requestSequence = header.header.actionId
         requestType = header.type
 
-        if (requestSequence > lastRequestSequence + 1) {
+        if (requestSequence != lastRequestSequence + 2) {
             LOG.warn(
                 "Client sequence number is out of sync (current is {}, sent is {})",
                 lastRequestSequence,

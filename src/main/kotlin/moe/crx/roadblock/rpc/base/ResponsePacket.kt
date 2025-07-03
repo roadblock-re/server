@@ -2,25 +2,29 @@ package moe.crx.roadblock.rpc.base
 
 import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
+import moe.crx.roadblock.io.ObjectIO.readObject
+import moe.crx.roadblock.io.ObjectIO.writeObject
 import moe.crx.roadblock.io.OptionalIO.readOptional
 import moe.crx.roadblock.io.OptionalIO.writeOptional
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.objects.base.RObject
+import moe.crx.roadblock.objects.game.ActionResponseHeader
 import moe.crx.roadblock.objects.game.ServerError
 
-open class ResponsePacket() : Packet(PacketDirection.RESPONSE) {
+open class ResponsePacket : RObject {
 
-    var responseSequence: Int = 0
-    var previousRequestSequence: Int = 0
-    var timestamp: Instant = now()
+    var header: ActionResponseHeader = ActionResponseHeader()
     var type: Short = 0
     var error: ServerError? = null
 
     override fun read(sink: InputSink) {
-        super.read(sink)
-        responseSequence = sink.readInt()
-        previousRequestSequence = sink.readInt()
-        timestamp = sink.readInstant()
+        if (sink newer "24.0.0") {
+            check(sink.readByte() == 7.toByte())
+        } else {
+            check(sink.readByte() == 5.toByte())
+        }
+        header = sink.readObject()
         type = if (sink newer "24.0.0") {
             sink.readShort()
         } else {
@@ -30,10 +34,12 @@ open class ResponsePacket() : Packet(PacketDirection.RESPONSE) {
     }
 
     override fun write(sink: OutputSink) {
-        super.write(sink)
-        sink.writeInt(responseSequence)
-        sink.writeInt(previousRequestSequence)
-        sink.writeInstant(timestamp)
+        if (sink newer "24.0.0") {
+            sink.writeByte(7)
+        } else {
+            sink.writeByte(5)
+        }
+        sink.writeObject(header)
         if (sink newer "24.0.0") {
             sink.writeShort(type)
         } else {
