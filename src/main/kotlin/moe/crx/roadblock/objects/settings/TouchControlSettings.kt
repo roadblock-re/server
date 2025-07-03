@@ -32,7 +32,9 @@ class TouchControlSettings : RObject {
         tiltingSensitivity = sink.readFloat()
         isHorizonTiltEnabled = sink.readBoolean()
         isTiltSteeringEnabled = sink.readInt()
-        isAutoselectEnabled = sink.readBoolean()
+        if (sink newer "24.0.0") {
+            isAutoselectEnabled = sink.readBoolean()
+        }
     }
 
     override fun write(sink: OutputSink) {
@@ -46,6 +48,8 @@ class TouchControlSettings : RObject {
         sink.writeFloat(tiltingSensitivity)
         sink.writeBoolean(isHorizonTiltEnabled)
         sink.writeInt(isTiltSteeringEnabled)
-        sink.writeBoolean(isAutoselectEnabled)
+        if (sink newer "24.0.0") {
+            sink.writeBoolean(isAutoselectEnabled)
+        }
     }
 }

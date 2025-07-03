@@ -1,5 +1,6 @@
 package moe.crx.roadblock.rpc.auth
 
+import moe.crx.roadblock.game.GameLayer
 import moe.crx.roadblock.io.ListIO.readList
 import moe.crx.roadblock.io.ListIO.writeList
 import moe.crx.roadblock.io.ObjectIO.readObject
@@ -39,6 +40,7 @@ class LoginRequest : RObject {
     override fun read(sink: InputSink) {
         check(sink.readByte() == 0.toByte())
         gameVersion = sink.readString()
+        sink.ver = GameLayer.selectVersion(gameVersion)
         typeSystemHash = sink.readLong()
         clientId = sink.readString()
         datacenterName = sink.readString()

@@ -44,7 +44,11 @@ class StateManager {
 
         fun read(ver: SerializationVersion): State {
             lock.withLock {
-                return stateFile.readBytes().sink(ver).readFully<State>()
+                runCatching {
+                    return stateFile.readBytes().sink(ver).readFully<State>()
+                }
+
+                return default(ver)
             }
         }
 
@@ -55,7 +59,7 @@ class StateManager {
             }
         }
 
-        fun default(): State {
+        fun default(ver: SerializationVersion): State {
             return State().apply {
                 blackMarket.apply {
                     isLocked = true
@@ -349,7 +353,7 @@ class StateManager {
                                 isKeyboardAzerty = 0
                             }
                             isAutoAccelerationEnabled = true
-                            isManualAccelerationTutorialNeeded = true
+                            isManualAccelerationTutorialNeeded = false
                         }
                     }
                     regionChangeCount = 0
@@ -385,9 +389,9 @@ class StateManager {
                     }
                     garageValue = 2860 // Lancer 1* garage value
                     tutorialOrderTracking = listOf()
-                    // TODO Amount of tutorials depends on game version
-                    menuTutorials = buildList { repeat(MenuTutorialType.entries.size) { add(RInt()) } }
-                    gameplayTutorials = buildList { repeat(GameplayTutorialType.entries.size) { add(RInt()) } }
+                    menuTutorials = buildList { repeat(MenuTutorialType.lastEntryFor(ver).ordinal + 1) { add(RInt()) } }
+                    gameplayTutorials =
+                        buildList { repeat(GameplayTutorialType.lastEntryFor(ver).ordinal + 1) { add(RInt()) } }
                     rewardForLevelUpClaimed = true
                 }
 

@@ -10,6 +10,7 @@ import moe.crx.roadblock.objects.base.RObject
 
 class ControlSettings : RObject {
 
+    // TODO I'm not sure about isRumbleEnabled placement.
     var isTouchDriveDisabled: Int = 0
     var touchControl: TouchControlSettings = TouchControlSettings()
     var gamepadControls: List<GamepadControlSettings> = listOf()
@@ -21,6 +22,9 @@ class ControlSettings : RObject {
     override fun read(sink: InputSink) {
         isTouchDriveDisabled = sink.readInt()
         touchControl = sink.readObject()
+        if (sink older "24.0.0") {
+            isRumbleEnabled = sink.readBoolean()
+        }
         gamepadControls = sink.readList()
         keyboardControl = sink.readObject()
         isAutoAccelerationEnabled = sink.readBoolean()
@@ -33,6 +37,9 @@ class ControlSettings : RObject {
     override fun write(sink: OutputSink) {
         sink.writeInt(isTouchDriveDisabled)
         sink.writeObject(touchControl)
+        if (sink older "24.0.0") {
+            sink.writeBoolean(isRumbleEnabled)
+        }
         sink.writeList(gamepadControls)
         sink.writeObject(keyboardControl)
         sink.writeBoolean(isAutoAccelerationEnabled)

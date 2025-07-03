@@ -2,15 +2,36 @@ package moe.crx.roadblock.game
 
 import moe.crx.roadblock.game.handlers.*
 import moe.crx.roadblock.objects.game.SerializationVersion
+import moe.crx.roadblock.rpc.base.RequestPacket
+import java.io.File
+import kotlin.reflect.KClass
 
-object GameLayer392 : GameLayer(SerializationVersion().apply {
-    major = 3
-    minor = 9
-    build = 2
-}) {
+class GameLayer(private val ver: SerializationVersion) {
+
+    companion object {
+        fun selectVersion(gameVersion: String): SerializationVersion {
+            return if (gameVersion.split('.').first().toInt() >= 24) {
+                SerializationVersion(24, 0, 14)
+            } else {
+                SerializationVersion(3, 9, 2)
+            }
+        }
+    }
+
+    data class PacketHandler(
+        val requestName: String,
+        val requestClass: KClass<out RequestPacket>,
+        val handle: (suspend (GameConnection, RequestPacket) -> Unit)?,
+    )
+
+    var currentId: Short = 0
+    var handlers: MutableMap<Short, PacketHandler?> = mutableMapOf()
 
     init {
         register(::handleActionLogin)
+        if (ver newer "24.0.0") {
+            registerStub("NotifyShutdownRequest")
+        }
         register(::handleCareerStartRace)
         register(::handleCareerFinishRace)
         register(::handleCareerCancelRace)
@@ -36,10 +57,15 @@ object GameLayer392 : GameLayer(SerializationVersion().apply {
         register(::handleGainCurrencyCheat)
         register(::handleGainCarBlueprintsCheat)
         register(::handleGainWildcardBlueprintsCheat)
-        register(::handleGainCarEvoBlueprintsCheat)
+        if (ver older "24.0.0") {
+            register(::handleGainCarEvoBlueprintsCheat)
+        }
         register(::handleSaveEmojiConfiguration)
         register(::handleBuyGachaBox)
         register(::handleBuyTimeLimitedGachaBox)
+        if (ver newer "24.0.0") {
+            registerStub("ClaimSponsorshipGachaBoxRequest")
+        }
         register(::handleClaimLevelUpGachaBoxes)
         register(::handleClaimMissionReward)
         register(::handleTutorialFinishRace)
@@ -47,6 +73,7 @@ object GameLayer392 : GameLayer(SerializationVersion().apply {
         register(::handleChangeGameplayTutorialState)
         register(::handleGainGarageLevelCheat)
         register(::handleGainGarageValueCheat)
+        //registerStub("ClaimAllFreePremiumGachasCheatRequest") // TODO Not supported on 24.0.1f (but supported on 24.0.6)
         register(::handleBlackMarketGetStatus)
         register(::handleBlackMarketBuy)
         register(::handleBlackMarketRefresh)
@@ -80,6 +107,12 @@ object GameLayer392 : GameLayer(SerializationVersion().apply {
         register(::handleInviteUser)
         register(::handleAcceptClubInvitation)
         register(::handleDeclineClubInvitation)
+        if (ver newer "24.0.0") {
+            registerStub("RequestClubDonationRequest")
+            registerStub("GiveClubDonationRequest")
+            registerStub("GetClubDonationsRequest")
+            registerStub("SetClubUGCValidatedCheatRequest")
+        }
         register(::handleClubRaceCancelRace)
         register(::handleClubRaceCreateRoom)
         register(::handleClubRaceFinishRace)
@@ -91,10 +124,22 @@ object GameLayer392 : GameLayer(SerializationVersion().apply {
         register(::handleMiscellaneousSetUserName)
         register(::handleMiscellaneousSetUserAgeAndGender)
         register(::handleMiscellaneousSetUserOnlinePrivacyPolicy)
-        register(::handleMiscellaneousSetConsentNoticeShown)
+        // TODO Are these the same? Should we use a single variable in MiscellaneousState?
+        if (ver older "24.0.0") {
+            register(::handleMiscellaneousSetConsentNoticeShown)
+        }
+        if (ver newer "24.0.0") {
+            registerStub("MiscellaneousSetUnderageDisclaimerShownRequest")
+        }
         register(::handleSaveGameSettings)
         register(::handleMiscellaneousSetPlatform)
-        register(::handleMiscellaneousSetUniqueUserName)
+        if (ver newer "24.0.0") {
+            registerStub("MiscellaneousSetCrossplayPlatformFilterRequest")
+            registerStub("SaveAdsMinigameResultRequest")
+        }
+        if (ver older "24.0.0") {
+            register(::handleMiscellaneousSetUniqueUserName)
+        }
         register(::handlePerformCheat)
         register(::handlePurchaseOfflineProduct)
         register(::handleIAPFakePurchaseCheat)
@@ -134,7 +179,13 @@ object GameLayer392 : GameLayer(SerializationVersion().apply {
         register(::handleDailyTasksReset)
         register(::handleBuyRelayOfferTier)
         register(::handleValidateIAPRelayOfferPurchase)
+        if (ver newer "24.0.0") {
+            registerStub("QuickRaceFinishRaceRequest")
+        }
         register(::handleSplitScreenStartRace)
+        if (ver newer "24.0.0") {
+            registerStub("SplitScreenEndRaceRequest")
+        }
         register(::handleUberSpecialEventDiscoverMissionCars)
         register(::handleUberSpecialEventStartRace)
         register(::handleUberSpecialEventCancelRace)
@@ -171,20 +222,22 @@ object GameLayer392 : GameLayer(SerializationVersion().apply {
         register(::handleSeasonPassClaimEpisodesCompletionRewards)
         register(::handleSeasonPassValidateProductPurchase)
         register(::handleSeasonPassSetPlayedOnboardingCheat)
-        register(::handleMultiplayerChallengesBuyEntry)
-        register(::handleMultiplayerChallengesRevealMoreSponsors)
-        register(::handleMultiplayerChallengesSelectSponsor)
-        register(::handleMultiplayerChallengesReviveRound)
-        register(::handleMultiplayerChallengesFinishRound)
-        register(::handleMultiplayerChallengesClaimReward)
-        register(::handleMultiplayerChallengesStartMatchmaking)
-        register(::handleMultiplayerChallengesCancelMatchmaking)
-        register(::handleMultiplayerChallengesStartRace)
-        register(::handleMultiplayerChallengesFinishRace)
-        register(::handleMultiplayerChallengesCancelRace)
-        register(::handleMultiplayerChallengesSyncRaces)
-        register(::handleMultiplayerChallengesReportUser)
-        register(::handleMultiplayerChallengesSkipCooldown)
+        if (ver older "24.0.0") {
+            register(::handleMultiplayerChallengesBuyEntry)
+            register(::handleMultiplayerChallengesRevealMoreSponsors)
+            register(::handleMultiplayerChallengesSelectSponsor)
+            register(::handleMultiplayerChallengesReviveRound)
+            register(::handleMultiplayerChallengesFinishRound)
+            register(::handleMultiplayerChallengesClaimReward)
+            register(::handleMultiplayerChallengesStartMatchmaking)
+            register(::handleMultiplayerChallengesCancelMatchmaking)
+            register(::handleMultiplayerChallengesStartRace)
+            register(::handleMultiplayerChallengesFinishRace)
+            register(::handleMultiplayerChallengesCancelRace)
+            register(::handleMultiplayerChallengesSyncRaces)
+            register(::handleMultiplayerChallengesReportUser)
+            register(::handleMultiplayerChallengesSkipCooldown)
+        }
         register(::handleClubWarsRegister)
         register(::handleClubWarsRefreshRegistration)
         register(::handleClubWarsProcessMatchmaking)
@@ -214,23 +267,52 @@ object GameLayer392 : GameLayer(SerializationVersion().apply {
         register(::handleInboxMarkAsRead)
         register(::handlePrivateLobbyCreateRoom)
         register(::handlePrivateLobbyJoinRoom)
+        // TODO PrivateLobby renamed to Party
+        if (ver newer "24.0.0") {
+            registerStub("PartyJoinByPartyId")
+            registerStub("PartyFindRoomByAccessCode")
+        }
         register(::handlePrivateLobbyStartRace)
         register(::handlePrivateLobbyFinishRace)
         register(::handlePrivateLobbyCancelRace)
+        if (ver newer "24.0.0") {
+            registerStub("PartyCancelRaceSpectator")
+        }
         register(::handlePrivateLobbyStartRaceSpectator)
+        if (ver newer "24.0.0") {
+            registerStub("PartyLeaveRoom")
+            registerStub("PartyKickUser")
+            registerStub("PartyLaunchRoom")
+            registerStub("PartyUpdateUserData")
+            registerStub("PartyUpdateRoomData")
+            registerStub("PartyChangeUserRole")
+            registerStub("PartySendPartyInvitation")
+            registerStub("PartySetNativeSession")
+        }
         register(::handleSendTrackingEvents)
-        register(::handleGetXuids)
-        register(::handleUpdateGamertag)
+        if (ver older "24.0.0") {
+            register(::handleGetXuids)
+            register(::handleUpdateGamertag)
+        }
+        if (ver newer "24.0.0") {
+            // TODO Is this GetXuids?
+            registerStub("GetPlatformIds")
+        }
         register(::handleGetOnlineUserInfo)
         register(::handleReportUser)
         register(::handleXboxLiveOnlyEnable)
         register(::handleBlockUser)
         register(::handleUnblockUser)
         register(::handleGetBlockedUsers)
-        register(::handleCreateTransferCode)
-        register(::handleUseTransferCode)
+        if (ver older "24.0.0") {
+            register(::handleCreateTransferCode)
+            register(::handleUseTransferCode)
+        }
         register(::handleBonusPassBuyPass)
         register(::handleBonusPassValidateProductPurchase)
+        if (ver newer "24.0.0") {
+            registerStub("BonusPassBundleValidateProductPurchase")
+        }
         register(::handleBonusPassFinishPass)
         register(::handlePiggyBankValidateProductPurchase)
         register(::handlePiggyBankClaimFreeTier)
@@ -240,6 +322,105 @@ object GameLayer392 : GameLayer(SerializationVersion().apply {
         register(::handleLegendFundClaimMilestone)
         register(::handleLegendFundResetCheat)
         register(::handleLegendFundObtainCheat)
-        // 229 packets
+        if (ver newer "24.0.0") {
+            registerStub("IncreaseVaultTicketCheat")
+            registerStub("ConsumeVaultTicketCheat")
+            registerStub("TriggerRefillVaultTicketByTimeCheat")
+            registerStub("VaultCompleteStageCheat")
+            registerStub("VaultRefillTickets")
+            registerStub("VaultOccupySlot")
+            registerStub("VaultDeoccupySlot")
+            registerStub("VaultEventStartRace")
+            registerStub("VaultEventFinishRace")
+            registerStub("VaultEventCancelRace")
+            registerStub("VaultEventClaimProgressionRewards")
+            registerStub("VaultExtendEvent")
+            registerStub("VaultEventSkipSoloRewardConditions")
+            registerStub("VaultGetRemoteVaultEventState")
+            registerStub("VaultCleanCorruptSlot")
+            registerStub("VaultNotifyAccomplishedEvent")
+            registerStub("SeasonalCurrencyConvertCurrency")
+            registerStub("UpsellPopupBuyOffer")
+            registerStub("UpsellPopupValidateProductPurchase")
+            registerStub("OverclockExpireEvent")
+            registerStub("OverclockPurchaseOverclockForCar")
+            registerStub("OverclockExpireCar")
+            registerStub("OverclockRemoveOverclockOfCarCheat")
+            registerStub("OverclockGainOverclockChipsCheat")
+            registerStub("OverclockResetOverclockChipsCheat")
+            registerStub("SponsorshipSelectContract")
+            registerStub("SponsorshipContractClaim")
+            registerStub("SponsorshipContractFail")
+            registerStub("ProcessSponsorshipDailyLogin")
+            registerStub("SaveObtainedAdsRewardDataIntoServerState")
+            registerStub("ClearAllObtainedAdsRewardDataInServerState")
+            registerStub("CreateTransferCode")
+            registerStub("LinkAccountWithTransferCode")
+            register(::handleLinkAccountWithCredential)
+            register(::handleConfirmLinkingOperation)
+            register(::handlePostLoginSocialUpdate)
+            registerStub("UpdateStatusLine")
+            registerStub("ListGameFriends")
+            registerStub("RequestGameFriend")
+            registerStub("RemoveGameFriend")
+            registerStub("ListGameFriendRequests")
+            registerStub("AcceptGameFriendRequest")
+            registerStub("RejectGameFriendRequest")
+            registerStub("CancelSentGameFriendRequest")
+            registerStub("SearchGameFriend")
+            registerStub("ListOneWayConnections")
+            registerStub("AddOneWayConnection")
+            registerStub("DeleteOneWayConnection")
+            registerStub("BatchFilterExistingUsers")
+            register(::handleGetCredentialsForConsoleUsers)
+            registerStub("AcceptAllFriendRequests")
+            registerStub("RejectAllFriendRequests")
+            registerStub("ProcessDLCIAPTransaction")
+        }
+    }
+
+    fun registerStub(requestName: String? = null) {
+        check(!handlers.containsKey(currentId)) {
+            "Handler with ID $currentId was already registered."
+        }
+
+        handlers.put(
+            currentId,
+            PacketHandler(
+                requestName ?: "<unknown name>",
+                RequestPacket::class,
+                null,
+            )
+        )
+
+        ++currentId
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    inline fun <reified T : RequestPacket> register(
+        noinline handle: (suspend (GameConnection, T) -> Unit)
+    ) {
+        check(!handlers.containsKey(currentId)) {
+            "Handler with ID $currentId was already registered."
+        }
+
+        handlers.put(
+            currentId,
+            PacketHandler(
+                T::class.java.simpleName,
+                T::class,
+                handle as suspend (GameConnection, RequestPacket) -> Unit,
+            )
+        )
+
+        ++currentId
+    }
+
+    fun getConfig(): File {
+        return File(File("game", "${ver.major}.${ver.minor}.${ver.build}"), "clientconfig.json")
+    }
+
+    fun getGameDb(): File {
+        return File(File("game", "${ver.major}.${ver.minor}.${ver.build}"), "A9-business.gdb")
     }
 }

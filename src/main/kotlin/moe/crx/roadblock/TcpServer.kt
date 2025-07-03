@@ -40,7 +40,8 @@ fun tcpServer(wait: Boolean): Job {
                 val input = client.inputStream
 
                 runCatching {
-                    output.write("{\"action\":\"create connection\",\"success\":\"True\",\"nonce\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}\n".toByteArray())
+                    val nonce = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                    output.write("{\"action\":\"create connection\",\"success\":\"True\",\"nonce\":\"$nonce\"}\n".toByteArray())
                     output.flush()
 
                     // Contains action, room_id, access_token

@@ -72,5 +72,15 @@ enum class MenuTutorialType {
     OnboardingSeasonPassUpsell,
     EpilepsyDisclaimer,
     MainMenuSponsorship,
-    MultiplayerSeriesTakedownMode,
+    MultiplayerSeriesTakedownMode;
+
+    companion object {
+        fun lastEntryFor(ver: SerializationVersion): MenuTutorialType {
+            return if (ver newer "24.0.0") {
+                MultiplayerSeriesTakedownMode
+            } else {
+                OnboardingSeasonPassUpsell
+            }
+        }
+    }
 }

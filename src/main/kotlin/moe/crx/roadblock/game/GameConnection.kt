@@ -33,11 +33,8 @@ import java.util.concurrent.locks.ReentrantLock
 // - Client tracking updates
 // - Multiplayer packets
 
-// TODO rewrite packets to variants
 // TODO plugin system
 // TODO UpdatesConsumer for State and it's members (create updates to send, and then apply them to state)
-// TODO Rework GameState members types
-// TODO look through all enums and set the right size where necessary
 
 class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend (ByteArray, Boolean) -> Unit) {
     companion object {
@@ -48,18 +45,19 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
         NOT_INITIALIZED, NOT_AUTHORIZED, AUTHORIZED
     }
 
+    var ver = SerializationVersion(24, 0, 14)
+    var layer = GameLayer(ver)
+
     var connectionState = ConnectionState.NOT_INITIALIZED
     var onlineInformationSent = false
     val cliJob: Job
-    var gameState = StateManager.default()
-    val layer = GameLayer24014
-    val ver: SerializationVersion
-        get() = layer.ver
 
     var packetLock: ReentrantLock = ReentrantLock()
     var lastRequestSequence = -2
     var requestSequence = 0
     var requestType: Short = 0
+
+    var gameState = StateManager.default(ver)
 
     init {
         LOG.info("Game connection created")
@@ -91,10 +89,10 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
                     continue
                 }
 
-                runCatching { bytes.sink(layer.ver).readObject<ResponsePacket>().type }.getOrNull()?.let { id ->
+                runCatching { bytes.sink(ver).readObject<ResponsePacket>().type }.getOrNull()?.let { id ->
                     LOG.info("Sending response packet with ID {}", id)
                 }
-                runCatching { bytes.sink(layer.ver).readObject<PushMessagePacket>().type }.getOrNull()?.let { id ->
+                runCatching { bytes.sink(ver).readObject<PushMessagePacket>().type }.getOrNull()?.let { id ->
                     LOG.info("Sending push message packet with ID {}", id)
                 }
                 send(bytes)
@@ -121,7 +119,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
         lastRequestSequence = requestSequence
         requestType = 0
 
-        send(response.bytes(layer.ver))
+        send(response.bytes(ver))
     }
 
     suspend fun receive(bytes: ByteArray) {
@@ -135,14 +133,12 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
         if (bytes.first().toInt() == 2 && connectionState == ConnectionState.NOT_AUTHORIZED) {
             connectionState = ConnectionState.AUTHORIZED
 
-            runCatching {
-                gameState = StateManager.read(layer.ver)
-            }
+            gameState = StateManager.read(ver)
 
             send(ReconnectionResponse().apply {
                 lastActionId = lastRequestSequence
                 lastCommitedActionId = lastRequestSequence
-            }.bytes(layer.ver))
+            }.bytes(ver))
             return
         }
 
@@ -163,7 +159,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
 
         // TODO Move to WebSocket handler
         if (connectionState == ConnectionState.NOT_INITIALIZED) {
-            val handshake = bytes.sink(layer.ver).readFully<ConnectGameRequest>()
+            val handshake = bytes.sink(ver).readFully<ConnectGameRequest>()
             LOG.info("Game connected with fedId {} and roomId {}", handshake.fedId, handshake.roomId)
             connectionState = ConnectionState.NOT_AUTHORIZED
             return
@@ -171,13 +167,21 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
 
         // TODO preserve game state, so it won't require auth on reconnect
         if (bytes.first().toInt() == 0) {
-            bytes.sink(layer.ver).readFully<LoginRequest>()
-            LOG.info("[I] Game authorized")
+            val loginRequest = bytes.sink(ver).readFully<LoginRequest>()
+
+            ver = GameLayer.selectVersion(loginRequest.gameVersion)
+            layer = GameLayer(ver)
+
+            LOG.info(
+                "[I] Game authorized, negotiated version {}.{}.{}, {} packet types",
+                ver.major,
+                ver.minor,
+                ver.build,
+                layer.handlers.size
+            )
             connectionState = ConnectionState.AUTHORIZED
 
-            runCatching {
-                gameState = StateManager.read(layer.ver)
-            }
+            gameState = StateManager.read(ver)
 
             LoginResponse().apply {
                 userSessionId = "506746a9-0f5e-4827-9dfc-eb9ccbad8b81"
@@ -191,7 +195,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
                 isClientReloadNeeded = false
                 isVipPlayer = false
                 signatureValue = GAME_SIGNATURE
-                serializationVersion = layer.ver
+                serializationVersion = ver
                 configData = ConfigData().apply {
                     compressionType = CompressionType.LZ4
                     data = layer.getConfig().readBytes()
@@ -204,7 +208,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
                 }
                 state = gameState
             }.let {
-                send(it.bytes(layer.ver), true)
+                send(it.bytes(ver), true)
             }
 
             return
@@ -218,7 +222,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
 
         packetLock.lock()
 
-        val header = bytes.sink(layer.ver).readObject<RequestPacket>()
+        val header = bytes.sink(ver).readObject<RequestPacket>()
 
         requestSequence = header.header.actionId
         requestType = header.type
@@ -231,7 +235,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
             )
         }
 
-        val handlerEntry = layer.mapPacket(header.type)
+        val handlerEntry = layer.handlers[header.type]
         val handler = handlerEntry?.handle
 
         if (handlerEntry == null || handler == null) {
@@ -250,7 +254,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
         }
 
         val request = runCatching {
-            bytes.sink(layer.ver).readFully(handlerEntry.requestClass)
+            bytes.sink(ver).readFully(handlerEntry.requestClass)
         }.onFailure { throwable ->
             LOG.error("[I] Error reading packet {} (ID {})", handlerEntry.requestName, header.type)
             throwable.printStackTrace()
@@ -307,6 +311,6 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
     }
 
     fun saveState() {
-        StateManager.write(gameState, layer.ver)
+        StateManager.write(gameState, ver)
     }
 }

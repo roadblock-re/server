@@ -22,5 +22,15 @@ enum class GameplayTutorialType {
     Accelerate,
     Brake,
     ManualNeedToAccelerate,
-    AutoAccelerate,
+    AutoAccelerate;
+
+    companion object {
+        fun lastEntryFor(ver: SerializationVersion): GameplayTutorialType {
+            return if (ver newer "24.0.0") {
+                AutoAccelerate
+            } else {
+                Accelerate
+            }
+        }
+    }
 }

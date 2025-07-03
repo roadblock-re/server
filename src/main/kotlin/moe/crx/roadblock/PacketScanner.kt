@@ -1,7 +1,7 @@
 package moe.crx.roadblock
 
-import moe.crx.roadblock.game.GameLayer392
 import moe.crx.roadblock.io.ObjectIO.readObject
+import moe.crx.roadblock.objects.game.SerializationVersion
 import moe.crx.roadblock.push.PushMessagePacket
 import moe.crx.roadblock.rpc.base.RequestPacket
 import moe.crx.roadblock.rpc.base.ResponsePacket
@@ -10,7 +10,7 @@ import java.io.File
 import kotlin.math.min
 
 fun main() {
-    val layer = GameLayer392
+    val ver = SerializationVersion(3, 9, 2)
     val requests = mutableMapOf<Short, MutableList<File>>()
     val responses = mutableMapOf<Short, MutableList<File>>()
     val special = mutableMapOf<Short, MutableList<File>>()
@@ -25,13 +25,13 @@ fun main() {
             stream.readNBytes(min(it.length(), 100).toInt())
         }
 
-        runCatching { bytes.sink(layer.ver).readObject<RequestPacket>().type }.getOrNull()?.let { id ->
+        runCatching { bytes.sink(ver).readObject<RequestPacket>().type }.getOrNull()?.let { id ->
             requests.getOrPut(id) { mutableListOf() }.add(it)
         }
-        runCatching { bytes.sink(layer.ver).readObject<ResponsePacket>().type }.getOrNull()?.let { id ->
+        runCatching { bytes.sink(ver).readObject<ResponsePacket>().type }.getOrNull()?.let { id ->
             responses.getOrPut(id) { mutableListOf() }.add(it)
         }
-        runCatching { bytes.sink(layer.ver).readObject<PushMessagePacket>().type }.getOrNull()?.let { id ->
+        runCatching { bytes.sink(ver).readObject<PushMessagePacket>().type }.getOrNull()?.let { id ->
             special.getOrPut(id) { mutableListOf() }.add(it)
         }
     }

@@ -5,6 +5,8 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 // TODO fix 406 Not Acceptable: POST - /iap-asa/inapp_crm/index.php
+// TODO fix 404 Not Found: POST - /transaction/transactions/me/gifts
+// TODO fix 404 Not Found: POST - /transaction/transactions/me/gift_bundles
 
 fun Route.iapOrders() = get("/inapp_crm/orders/index.php/") {
     call.queryParameters["portal"]

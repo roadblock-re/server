@@ -54,7 +54,7 @@ fun RObject.bytes(ver: SerializationVersion): ByteArray {
 
 fun ByteArray.sha256() = MessageDigest.getInstance("SHA-256").digest(this).toHexString()
 
-fun ByteArray.toHexString() = joinToString("") { it.toHexString() }
+fun ByteArray.toHexString(separator: String = "") = joinToString(separator) { it.toHexString() }
 
 fun Byte.toHexString() = "%02x".format(this)
 

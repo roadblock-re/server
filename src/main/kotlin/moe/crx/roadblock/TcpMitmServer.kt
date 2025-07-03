@@ -143,13 +143,13 @@ fun tcpMitmServer(originalHost: String, originalPort: Int, wait: Boolean): Job {
                         serverOutput.flush()
 
                         if (type == 1) {
-                            //val hash = bytes.take(4).toByteArray().toBigEndianInt()
+                            val hash = bytes.take(4).toByteArray().toBigEndianInt()
                             val decompressedLength = bytes.drop(4).take(4).toByteArray().toBigEndianInt()
                             val compressedBytes = bytes.drop(8).toByteArray()
 
-                            //val calculatedHash =
-                            //    xxHash32.hash(compressedBytes, 0, compressedBytes.size, decompressedLength)
-                            //check(hash == calculatedHash)
+                            val calculatedHash =
+                                xxHash32.hash(compressedBytes, 0, compressedBytes.size, decompressedLength)
+                            check(hash == calculatedHash)
 
                             bytes = safeDecompressor.decompress(compressedBytes, decompressedLength)
                         }
@@ -181,13 +181,18 @@ fun tcpMitmServer(originalHost: String, originalPort: Int, wait: Boolean): Job {
                         serverDecrypt.processBytes(bytes.copyOf(), 0, bytes.size, bytes, 0)
 
                         if (type == 1) {
-                            //val hash = bytes.take(4).toByteArray().toBigEndianInt()
+                            val hash = bytes.take(4).toByteArray().toBigEndianInt()
                             val decompressedLength = bytes.drop(4).take(4).toByteArray().toBigEndianInt()
                             val compressedBytes = bytes.drop(8).toByteArray()
 
-                            //val calculatedHash =
-                            //    xxHash32.hash(compressedBytes, 0, compressedBytes.size, decompressedLength)
-                            //check(hash == calculatedHash)
+                            val calculatedHash =
+                                xxHash32.hash(
+                                    compressedBytes,
+                                    0,
+                                    compressedBytes.size,
+                                    bytes.drop(4).take(4).toByteArray().toLittleEndianInt()
+                                )
+                            check(hash == calculatedHash)
 
                             bytes = safeDecompressor.decompress(compressedBytes, decompressedLength)
                         }

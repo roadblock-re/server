@@ -4,7 +4,13 @@ import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
 
-class SerializationVersion : RObject {
+class SerializationVersion() : RObject {
+
+    constructor(major: Short, minor: Short, build: Short) : this() {
+        this.major = major
+        this.minor = minor
+        this.build = build
+    }
 
     var major: Short = 0
     var minor: Short = 0
