@@ -109,9 +109,7 @@ fun tcpMitmServer(originalHost: String, originalPort: Int, wait: Boolean): Job {
                                 continue
                             }
 
-                            val bytes = line.replace(" ", "").windowed(2, 2) {
-                                it.substring(0).toByte(16)
-                            }.toByteArray()
+                            val bytes = line.fromHexString()
 
                             sendPacket(bytes, 0)
                         }

@@ -17,6 +17,7 @@ import moe.crx.roadblock.rpc.base.ReconnectionResponse
 import moe.crx.roadblock.rpc.base.RequestPacket
 import moe.crx.roadblock.rpc.base.ResponsePacket
 import moe.crx.roadblock.utils.bytes
+import moe.crx.roadblock.utils.fromHexString
 import moe.crx.roadblock.utils.readFully
 import moe.crx.roadblock.utils.sink
 import moe.crx.roadblock.utils.toHexString
@@ -80,9 +81,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
                         File(it).readBytes()
                     }
                 }.getOrNull() ?: runCatching {
-                    line.replace(" ", "").windowed(2, 2) {
-                        it.substring(0).toByte(16)
-                    }.toByteArray()
+                    line.fromHexString()
                 }.getOrNull()
 
                 if (bytes == null) {

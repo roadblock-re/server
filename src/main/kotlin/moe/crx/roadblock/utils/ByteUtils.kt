@@ -56,6 +56,10 @@ fun ByteArray.sha256() = MessageDigest.getInstance("SHA-256").digest(this).toHex
 
 fun ByteArray.toHexString(separator: String = "") = joinToString(separator) { it.toHexString() }
 
+fun String.fromHexString() = filterNot { it.isWhitespace() }.windowed(2, 2) {
+    it.substring(0).toInt(16).toByte()
+}.toByteArray()
+
 fun Byte.toHexString() = "%02x".format(this)
 
 fun decryptDesEcbZeroPadding(encryptedBase64: String, keyString: String): String {
