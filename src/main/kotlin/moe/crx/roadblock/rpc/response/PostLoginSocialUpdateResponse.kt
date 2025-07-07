@@ -12,17 +12,17 @@ import moe.crx.roadblock.rpc.base.UpdatesQueueWithRootReactionsResponse
 
 class PostLoginSocialUpdateResponse : UpdatesQueueWithRootReactionsResponse() {
 
-    var friendsList: SocialConnectionList? = null
-    var friendRequestsList: SocialRequestList? = null
-    var sentFriendRequestsList: SocialRequestList? = null
-    var blockedList: SocialConnectionList? = null
-    var blockedByList: SocialConnectionList? = null
-    var recentlyPlayedWithUsers: SocialConnectionList? = null
+    var friendsList: SocialConnectionList? = SocialConnectionList()
+    var friendRequestsList: SocialRequestList? = SocialRequestList()
+    var sentFriendRequestsList: SocialRequestList? = SocialRequestList()
+    var blockedList: SocialConnectionList? = SocialConnectionList()
+    var blockedByList: SocialConnectionList? = SocialConnectionList()
+    var recentlyPlayedWithUsers: SocialConnectionList? = SocialConnectionList()
     var recentlyPlayedWithUsersTimepoint: Instant = now()
-    var nextRefreshTime: Int = 0
-    var nextUpdateOnlineStatusTime: Int = 0
-    var minimumTimeBetweenPlatformUsersRefreshes: Int = 0
-    var requestSocialProfileCooldownTime: Int = 0
+    var nextRefreshTime: Int = Int.MAX_VALUE
+    var nextUpdateOnlineStatusTime: Int = Int.MAX_VALUE
+    var minimumTimeBetweenPlatformUsersRefreshes: Int = Int.MAX_VALUE
+    var requestSocialProfileCooldownTime: Int = Int.MAX_VALUE
 
     override fun read(sink: InputSink) {
         super.read(sink)
