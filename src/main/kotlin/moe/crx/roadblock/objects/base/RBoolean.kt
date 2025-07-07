@@ -14,4 +14,16 @@ open class RBoolean(var value: Boolean) : RObject {
     override fun write(sink: OutputSink) {
         sink.writeBoolean(value)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is RBoolean) {
+            return value == other.value
+        }
+
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return value.hashCode()
+    }
 }

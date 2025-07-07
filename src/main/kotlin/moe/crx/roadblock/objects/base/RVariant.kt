@@ -20,4 +20,16 @@ abstract class RVariant(vararg clazz: KClass<out RObject>) : RObject {
     override fun write(sink: OutputSink) {
         sink.writeVariant(variant, *classes)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is RVariant) {
+            return variant == other.variant
+        }
+
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return variant.hashCode()
+    }
 }

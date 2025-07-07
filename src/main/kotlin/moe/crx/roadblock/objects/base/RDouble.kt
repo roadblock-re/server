@@ -14,4 +14,16 @@ open class RDouble(var value: Double) : RObject {
     override fun write(sink: OutputSink) {
         sink.writeDouble(value)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is RDouble) {
+            return value == other.value
+        }
+
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return value.hashCode()
+    }
 }

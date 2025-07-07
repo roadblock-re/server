@@ -12,4 +12,12 @@ open class RVoid : RObject {
     override fun write(sink: OutputSink) {
 
     }
+
+    override fun equals(other: Any?): Boolean {
+        return other is RVoid
+    }
+
+    override fun hashCode(): Int {
+        return 0
+    }
 }

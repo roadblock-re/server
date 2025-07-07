@@ -14,4 +14,16 @@ open class RByteArray(var value: ByteArray) : RObject {
     override fun write(sink: OutputSink) {
         sink.writeByteArray(value)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is RByteArray) {
+            return value.contentEquals(other.value)
+        }
+
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return value.contentHashCode()
+    }
 }

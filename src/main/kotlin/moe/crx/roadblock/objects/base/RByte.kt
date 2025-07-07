@@ -14,4 +14,16 @@ open class RByte(var value: Byte) : RObject {
     override fun write(sink: OutputSink) {
         sink.writeByte(value)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is RByte) {
+            return value == other.value
+        }
+
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return value.hashCode()
+    }
 }

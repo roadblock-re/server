@@ -14,4 +14,16 @@ open class RShort(var value: Short) : RObject {
     override fun write(sink: OutputSink) {
         sink.writeShort(value)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is RShort) {
+            return value == other.value
+        }
+
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return value.hashCode()
+    }
 }

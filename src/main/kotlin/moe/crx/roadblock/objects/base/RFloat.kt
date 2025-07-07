@@ -14,4 +14,16 @@ open class RFloat(var value: Float) : RObject {
     override fun write(sink: OutputSink) {
         sink.writeFloat(value)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is RFloat) {
+            return value == other.value
+        }
+
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return value.hashCode()
+    }
 }

@@ -16,4 +16,16 @@ open class RInstant(var value: Instant) : RObject {
     override fun write(sink: OutputSink) {
         sink.writeInstant(value)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is RInstant) {
+            return value == other.value
+        }
+
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return value.hashCode()
+    }
 }

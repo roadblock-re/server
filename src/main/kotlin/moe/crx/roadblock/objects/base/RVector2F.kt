@@ -16,4 +16,16 @@ open class RVector2F(var x: Float, var y: Float) : RObject {
         sink.writeFloat(x)
         sink.writeFloat(y)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is RVector2F) {
+            return x == other.x && y == other.y
+        }
+
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return x.hashCode() * 31 + y.hashCode()
+    }
 }

@@ -14,4 +14,16 @@ open class RInt(var value: Int) : RObject {
     override fun write(sink: OutputSink) {
         sink.writeInt(value)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is RInt) {
+            return value == other.value
+        }
+
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return value.hashCode()
+    }
 }
