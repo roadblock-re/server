@@ -27,10 +27,7 @@ suspend fun handleLinkAccountWithCredential(
     session: GameConnection,
     request: LinkAccountWithCredentialRequest
 ) {
-    session.send(LinkAccountWithCredentialResponse().apply {
-        accountLinkingInfo = UserAccountInfo()
-        accountConflictData = SNSUserConflictData()
-    })
+    session.send(LinkAccountWithCredentialResponse())
 }
 
 suspend fun handleConfirmLinkingOperation(

@@ -18,24 +18,7 @@ suspend fun handleActionLogin(session: GameConnection, request: ActionLoginReque
 }
 
 suspend fun handleCareerStartRace(session: GameConnection, request: CareerStartRaceRequest) {
-    val car = session.gameState.inventory.cars[RInt(request.carId)] ?: return // TODO return server error
-
-    //TODO add LastUsageChanged
-    val updates = UpdatesTree(
-        UpdatesNode(
-            InventoryCarMaintenanceBalanceChanged().apply {
-                carId = request.carId
-                oldSlots = car.maintenanceStats.maintenanceSlots
-                newSlots = (car.maintenanceStats.maintenanceSlots - 1).toShort()
-            }
-        )
-    )
-
-    car.maintenanceStats.maintenanceSlots = (car.maintenanceStats.maintenanceSlots - 1).toShort()
-
-    session.saveState()
-
-    session.send(CareerStartRaceResponse().apply { updatesQueue = updates.flatten(session.ver) })
+    session.send(CareerStartRaceResponse())
 }
 
 suspend fun handleCareerFinishRace(session: GameConnection, request: CareerFinishRaceRequest) {
@@ -169,52 +152,11 @@ suspend fun handleClaimMissionReward(session: GameConnection, request: ClaimMiss
 }
 
 suspend fun handleChangeMenuTutorialState(session: GameConnection, request: ChangeMenuTutorialStateRequest) {
-    val updates = UpdatesTree(
-        UpdatesNode(
-            PlayerStatsMenuTutorialStateChanged().apply {
-                type = request.menuTutorialType
-                oldState = session.gameState.playerStats.menuTutorials[request.menuTutorialType.ordinal].value.toEnum()
-                newState = request.tutorialState
-            }
-        )
-    )
-
-    session.gameState.playerStats.apply {
-        menuTutorials = menuTutorials.toMutableList().apply {
-            this[request.menuTutorialType.ordinal] = RInt().apply {
-                value = request.tutorialState.ordinal
-            }
-        }
-    }
-
-    session.saveState()
-
-    session.send(ChangeMenuTutorialStateResponse().apply { updatesQueue = updates.flatten(session.ver) })
+    session.send(ChangeMenuTutorialStateResponse())
 }
 
 suspend fun handleChangeGameplayTutorialState(session: GameConnection, request: ChangeGameplayTutorialStateRequest) {
-    val updates = UpdatesTree(
-        UpdatesNode(
-            PlayerStatsGameplayTutorialStateChanged().apply {
-                type = request.gameplayTutorialType
-                oldState =
-                    session.gameState.playerStats.gameplayTutorials[request.gameplayTutorialType.ordinal].value.toEnum()
-                newState = request.tutorialState
-            }
-        )
-    )
-
-    session.gameState.playerStats.apply {
-        gameplayTutorials = gameplayTutorials.toMutableList().apply {
-            this[request.gameplayTutorialType.ordinal] = RInt().apply {
-                value = request.tutorialState.ordinal
-            }
-        }
-    }
-
-    session.saveState()
-
-    session.send(ChangeGameplayTutorialStateResponse().apply { updatesQueue = updates.flatten(session.ver) })
+    session.send(ChangeGameplayTutorialStateResponse())
 }
 
 suspend fun handleGainGarageLevelCheat(session: GameConnection, request: GainGarageLevelCheatRequest) {
@@ -439,11 +381,6 @@ suspend fun handleSaveGameSettings(
     session: GameConnection,
     request: SaveGameSettingsRequest
 ) {
-    session.gameState.miscellaneous.gameSettings = request.settings
-
-    session.saveState()
-
-    // TODO Updates
     session.send(SaveGameSettingsResponse())
 }
 
