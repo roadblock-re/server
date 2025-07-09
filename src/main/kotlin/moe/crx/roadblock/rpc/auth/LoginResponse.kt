@@ -8,6 +8,7 @@ import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
 import moe.crx.roadblock.objects.game.*
+import moe.crx.roadblock.objects.models.State
 
 class LoginResponse : RObject {
     companion object {

@@ -1,11 +1,10 @@
-package moe.crx.roadblock.objects.game
+package moe.crx.roadblock.objects.models
 
 import moe.crx.roadblock.io.ObjectIO.readObject
 import moe.crx.roadblock.io.ObjectIO.writeObject
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.models.*
 
 class State : RObject {
 
@@ -40,6 +39,10 @@ class State : RObject {
     var sponsorshipSystem: SponsorshipSystemState = SponsorshipSystemState()
     var goldenChestSystem: GoldenChestSystemState = GoldenChestSystemState()
     var socialSystem: SocialSystemState = SocialSystemState()
+    var gauntletSystem: GauntletSystemState = GauntletSystemState()
+    var vipSystem: VipSystemState = VipSystemState()
+    var activationSystem: ActivationSystemState = ActivationSystemState()
+    var tournamentSystem: TournamentSystemState = TournamentSystemState()
 
     override fun read(sink: InputSink) {
         blackMarket = sink.readObject()
