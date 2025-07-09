@@ -24,6 +24,7 @@ class LoginResponse : RObject {
     var serverDBs: ServerDBSerialization = ServerDBSerialization()
     var serverSyslogId: String = ""
     var buildId: String = ""
+    var instance: String = ""
     var didMaintenanceFreeRefill: Boolean = false
     var remindNewGarageLevel: Boolean = false
     var isClientReloadNeeded: Boolean = false
@@ -45,6 +46,9 @@ class LoginResponse : RObject {
         serverDBs = sink.readObject()
         serverSyslogId = sink.readString()
         buildId = sink.readString()
+        if (sink newer "24.6.0") {
+            instance = sink.readString()
+        }
         didMaintenanceFreeRefill = sink.readBoolean()
         remindNewGarageLevel = sink.readBoolean()
         isClientReloadNeeded = sink.readBoolean()
@@ -69,6 +73,9 @@ class LoginResponse : RObject {
         sink.writeObject(serverDBs)
         sink.writeString(serverSyslogId)
         sink.writeString(buildId)
+        if (sink newer "24.6.0") {
+            sink.writeString(instance)
+        }
         sink.writeBoolean(didMaintenanceFreeRefill)
         sink.writeBoolean(remindNewGarageLevel)
         sink.writeBoolean(isClientReloadNeeded)
