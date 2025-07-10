@@ -9,12 +9,16 @@ import kotlin.reflect.KClass
 class GameLayer(private val ver: SerializationVersion) {
 
     companion object {
+        val versionRegex = Regex("(\\d+)\\.(\\d+)\\.(\\d+)(\\w*)")
+
         fun selectVersion(gameVersion: String): SerializationVersion {
-            return if (gameVersion.split('.').first().toInt() >= 24) {
-                SerializationVersion(24, 0, 14)
-            } else {
-                SerializationVersion(3, 9, 2)
-            }
+            val match = versionRegex.find(gameVersion)
+
+            return SerializationVersion(
+                match?.groups[1]?.value?.toShortOrNull() ?: 0,
+                match?.groups[2]?.value?.toShortOrNull() ?: 0,
+                match?.groups[4]?.value?.toShortOrNull(16) ?: 0,
+            )
         }
     }
 

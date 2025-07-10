@@ -4,17 +4,9 @@ import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
 
-class SerializationVersion() : RObject {
+class SerializationVersion(var major: Short, var minor: Short, var build: Short) : RObject {
 
-    constructor(major: Short, minor: Short, build: Short) : this() {
-        this.major = major
-        this.minor = minor
-        this.build = build
-    }
-
-    var major: Short = 0
-    var minor: Short = 0
-    var build: Short = 0
+    constructor() : this(0, 0, 0)
 
     override fun read(sink: InputSink) {
         major = sink.readShort()
