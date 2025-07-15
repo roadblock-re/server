@@ -23,7 +23,9 @@ class CarUsageStats : RObject {
         numRacesCareer = sink.readShort()
         numRacesMultiplayer = sink.readShort()
         numRacesTLE = sink.readShort()
-        numRacesClubRace = sink.readShort()
+        if (sink older "24.6.0") {
+            numRacesClubRace = sink.readShort()
+        }
     }
 
     override fun write(sink: OutputSink) {
@@ -32,6 +34,8 @@ class CarUsageStats : RObject {
         sink.writeShort(numRacesCareer)
         sink.writeShort(numRacesMultiplayer)
         sink.writeShort(numRacesTLE)
-        sink.writeShort(numRacesClubRace)
+        if (sink older "24.6.0") {
+            sink.writeShort(numRacesClubRace)
+        }
     }
 }

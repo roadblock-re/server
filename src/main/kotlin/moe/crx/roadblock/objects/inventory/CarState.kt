@@ -26,13 +26,14 @@ class CarState : RObject {
     var usageState: CarUsageStats = CarUsageStats()
     var customizationState: CarCustomizationState = CarCustomizationState()
     var tierBlueprints: Blueprints = 0
-    var ownedCustomParts: List<RShort> = listOf()
+    var ownedDecalVisuals: List<RInt> = listOf()
     var isOwned: Boolean = false
     var isCarKeyOwned: Boolean = false
-    var ownedDecalVisuals: List<RInt> = listOf()
+    var ownedCustomParts: List<RShort> = listOf()
     var currentEvoTier: RByte? = null
     var evoTierBlueprints: Blueprints = 0
     var overclockExpirationDate: RInstant? = null
+    var unlockedAssemblyBlueprints: Int = 0
 
     override fun read(sink: InputSink) {
         blueprints = sink.readInt()
@@ -55,6 +56,9 @@ class CarState : RObject {
         }
         if (sink newer "24.0.0") {
             overclockExpirationDate = sink.readOptional()
+        }
+        if (sink newer "24.6.0") {
+            unlockedAssemblyBlueprints = sink.readInt()
         }
     }
 
@@ -79,6 +83,9 @@ class CarState : RObject {
         }
         if (sink newer "24.0.0") {
             sink.writeOptional(overclockExpirationDate)
+        }
+        if (sink newer "24.6.0") {
+            sink.writeInt(unlockedAssemblyBlueprints)
         }
     }
 }
