@@ -26,10 +26,10 @@ class InventoryState : RObject {
 
     var cars: Map<RInt, CarState> = mapOf()
     var wallets: List<WalletState> = listOf()
-    //var iapWallets37: List<WalletState> = listOf()
 
-    var iapWallets39: Map<RInt, WalletState> = mapOf() // 3.9+ only (also maybe 3.8)
+    var iapWallets: Map<RInt, WalletState> = mapOf() // 3.9+ only (also maybe 3.8)
     var wildcardBlueprints: List<WildcardBlueprintClassState> = listOf()
+    var wildcardUpgradeItems: List<RInt> = listOf()
     var upgradeInfoState: List<StatUpgradeInfoState> = listOf()
     var lastActionTime: Instant = now()
     var maintenanceBooking: MaintenanceBooking? = null
@@ -39,9 +39,11 @@ class InventoryState : RObject {
     override fun read(sink: InputSink) {
         cars = sink.readMap()
         wallets = sink.readList()
-        //iapWallets37 = sink.readList()
-        iapWallets39 = sink.readMap()
+        iapWallets = sink.readMap()
         wildcardBlueprints = sink.readList()
+        if (sink newer "24.6.0") {
+            wildcardUpgradeItems = sink.readList()
+        }
         upgradeInfoState = sink.readList()
         lastActionTime = sink.readInstant()
         maintenanceBooking = sink.readOptional()
@@ -54,9 +56,11 @@ class InventoryState : RObject {
     override fun write(sink: OutputSink) {
         sink.writeMap(cars)
         sink.writeList(wallets)
-        //sink.writeList(iapWallets37)
-        sink.writeMap(iapWallets39)
+        sink.writeMap(iapWallets)
         sink.writeList(wildcardBlueprints)
+        if (sink newer "24.6.0") {
+            sink.writeList(wildcardUpgradeItems)
+        }
         sink.writeList(upgradeInfoState)
         sink.writeInstant(lastActionTime)
         sink.writeOptional(maintenanceBooking)

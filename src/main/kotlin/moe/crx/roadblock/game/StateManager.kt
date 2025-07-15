@@ -284,7 +284,7 @@ class StateManager {
                             currentBalance = 0
                         },
                     )
-                    iapWallets39 = buildMap {
+                    iapWallets = buildMap {
                         repeat(6) {
                             put(RInt().apply { value = it }, WalletState())
                         }
