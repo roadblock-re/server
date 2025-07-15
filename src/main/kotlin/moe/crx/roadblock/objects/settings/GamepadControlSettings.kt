@@ -9,6 +9,7 @@ class GamepadControlSettings : RObject {
     var gamepadId: Long = 0
     var isAutoselectEnabled: Boolean = false
     var tiltingSensitivity: Float = 0f
+    var isHorizonTiltEnabled: Boolean = false
     var selectedLayout: Int = 0
     var touchDriveSensitivity: Float = 0f
     var manualSensitivity: Float = 0f
@@ -17,6 +18,9 @@ class GamepadControlSettings : RObject {
         gamepadId = sink.readLong()
         isAutoselectEnabled = sink.readBoolean()
         tiltingSensitivity = sink.readFloat()
+        if (sink newer "24.6.0") {
+            isHorizonTiltEnabled = sink.readBoolean()
+        }
         selectedLayout = sink.readInt()
         touchDriveSensitivity = sink.readFloat()
         manualSensitivity = sink.readFloat()
@@ -26,6 +30,9 @@ class GamepadControlSettings : RObject {
         sink.writeLong(gamepadId)
         sink.writeBoolean(isAutoselectEnabled)
         sink.writeFloat(tiltingSensitivity)
+        if (sink newer "24.6.0") {
+            sink.writeBoolean(isHorizonTiltEnabled)
+        }
         sink.writeInt(selectedLayout)
         sink.writeFloat(touchDriveSensitivity)
         sink.writeFloat(manualSensitivity)

@@ -15,6 +15,7 @@ import moe.crx.roadblock.io.OptionalIO.writeOptional
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RBoolean
+import moe.crx.roadblock.objects.base.RByte
 import moe.crx.roadblock.objects.base.RInt
 import moe.crx.roadblock.objects.base.RObject
 import moe.crx.roadblock.objects.base.RString
@@ -34,8 +35,7 @@ class MiscellaneousState : RObject {
     var deviceCountry: RString? = null
     var claimedEnableSystemNotificationsReward: Boolean = false
     var channelName: RString? = null
-    var isGDPRCompliant: RBoolean? = null
-    var consentNoticeShown: Boolean = false
+    var privacyPolicy: RByte? = null
     var platform: RInt? = null // PlatformType
     var xboxLiveOnlyEnabled: RBoolean? = null
     var uniqueUserNameChangeCount: RInt? = null
@@ -49,6 +49,8 @@ class MiscellaneousState : RObject {
     var hasUserChangedName: Boolean = false
     var isUserNameForced: Boolean = false
     var offlinePurchasedAmounts: Map<RString, RInt> = mapOf()
+    var adsReplacementRemaining: Map<RInt, RInt> = mapOf()
+    var resetAdsReplacementTimepoint: Instant = now()
 
     override fun read(sink: InputSink) {
         username = sink.readString()
@@ -61,16 +63,22 @@ class MiscellaneousState : RObject {
         deviceCountry = sink.readOptional()
         claimedEnableSystemNotificationsReward = sink.readBoolean()
         channelName = sink.readOptional()
-        isGDPRCompliant = sink.readOptional()
+        privacyPolicy = if (sink older "24.6.0") {
+            sink.readOptional()
+        } else {
+            RByte(sink.readByte())
+        }
         if (sink older "24.0.0") {
-            consentNoticeShown = sink.readBoolean()
+            underageDisclaimerShown = sink.readBoolean()
         }
         platform = if (sink older "24.0.0") {
             sink.readOptional()
         } else {
             sink.readObject()
         }
-        xboxLiveOnlyEnabled = sink.readOptional()
+        if (sink older "24.6.0") {
+            xboxLiveOnlyEnabled = sink.readOptional()
+        }
         if (sink older "24.0.0") {
             uniqueUserNameChangeCount = sink.readOptional()
         }
@@ -86,6 +94,10 @@ class MiscellaneousState : RObject {
             isUserNameForced = sink.readBoolean()
             offlinePurchasedAmounts = sink.readMap()
         }
+        if (sink newer "24.6.0") {
+            adsReplacementRemaining = sink.readMap()
+            resetAdsReplacementTimepoint = sink.readInstant()
+        }
     }
 
     override fun write(sink: OutputSink) {
@@ -99,16 +111,22 @@ class MiscellaneousState : RObject {
         sink.writeOptional(deviceCountry)
         sink.writeBoolean(claimedEnableSystemNotificationsReward)
         sink.writeOptional(channelName)
-        sink.writeOptional(isGDPRCompliant)
+        if (sink older "24.6.0") {
+            sink.writeOptional(privacyPolicy)
+        } else {
+            sink.writeByte(privacyPolicy?.value ?: 0)
+        }
         if (sink older "24.0.0") {
-            sink.writeBoolean(consentNoticeShown)
+            sink.writeBoolean(underageDisclaimerShown)
         }
         if (sink older "24.0.0") {
             sink.writeOptional(platform)
         } else {
             sink.writeObject(platform ?: RInt())
         }
-        sink.writeOptional(xboxLiveOnlyEnabled)
+        if (sink older "24.6.0") {
+            sink.writeOptional(xboxLiveOnlyEnabled)
+        }
         if (sink older "24.0.0") {
             sink.writeOptional(uniqueUserNameChangeCount)
         }
@@ -123,6 +141,10 @@ class MiscellaneousState : RObject {
             sink.writeBoolean(hasUserChangedName)
             sink.writeBoolean(isUserNameForced)
             sink.writeMap(offlinePurchasedAmounts)
+        }
+        if (sink newer "24.6.0") {
+            sink.writeMap(adsReplacementRemaining)
+            sink.writeInstant(resetAdsReplacementTimepoint)
         }
     }
 }

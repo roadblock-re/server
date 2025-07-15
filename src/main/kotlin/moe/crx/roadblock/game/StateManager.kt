@@ -2,7 +2,7 @@ package moe.crx.roadblock.game
 
 import kotlinx.datetime.*
 import kotlinx.datetime.Clock.System.now
-import moe.crx.roadblock.objects.base.RBoolean
+import moe.crx.roadblock.objects.base.RByte
 import moe.crx.roadblock.objects.base.RInt
 import moe.crx.roadblock.objects.base.RString
 import moe.crx.roadblock.objects.base.RVector2F
@@ -364,8 +364,8 @@ class StateManager {
                     deviceCountry = RString().apply { value = "US" }
                     claimedEnableSystemNotificationsReward = false
                     channelName = null
-                    isGDPRCompliant = RBoolean().apply { value = true }
-                    consentNoticeShown = false
+                    privacyPolicy = RByte(0)
+                    underageDisclaimerShown = false
                     platform = null
                     xboxLiveOnlyEnabled = null
                     uniqueUserNameChangeCount = RInt().apply { value = 1 }
