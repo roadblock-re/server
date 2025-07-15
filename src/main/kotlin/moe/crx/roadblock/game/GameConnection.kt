@@ -46,7 +46,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
         NOT_INITIALIZED, NOT_AUTHORIZED, AUTHORIZED
     }
 
-    var ver = SerializationVersion(24, 0, 14)
+    var ver = SerializationVersion(0, 0, 0)
     var layer = GameLayer(ver)
 
     var connectionState = ConnectionState.NOT_INITIALIZED
