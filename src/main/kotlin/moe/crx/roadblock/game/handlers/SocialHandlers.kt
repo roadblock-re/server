@@ -1,8 +1,6 @@
 package moe.crx.roadblock.game.handlers
 
 import moe.crx.roadblock.game.GameConnection
-import moe.crx.roadblock.objects.game.SNSUserConflictData
-import moe.crx.roadblock.objects.game.UserAccountInfo
 import moe.crx.roadblock.rpc.request.ConfirmLinkingOperationRequest
 import moe.crx.roadblock.rpc.request.GetCredentialsForConsoleUsersRequest
 import moe.crx.roadblock.rpc.request.LinkAccountWithCredentialRequest
