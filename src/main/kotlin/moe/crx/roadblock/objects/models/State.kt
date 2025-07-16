@@ -86,6 +86,12 @@ class State : RObject {
         if (sink newer "24.1.0") {
             socialSystem = sink.readObject()
         }
+        if (sink newer "24.6.0") {
+            gauntletSystem = sink.readObject()
+            vipSystem = sink.readObject()
+            activationSystem = sink.readObject()
+            tournamentSystem = sink.readObject()
+        }
     }
 
     override fun write(sink: OutputSink) {
@@ -129,6 +135,12 @@ class State : RObject {
         }
         if (sink newer "24.1.0") {
             sink.writeObject(socialSystem)
+        }
+        if (sink newer "24.6.0") {
+            sink.writeObject(gauntletSystem)
+            sink.writeObject(vipSystem)
+            sink.writeObject(activationSystem)
+            sink.writeObject(tournamentSystem)
         }
     }
 }
