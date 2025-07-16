@@ -10,6 +10,8 @@ class TLEventRaceData : RObject {
     var carId: Int = 0
     var carRank: Short = 0
     var isCarOverclocked: Boolean = false
+    var collectedItemCount: Int = 0
+    var driveMeters: Int = 0
 
     override fun read(sink: InputSink) {
         timeInMicroseconds = sink.readInt()
@@ -17,6 +19,10 @@ class TLEventRaceData : RObject {
         carRank = sink.readShort()
         if (sink newer "24.0.0") {
             isCarOverclocked = sink.readBoolean()
+        }
+        if (sink newer "24.6.0") {
+            collectedItemCount = sink.readInt()
+            driveMeters = sink.readInt()
         }
     }
 
@@ -26,6 +32,10 @@ class TLEventRaceData : RObject {
         sink.writeShort(carRank)
         if (sink newer "24.0.0") {
             sink.writeBoolean(isCarOverclocked)
+        }
+        if (sink newer "24.6.0") {
+            sink.writeInt(collectedItemCount)
+            sink.writeInt(driveMeters)
         }
     }
 }

@@ -22,6 +22,8 @@ class TLEventData : RObject {
     var isAutoClaimed: Boolean = false
     var nitroGhostResetCount: Int = 0 // 3.9+ only (also maybe 3.8)
     var bestNitroGhostTimeInSeconds: Int = 0 // 3.9+ only (also maybe 3.8)
+    var lastRace: TLEventLastRace = TLEventLastRace()
+    var optAutoplayData: TLEventAutoplayData? = null
 
     override fun read(sink: InputSink) {
         soloData = sink.readObject()
@@ -34,6 +36,10 @@ class TLEventData : RObject {
         isAutoClaimed = sink.readBoolean()
         nitroGhostResetCount = sink.readInt()
         bestNitroGhostTimeInSeconds = sink.readInt()
+        if (sink newer "24.6.0") {
+            lastRace = sink.readObject()
+            optAutoplayData = sink.readOptional()
+        }
     }
 
     override fun write(sink: OutputSink) {
@@ -47,5 +53,9 @@ class TLEventData : RObject {
         sink.writeBoolean(isAutoClaimed)
         sink.writeInt(nitroGhostResetCount)
         sink.writeInt(bestNitroGhostTimeInSeconds)
+        if (sink newer "24.6.0") {
+            sink.writeObject(lastRace)
+            sink.writeOptional(optAutoplayData)
+        }
     }
 }
