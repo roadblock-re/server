@@ -19,6 +19,7 @@ class SeasonPassState : RObject {
     var tiers: Map<RByte, TierData> = mapOf()
     var benefits: LegendPassBenefitsMultipliers = LegendPassBenefitsMultipliers()
     var nextDayFromLastRace: Instant = now()
+    var episodesCompletionRewardsState: Byte = 0
 
     override fun read(sink: InputSink) {
         endDate = sink.readInstant()
@@ -27,6 +28,9 @@ class SeasonPassState : RObject {
         tiers = sink.readMap()
         benefits = sink.readObject()
         nextDayFromLastRace = sink.readInstant()
+        if (sink newer "24.6.0") {
+            episodesCompletionRewardsState = sink.readByte()
+        }
     }
 
     override fun write(sink: OutputSink) {
@@ -36,5 +40,8 @@ class SeasonPassState : RObject {
         sink.writeMap(tiers)
         sink.writeObject(benefits)
         sink.writeInstant(nextDayFromLastRace)
+        if (sink newer "24.6.0") {
+            sink.writeByte(episodesCompletionRewardsState)
+        }
     }
 }

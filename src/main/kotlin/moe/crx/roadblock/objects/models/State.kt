@@ -73,7 +73,11 @@ class State : RObject {
         legendFundSystem = sink.readObject()
         if (sink newer "24.0.0") {
             vaultSystem = sink.readObject()
+        }
+        if (sink newer "24.0.0" && sink older "24.6.0") {
             seasonalCurrencySystem = sink.readObject()
+        }
+        if (sink newer "24.0.0") {
             upsellPopupSystem = sink.readObject()
             overclockSystem = sink.readObject()
             sponsorshipSystem = sink.readObject()
@@ -113,7 +117,11 @@ class State : RObject {
         sink.writeObject(legendFundSystem)
         if (sink newer "24.0.0") {
             sink.writeObject(vaultSystem)
+        }
+        if (sink newer "24.0.0" && sink older "24.6.0") {
             sink.writeObject(seasonalCurrencySystem)
+        }
+        if (sink newer "24.0.0") {
             sink.writeObject(upsellPopupSystem)
             sink.writeObject(overclockSystem)
             sink.writeObject(sponsorshipSystem)
