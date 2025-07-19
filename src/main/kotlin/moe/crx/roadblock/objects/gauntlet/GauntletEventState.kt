@@ -31,8 +31,8 @@ class GauntletEventState : RObject {
     var tickets: Short = 0
     var score: Short = 0
     var isClaimed: Boolean = false
-    var evidenceThreshold: Int = 0
-    var evidenceWeightMultiplier: Int = 0
+    var evidenceThreshold: Float = 0f
+    var evidenceWeightMultiplier: Float = 0f
     var evidences: Map<RInt, GauntletEvidenceEntry> = mapOf()
     var banTypes: List<RInt> = listOf()
     var optCurrentRevenge: RInstant? = null
@@ -61,8 +61,8 @@ class GauntletEventState : RObject {
         tickets = sink.readShort()
         score = sink.readShort()
         isClaimed = sink.readBoolean()
-        evidenceThreshold = sink.readInt()
-        evidenceWeightMultiplier = sink.readInt()
+        evidenceThreshold = sink.readFloat()
+        evidenceWeightMultiplier = sink.readFloat()
         evidences = sink.readMap()
         banTypes = sink.readList()
         optCurrentRevenge = sink.readOptional()
@@ -92,8 +92,8 @@ class GauntletEventState : RObject {
         sink.writeShort(tickets)
         sink.writeShort(score)
         sink.writeBoolean(isClaimed)
-        sink.writeInt(evidenceThreshold)
-        sink.writeInt(evidenceWeightMultiplier)
+        sink.writeFloat(evidenceThreshold)
+        sink.writeFloat(evidenceWeightMultiplier)
         sink.writeMap(evidences)
         sink.writeList(banTypes)
         sink.writeOptional(optCurrentRevenge)
