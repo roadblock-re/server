@@ -16,16 +16,26 @@ class WalletState : RObject {
     var eventId: RString? = null // 3.9+ only (also maybe 3.8)
 
     override fun read(sink: InputSink) {
-        currentBalance = sink.readInt()
-        currentType = sink.readInt()
+        if (sink older "45.0.0") {
+            currentBalance = sink.readInt()
+            currentType = sink.readInt()
+        } else {
+            currentType = sink.readInt()
+            currentBalance = sink.readInt()
+        }
         if (sink older "24.6.0") {
             eventId = sink.readOptional()
         }
     }
 
     override fun write(sink: OutputSink) {
-        sink.writeInt(currentBalance)
-        sink.writeInt(currentType)
+        if (sink older "45.0.0") {
+            sink.writeInt(currentBalance)
+            sink.writeInt(currentType)
+        } else {
+            sink.writeInt(currentType)
+            sink.writeInt(currentBalance)
+        }
         if (sink older "24.6.0") {
             sink.writeOptional(eventId)
         }

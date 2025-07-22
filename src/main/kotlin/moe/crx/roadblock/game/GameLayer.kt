@@ -14,11 +14,18 @@ class GameLayer(private val ver: SerializationVersion) {
         fun selectVersion(gameVersion: String): SerializationVersion {
             val match = versionRegex.find(gameVersion)
 
-            return SerializationVersion(
+            var ver = SerializationVersion(
                 match?.groups[1]?.value?.toShortOrNull() ?: 0,
                 match?.groups[2]?.value?.toShortOrNull() ?: 0,
                 match?.groups[4]?.value?.toShortOrNull(16) ?: 0,
             )
+
+            // TODO Add game version to serialization version mapping?
+            if (ver == SerializationVersion(45, 0, 10)) {
+                ver = SerializationVersion(45, 0, 6)
+            }
+
+            return ver
         }
     }
 
@@ -34,7 +41,7 @@ class GameLayer(private val ver: SerializationVersion) {
     init {
         register(::handleActionLogin)
         if (ver newer "24.0.0") {
-            registerStub("NotifyShutdownRequest")
+            registerStub("NotifyShutdown")
         }
         register(::handleCareerStartRace)
         register(::handleCareerFinishRace)
@@ -43,7 +50,7 @@ class GameLayer(private val ver: SerializationVersion) {
         register(::handleCompleteCareerSeasonCheat)
         register(::handleGainEventFlagCheat)
         if (ver newer "24.6.0") {
-            registerStub("GainCareerFlagsCheatRequest")
+            registerStub("GainCareerFlagsCheat")
         }
         register(::handleUnlockAllChaptersCheat)
         register(::handleUnlockAllSeasonsCheat)
@@ -54,42 +61,58 @@ class GameLayer(private val ver: SerializationVersion) {
         register(::handleMaintenanceSkipRefillWithBonusPassBenefit)
         register(::handleMaintenanceValidateRefill)
         if (ver newer "24.6.0") {
-            registerStub("UnlockAssemblyStageRequest")
+            registerStub("UnlockAssemblyStage")
         }
         register(::handleUnlockUpgradeTier)
         register(::handleUpgradeCarStatLevel)
         register(::handleFreeUpgradeCarStatLevel)
         register(::handleInstallUpgradeItem)
+        if (ver newer "45.0.0") {
+            registerStub("AcquireAndInstallUpgradeItem")
+        }
         register(::handleConvertWildcardBlueprints)
         register(::handleTrashItem)
+        if (ver newer "45.0.0") {
+            registerStub("EquipEvoTuningEngine")
+            registerStub("EquipEvoTuningDriveTrain")
+            registerStub("EquipEvoTuningIntake")
+            registerStub("EquipEvoTuningNOS")
+            registerStub("EquipEvoTuningSKit")
+        }
         register(::handleGainAllCarItemsCheat)
         register(::handleGainAllCarsCheat)
         register(::handleGainCurrencyCheat)
         register(::handleGainCarBlueprintsCheat)
         register(::handleGainWildcardBlueprintsCheat)
         if (ver newer "24.6.0") {
-            registerStub("GainWildcardUpgradeItemsCheatRequest")
+            registerStub("GainWildcardUpgradeItemsCheat")
         }
         if (ver older "24.0.0") {
             register(::handleGainCarEvoBlueprintsCheat)
+        }
+        if (ver newer "45.0.0") {
+            registerStub("GetAllEvoTuningCarPartsCheat")
         }
         register(::handleSaveEmojiConfiguration)
         register(::handleBuyGachaBox)
         register(::handleBuyTimeLimitedGachaBox)
         if (ver newer "24.0.0") {
-            registerStub("ClaimSponsorshipGachaBoxRequest")
+            registerStub("ClaimSponsorshipGachaBox")
         }
         register(::handleClaimLevelUpGachaBoxes)
         register(::handleClaimMissionReward)
         if (ver newer "24.6.0") {
-            registerStub("ClaimAllMissionRewardRequest")
+            registerStub("ClaimAllMissionReward")
         }
         register(::handleTutorialFinishRace)
         register(::handleChangeMenuTutorialState)
         register(::handleChangeGameplayTutorialState)
         register(::handleGainGarageLevelCheat)
         register(::handleGainGarageValueCheat)
-        //registerStub("ClaimAllFreePremiumGachasCheatRequest") // TODO Not supported on 24.0.1f (but supported on 24.0.6)
+        if (ver newer "24.0.0") {
+            // TODO Not supported on 24.0.1f (but supported on 24.0.6)
+            registerStub("ClaimAllFreePremiumGachasCheat")
+        }
         register(::handleBlackMarketGetStatus)
         register(::handleBlackMarketBuy)
         register(::handleBlackMarketRefresh)
@@ -107,7 +130,7 @@ class GameLayer(private val ver: SerializationVersion) {
         register(::handleMultiplayerSeriesSyncRaces)
         register(::handleMultiplayerSeriesReportUser)
         if (ver newer "24.6.0") {
-            registerStub("MultiplayerSeriesClaimSkippedMilestonesRequest")
+            registerStub("MultiplayerSeriesClaimSkippedMilestones")
         }
         register(::handleCreateClub)
         register(::handleEditClub)
@@ -127,22 +150,22 @@ class GameLayer(private val ver: SerializationVersion) {
         register(::handleAcceptClubInvitation)
         register(::handleDeclineClubInvitation)
         if (ver newer "24.0.0") {
-            registerStub("RequestClubDonationRequest")
-            registerStub("GiveClubDonationRequest")
-            registerStub("GetClubDonationsRequest")
+            registerStub("RequestClubDonation")
+            registerStub("GiveClubDonation")
+            registerStub("GetClubDonations")
         }
         if (ver newer "24.0.0" && ver older "24.6.0") {
-            registerStub("SetClubUGCValidatedCheatRequest")
+            registerStub("SetClubUGCValidatedCheat")
         }
         if (ver newer "24.6.0") {
-            registerStub("SearchClubsByKeywordsRequest")
-            registerStub("SearchRecommendedClubsRequest")
-            registerStub("SearchClubByTagRequest")
-            registerStub("GetClubDataRequest")
-            registerStub("GetClubInvitationsRequest")
-            registerStub("GetClubMembershipApprovalRequestsRequest")
-            registerStub("GetClubMembersRequest")
-            registerStub("GetInvitedPlayersRequest")
+            registerStub("SearchClubsByKeywords")
+            registerStub("SearchRecommendedClubs")
+            registerStub("SearchClubByTag")
+            registerStub("GetClubData")
+            registerStub("GetClubInvitations")
+            registerStub("GetClubMembershipApprovalRequests")
+            registerStub("GetClubMembers")
+            registerStub("GetInvitedPlayers")
         }
         if (ver older "24.6.0") {
             register(::handleClubRaceCancelRace)
@@ -162,22 +185,22 @@ class GameLayer(private val ver: SerializationVersion) {
             register(::handleMiscellaneousSetConsentNoticeShown)
         }
         if (ver newer "24.0.0") {
-            registerStub("MiscellaneousSetUnderageDisclaimerShownRequest")
+            registerStub("MiscellaneousSetUnderageDisclaimerShown")
         }
         register(::handleSaveGameSettings)
         register(::handleMiscellaneousSetPlatform)
         if (ver newer "24.0.0") {
-            registerStub("MiscellaneousSetCrossplayPlatformFilterRequest")
-            registerStub("SaveAdsMinigameResultRequest")
+            registerStub("MiscellaneousSetCrossplayPlatformFilter")
+            registerStub("SaveAdsMinigameResult")
         }
         if (ver older "24.0.0") {
             register(::handleMiscellaneousSetUniqueUserName)
         }
         if (ver newer "24.6.0") {
-            registerStub("MiscellaneousUpdateProfileConsentRequest")
-            registerStub("MiscellaneousSaveProfileConsentRequest")
-            registerStub("MiscellaneousClaimAdsReplacementRequest")
-            registerStub("MiscellaneousResetAdsReplacementStateRequest")
+            registerStub("MiscellaneousUpdateProfileConsent")
+            registerStub("MiscellaneousSaveProfileConsent")
+            registerStub("MiscellaneousClaimAdsReplacement")
+            registerStub("MiscellaneousResetAdsReplacementState")
         }
         register(::handlePerformCheat)
         register(::handlePurchaseOfflineProduct)
@@ -186,7 +209,12 @@ class GameLayer(private val ver: SerializationVersion) {
         register(::handleProcessPendingSeshatGiftTransaction)
         register(::handleProcessPendingSeshatIAPTransaction)
         register(::handleProcessPendingSeshatRefundTransaction)
-        register(::handleProcessPendingSeshatTransactions)
+        if (ver older "45.0.0") {
+            register(::handleProcessPendingSeshatTransactions)
+        }
+        if (ver newer "45.0.0") {
+            registerStub("ProcessOrphanTransactions")
+        }
         register(::handleClaimAdClientSideRewards)
         register(::handleCurrencyPackValidatePurchase)
         register(::handlePromotionValidatePurchase)
@@ -196,13 +224,16 @@ class GameLayer(private val ver: SerializationVersion) {
         register(::handleTLEventClaimRankRewards)
         register(::handleTLEventCompleteCheat)
         register(::handleTLEventFinishRace)
+        if (ver newer "45.0.0") {
+            registerStub("TLEventAutoplayFinishRace")
+        }
         register(::handleTLEventRefillTickets)
         register(::handleTLEventRefreshClaimState)
         register(::handleTLEventSkipClubRewardContidion)
         register(::handleTLEventSkipSoloRewardContidion)
         register(::handleTLEventStartRace)
         if (ver newer "24.6.0") {
-            registerStub("TLEventAutoplayStartRaceRequest")
+            registerStub("TLEventAutoplayStartRace")
         }
         register(::handleTLEventClaimPreviousSpecialEvent)
         register(::handleTimeLimitedSpecialEventClaimProgressionReward)
@@ -222,11 +253,11 @@ class GameLayer(private val ver: SerializationVersion) {
         register(::handleBuyRelayOfferTier)
         register(::handleValidateIAPRelayOfferPurchase)
         if (ver newer "24.0.0" && ver older "24.6.0") {
-            registerStub("QuickRaceFinishRaceRequest")
+            registerStub("QuickRaceFinishRace")
         }
         register(::handleSplitScreenStartRace)
         if (ver newer "24.0.0") {
-            registerStub("SplitScreenEndRaceRequest")
+            registerStub("SplitScreenEndRace")
         }
         register(::handleUberSpecialEventDiscoverMissionCars)
         register(::handleUberSpecialEventStartRace)
@@ -280,32 +311,34 @@ class GameLayer(private val ver: SerializationVersion) {
             register(::handleMultiplayerChallengesReportUser)
             register(::handleMultiplayerChallengesSkipCooldown)
         }
-        register(::handleClubWarsRegister)
-        register(::handleClubWarsRefreshRegistration)
-        register(::handleClubWarsProcessMatchmaking)
-        register(::handleClubWarsDefenseStartRace)
-        register(::handleClubWarsDefenseFinishRace)
-        register(::handleClubWarsDefenseCancelRace)
-        register(::handleClubWarsDefenseAssignCar)
-        register(::handleClubWarsDefenseOccupyNode)
-        register(::handleClubWarsDefenseUnassignCar)
-        register(::handleClubWarsDefenseVacateNode)
-        register(::handleClubWarsPracticeStartRace)
-        register(::handleClubWarsPracticeFinishRace)
-        register(::handleClubWarsPracticeCancelRace)
-        register(::handleClubWarsAttackStartRace)
-        register(::handleClubWarsAttackFinishRace)
-        register(::handleClubWarsAttackCancelRace)
-        register(::handleClubWarsAttackConquerNode)
-        register(::handleClubWarsAttackSelectEntryPoint)
-        register(::handleClubWarsRefreshRegions)
-        register(::handleClubWarsRefreshNodes)
-        register(::handleClubWarsFinishRound)
-        register(::handleClubWarsClaimRound)
-        register(::handleClubWarsRefreshClaimState)
-        register(::handleClubWarsClaimRewards)
-        register(::handleClubWarsMarketBuy)
-        register(::handleClubWarsMarketRefresh)
+        if (ver older "45.0.0") {
+            register(::handleClubWarsRegister)
+            register(::handleClubWarsRefreshRegistration)
+            register(::handleClubWarsProcessMatchmaking)
+            register(::handleClubWarsDefenseStartRace)
+            register(::handleClubWarsDefenseFinishRace)
+            register(::handleClubWarsDefenseCancelRace)
+            register(::handleClubWarsDefenseAssignCar)
+            register(::handleClubWarsDefenseOccupyNode)
+            register(::handleClubWarsDefenseUnassignCar)
+            register(::handleClubWarsDefenseVacateNode)
+            register(::handleClubWarsPracticeStartRace)
+            register(::handleClubWarsPracticeFinishRace)
+            register(::handleClubWarsPracticeCancelRace)
+            register(::handleClubWarsAttackStartRace)
+            register(::handleClubWarsAttackFinishRace)
+            register(::handleClubWarsAttackCancelRace)
+            register(::handleClubWarsAttackConquerNode)
+            register(::handleClubWarsAttackSelectEntryPoint)
+            register(::handleClubWarsRefreshRegions)
+            register(::handleClubWarsRefreshNodes)
+            register(::handleClubWarsFinishRound)
+            register(::handleClubWarsClaimRound)
+            register(::handleClubWarsRefreshClaimState)
+            register(::handleClubWarsClaimRewards)
+            register(::handleClubWarsMarketBuy)
+            register(::handleClubWarsMarketRefresh)
+        }
         register(::handleInboxMarkAsRead)
         // TODO PrivateLobby renamed to Party
         register(::handlePrivateLobbyCreateRoom)
@@ -317,7 +350,7 @@ class GameLayer(private val ver: SerializationVersion) {
         register(::handlePrivateLobbyStartRace)
         register(::handlePrivateLobbyFinishRace)
         if (ver newer "24.6.0") {
-            registerStub("PartyNotifyReturnToLobbyRequest")
+            registerStub("PartyNotifyReturnToLobby")
         }
         register(::handlePrivateLobbyCancelRace)
         if (ver newer "24.0.0") {
@@ -367,8 +400,7 @@ class GameLayer(private val ver: SerializationVersion) {
         register(::handlePiggyBankAddMoneyToBankCheat)
         register(::handleLegendFundValidateProductPurchase)
         if (ver newer "24.6.0") {
-            registerStub("LegendFundValidateProductPurchaseRequest")
-            registerStub("LegendFundCancelProductPurchaseRequest")
+            registerStub("LegendFundCancelProductPurchase")
         }
         register(::handleLegendFundClaimMilestone)
         register(::handleLegendFundResetCheat)
@@ -384,13 +416,13 @@ class GameLayer(private val ver: SerializationVersion) {
             registerStub("VaultEventStartRace")
         }
         if (ver newer "24.6.0") {
-            registerStub("VaultEventAutoplayStartRaceRequest")
+            registerStub("VaultEventAutoplayStartRace")
         }
         if (ver newer "24.0.0") {
             registerStub("VaultEventFinishRace")
         }
         if (ver newer "24.6.0") {
-            registerStub("VaultEventAutoplayFinishRaceRequest")
+            registerStub("VaultEventAutoplayFinishRace")
         }
         if (ver newer "24.0.0") {
             registerStub("VaultEventCancelRace")
@@ -405,23 +437,28 @@ class GameLayer(private val ver: SerializationVersion) {
             registerStub("SeasonalCurrencyConvertCurrency")
         }
         if (ver newer "24.6.0") {
-            registerStub("ActivationConvertCurrencyRequest")
-            registerStub("ActivationBlackMarketGetStatusRequest")
-            registerStub("ActivationRefreshBlackMarketRequest")
-            registerStub("ActivationBlackMarketBuyRequest")
+            registerStub("ActivationConvertCurrency")
+            registerStub("ActivationBlackMarketGetStatus")
+            registerStub("ActivationRefreshBlackMarket")
+            registerStub("ActivationBlackMarketBuy")
         }
         if (ver newer "24.0.0") {
             registerStub("UpsellPopupBuyOffer")
             registerStub("UpsellPopupValidateProductPurchase")
         }
         if (ver newer "24.6.0") {
-            registerStub("UpsellPopupCancelProductPurchaseRequest")
-            registerStub("UpsellPopupShownRequest")
+            registerStub("UpsellPopupCancelProductPurchase")
+            registerStub("UpsellPopupShown")
         }
         if (ver newer "24.0.0") {
             registerStub("OverclockExpireEvent")
             registerStub("OverclockPurchaseOverclockForCar")
             registerStub("OverclockExpireCar")
+        }
+        if (ver newer "45.0.0") {
+            registerStub("OverclockApplyOverclockForCarCheat")
+        }
+        if (ver newer "24.0.0") {
             registerStub("OverclockRemoveOverclockOfCarCheat")
             registerStub("OverclockGainOverclockChipsCheat")
             registerStub("OverclockResetOverclockChipsCheat")
@@ -434,6 +471,11 @@ class GameLayer(private val ver: SerializationVersion) {
             registerStub("CreateTransferCode")
             registerStub("LinkAccountWithTransferCode")
             register(::handleLinkAccountWithCredential)
+        }
+        if (ver newer "45.0.0") {
+            registerStub("RelinkCredentials")
+        }
+        if (ver newer "24.0.0") {
             register(::handleConfirmLinkingOperation)
             register(::handlePostLoginSocialUpdate)
             registerStub("UpdateStatusLine")
@@ -441,9 +483,9 @@ class GameLayer(private val ver: SerializationVersion) {
             registerStub("RequestGameFriend")
             registerStub("RemoveGameFriend")
             registerStub("ListGameFriendRequests")
-            registerStub("AcceptGameFriendRequest")
-            registerStub("RejectGameFriendRequest")
-            registerStub("CancelSentGameFriendRequest")
+            registerStub("AcceptGameFriend")
+            registerStub("RejectGameFriend")
+            registerStub("CancelSentGameFriend")
             registerStub("SearchGameFriend")
             registerStub("ListOneWayConnections")
             registerStub("AddOneWayConnection")
@@ -454,67 +496,73 @@ class GameLayer(private val ver: SerializationVersion) {
             registerStub("RejectAllFriendRequests")
         }
         if (ver newer "24.6.0") {
-            registerStub("SetAllowFriendRequestsRequest") // TODO Should be from 24.1.0
-            registerStub("SendChatMessageRequest")
+            // TODO Should be from 24.1.0
+            registerStub("SetAllowFriendRequests")
+            registerStub("SendChatMessage")
         }
         if (ver newer "24.0.0") {
             registerStub("ProcessDLCIAPTransaction")
         }
         if (ver newer "24.6.0") {
-            registerStub("ListRegionsRequest")
-            registerStub("GauntletStartEventRequest")
-            registerStub("GauntletRefreshEventRequest")
-            registerStub("GauntletRestartQualificationRequest")
-            registerStub("GauntletFinishQualificationRequest")
-            registerStub("GauntletLeaveQualificationRequest")
-            registerStub("GauntletRerollOpponentsRequest")
-            registerStub("GauntletRerollBannedOpponentsSetRequest")
-            registerStub("GauntletValidateRaceLogRequest")
-            registerStub("GauntletValidateEventAlreadyFinishedRequest")
-            registerStub("GauntletStartChallengeRequest")
-            registerStub("GauntletStartRevengeRequest")
-            registerStub("GauntletSetChallengeCarsRequest")
-            registerStub("GauntletStartRaceRequest")
-            registerStub("GauntletFinishRaceRequest")
-            registerStub("GauntletCancelRaceRequest")
-            registerStub("GauntletBuyTicketRequest")
-            registerStub("GauntletLeaveChallengeRequest")
-            registerStub("GauntletFinishChallengeRequest")
-            registerStub("GauntletFinalClaimRequest")
-            registerStub("GauntletProcessPendingTransactionsRequest")
-            registerStub("GauntletResetEventStateRequest")
-            registerStub("GauntletUpdatePendingDataAndActionsRequest")
-            registerStub("GauntletSetTicketsCheatRequest")
-            registerStub("GauntletFinishRaceCheatRequest")
-            registerStub("GauntletFinishChallengeCheatRequest")
-            registerStub("GauntletSetEloCheatRequest")
-            registerStub("GauntletAddChallengePointsCheatRequest")
-            registerStub("GauntletFakeOpponentsCheatRequest")
-            registerStub("GauntletResetStateCheatRequest")
-            registerStub("GauntletMarketRefreshCheatRequest")
-            registerStub("GauntletMarketBuyRequest")
-            registerStub("GauntletMarketRefreshRequest")
-            registerStub("ClaimDailyVIPFreeGiftRequest")
-            registerStub("VIPBlackMarketGetStatusRequest")
-            registerStub("RefreshVIPBlackMarketRequest")
-            registerStub("VIPBlackMarketBuyRequest")
-            registerStub("ValidateVIPBundleProductPurchaseRequest")
-            registerStub("JoinTournamentMatchRequest")
-            registerStub("QuitTournamentMatchRequest")
-            registerStub("GetTournamentMatchDetailsRequest")
-            registerStub("UpdateTournamentMatchStatusRequest")
-            registerStub("TournamentCreateRoomRequest")
-            registerStub("TournamentJoinRoomRequest")
-            registerStub("TournamentUpdateUserDataRequest")
-            registerStub("TournamentStartRaceRequest")
-            registerStub("TournamentLaunchRoomRequest")
-            registerStub("TournamentFinishRaceRequest")
-            registerStub("TournamentNotifyReturnToLobbyRequest")
-            registerStub("AllowAllPlatformTournamentCheatRequest")
-            registerStub("MockTournamentMatchCheatRequest")
-            registerStub("UserCustomizableBundleValidateProductPurchaseRequest")
-            registerStub("ValidateIAPVanityPurchaseRequest")
-            registerStub("BuyCarVanityItemRequest")
+            registerStub("ListRegions")
+            registerStub("GauntletStartEvent")
+            registerStub("GauntletRefreshEvent")
+            registerStub("GauntletRestartQualification")
+            registerStub("GauntletFinishQualification")
+            registerStub("GauntletLeaveQualification")
+            registerStub("GauntletRerollOpponents")
+            registerStub("GauntletRerollBannedOpponentsSet")
+            registerStub("GauntletValidateRaceLog")
+            registerStub("GauntletValidateEventAlreadyFinished")
+            registerStub("GauntletStartChallenge")
+            registerStub("GauntletStartRevenge")
+            registerStub("GauntletSetChallengeCars")
+            registerStub("GauntletStartRace")
+            registerStub("GauntletFinishRace")
+            registerStub("GauntletCancelRace")
+            registerStub("GauntletBuyTicket")
+            registerStub("GauntletLeaveChallenge")
+            registerStub("GauntletFinishChallenge")
+            registerStub("GauntletFinalClaim")
+            registerStub("GauntletProcessPendingTransactions")
+            registerStub("GauntletResetEventState")
+            registerStub("GauntletUpdatePendingDataAndActions")
+            registerStub("GauntletSetTicketsCheat")
+            registerStub("GauntletFinishRaceCheat")
+            registerStub("GauntletFinishChallengeCheat")
+            registerStub("GauntletSetEloCheat")
+            registerStub("GauntletAddChallengePointsCheat")
+            registerStub("GauntletFakeOpponentsCheat")
+            registerStub("GauntletResetStateCheat")
+            registerStub("GauntletMarketRefreshCheat")
+            registerStub("GauntletMarketBuy")
+            registerStub("GauntletMarketRefresh")
+            registerStub("ClaimDailyVIPFreeGift")
+            registerStub("VIPBlackMarketGetStatus")
+            registerStub("RefreshVIPBlackMarket")
+            registerStub("VIPBlackMarketBuy")
+            registerStub("ValidateVIPBundleProductPurchase")
+            registerStub("JoinTournamentMatch")
+            registerStub("QuitTournamentMatch")
+            registerStub("GetTournamentMatchDetails")
+            registerStub("UpdateTournamentMatchStatus")
+            registerStub("TournamentCreateRoom")
+            registerStub("TournamentJoinRoom")
+            registerStub("TournamentUpdateUserData")
+            registerStub("TournamentStartRace")
+            registerStub("TournamentLaunchRoom")
+            registerStub("TournamentFinishRace")
+        }
+        if (ver newer "45.0.0") {
+            registerStub("TournamentCancelRace")
+        }
+        if (ver newer "24.6.0") {
+            registerStub("TournamentNotifyReturnToLobby")
+            registerStub("AllowAllPlatformTournamentCheat")
+            registerStub("MockTournamentMatchCheat")
+            registerStub("UserCustomizableBundleValidateProductPurchase")
+            registerStub("ValidateIAPVanityPurchase")
+            registerStub("BuyCarVanityItem")
         }
     }
 

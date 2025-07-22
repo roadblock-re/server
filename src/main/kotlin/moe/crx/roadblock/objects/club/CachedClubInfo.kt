@@ -6,6 +6,8 @@ import moe.crx.roadblock.io.EnumIO.readEnum
 import moe.crx.roadblock.io.EnumIO.writeEnum
 import moe.crx.roadblock.io.ObjectIO.readObject
 import moe.crx.roadblock.io.ObjectIO.writeObject
+import moe.crx.roadblock.io.OptionalIO.readOptional
+import moe.crx.roadblock.io.OptionalIO.writeOptional
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
@@ -21,6 +23,7 @@ class CachedClubInfo : RObject {
     var memberRank: ClubMemberRank = ClubMemberRank.Manager
     var motto: String = ""
     var isUGCValidated: Boolean = false
+    var lastEditor: ClubLastEditorData? = null
 
     override fun read(sink: InputSink) {
         creationTimestamp = sink.readInstant()
@@ -30,8 +33,11 @@ class CachedClubInfo : RObject {
         membershipType = sink.readEnum()
         memberRank = sink.readEnum()
         motto = sink.readString()
-        if (sink newer "24.0.0") {
+        if (sink newer "24.0.0" && sink older "45.0.0") {
             isUGCValidated = sink.readBoolean()
+        }
+        if (sink newer "45.0.0") {
+            lastEditor = sink.readOptional()
         }
     }
 
@@ -43,8 +49,11 @@ class CachedClubInfo : RObject {
         sink.writeEnum(membershipType)
         sink.writeEnum(memberRank)
         sink.writeString(motto)
-        if (sink newer "24.0.0") {
+        if (sink newer "24.0.0" && sink older "45.0.0") {
             sink.writeBoolean(isUGCValidated)
+        }
+        if (sink newer "45.0.0") {
+            sink.writeOptional(lastEditor)
         }
     }
 }

@@ -17,6 +17,7 @@ class CarCustomizationState : RObject {
     var lockedNeonTubes: Boolean = false
     var lockedMaterialMetallic: Boolean = false
     var lockedMaterialMatte: Boolean = false
+    var evoTuningPartsConfiguration: EvoTuningPartsConfiguration = EvoTuningPartsConfiguration()
     var lockedDualTone: Boolean = false
     var lockedMaterialMetallicRims: Boolean = false
     var lockedMaterialMatteRims: Boolean = false
@@ -43,6 +44,9 @@ class CarCustomizationState : RObject {
         lockedNeonTubes = sink.readBoolean()
         lockedMaterialMetallic = sink.readBoolean()
         lockedMaterialMatte = sink.readBoolean()
+        if (sink newer "45.0.0") {
+            evoTuningPartsConfiguration = sink.readObject()
+        }
         lockedDualTone = sink.readBoolean()
         lockedMaterialMetallicRims = sink.readBoolean()
         lockedMaterialMatteRims = sink.readBoolean()
@@ -70,6 +74,9 @@ class CarCustomizationState : RObject {
         sink.writeBoolean(lockedNeonTubes)
         sink.writeBoolean(lockedMaterialMetallic)
         sink.writeBoolean(lockedMaterialMatte)
+        if (sink newer "45.0.0") {
+            sink.writeObject(evoTuningPartsConfiguration)
+        }
         sink.writeBoolean(lockedDualTone)
         sink.writeBoolean(lockedMaterialMetallicRims)
         sink.writeBoolean(lockedMaterialMatteRims)

@@ -36,7 +36,9 @@ class ClubSystemState : RObject {
         }
         leaveClubReason = sink.readOptional()
         cancelJoinRequest = sink.readOptional()
-        clubWars = sink.readMap()
+        if (sink older "45.0.0") {
+            clubWars = sink.readMap()
+        }
     }
 
     override fun write(sink: OutputSink) {
@@ -50,6 +52,8 @@ class ClubSystemState : RObject {
         }
         sink.writeOptional(leaveClubReason)
         sink.writeOptional(cancelJoinRequest)
-        sink.writeMap(clubWars)
+        if (sink older "45.0.0") {
+            sink.writeMap(clubWars)
+        }
     }
 }

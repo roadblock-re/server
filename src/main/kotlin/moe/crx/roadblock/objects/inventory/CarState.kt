@@ -24,6 +24,7 @@ class CarState : RObject {
     var freeUpgrades: List<RInt> = listOf()
     var maintenanceStats: CarMaintenanceStats = CarMaintenanceStats()
     var usageState: CarUsageStats = CarUsageStats()
+    var ownedEvoTuningParts: EvoTuningParts = EvoTuningParts()
     var customizationState: CarCustomizationState = CarCustomizationState()
     var tierBlueprints: Blueprints = 0
     var ownedDecalVisuals: List<RInt> = listOf()
@@ -44,6 +45,9 @@ class CarState : RObject {
         freeUpgrades = sink.readList()
         maintenanceStats = sink.readObject()
         usageState = sink.readObject()
+        if (sink newer "45.0.0") {
+            ownedEvoTuningParts = sink.readObject()
+        }
         customizationState = sink.readObject()
         tierBlueprints = sink.readInt()
         ownedDecalVisuals = sink.readList()
@@ -71,6 +75,9 @@ class CarState : RObject {
         sink.writeList(freeUpgrades)
         sink.writeObject(maintenanceStats)
         sink.writeObject(usageState)
+        if (sink newer "45.0.0") {
+            sink.writeObject(ownedEvoTuningParts)
+        }
         sink.writeObject(customizationState)
         sink.writeInt(tierBlueprints)
         sink.writeList(ownedDecalVisuals)

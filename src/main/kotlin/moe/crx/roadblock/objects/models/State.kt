@@ -25,13 +25,13 @@ class State : RObject {
     var uberSystem: UberSystemState = UberSystemState()
     var championshipSystem: ChampionshipSystemState = ChampionshipSystemState()
     var seasonPassSystem: SeasonPassSystemState = SeasonPassSystemState()
-    var multiplayerChallenges: MultiplayerChallengesState = MultiplayerChallengesState() // no in ALU
+    var multiplayerChallenges: MultiplayerChallengesState = MultiplayerChallengesState()
     var inbox: InboxState = InboxState()
     var clubWarsSystem: ClubWarsSystemState = ClubWarsSystemState()
     var privateLobby: PrivateLobbyState = PrivateLobbyState()
     var bonusPassSystem: BonusPassSystemState = BonusPassSystemState()
     var piggyBankSystem: PiggyBankSystemState = PiggyBankSystemState()
-    var legendFundSystem: LegendFundSystemState = LegendFundSystemState() // 3.9+ only (also maybe 3.8)
+    var legendFundSystem: LegendFundSystemState = LegendFundSystemState()
     var vaultSystem: VaultSystemState = VaultSystemState()
     var seasonalCurrencySystem: SeasonalCurrencySystemState = SeasonalCurrencySystemState()
     var upsellPopupSystem: UpsellPopupSystemState = UpsellPopupSystemState()
@@ -43,6 +43,7 @@ class State : RObject {
     var vipSystem: VipSystemState = VipSystemState()
     var activationSystem: ActivationSystemState = ActivationSystemState()
     var tournamentSystem: TournamentSystemState = TournamentSystemState()
+    var userCustomizableBundleSystem: UserCustomizableBundleSystemState = UserCustomizableBundleSystemState()
 
     override fun read(sink: InputSink) {
         blackMarket = sink.readObject()
@@ -66,7 +67,9 @@ class State : RObject {
             multiplayerChallenges = sink.readObject()
         }
         inbox = sink.readObject()
-        clubWarsSystem = sink.readObject()
+        if (sink older "45.0.0") {
+            clubWarsSystem = sink.readObject()
+        }
         privateLobby = sink.readObject()
         bonusPassSystem = sink.readObject()
         piggyBankSystem = sink.readObject()
@@ -92,6 +95,9 @@ class State : RObject {
             activationSystem = sink.readObject()
             tournamentSystem = sink.readObject()
         }
+        if (sink newer "45.0.0") {
+            userCustomizableBundleSystem = sink.readObject()
+        }
     }
 
     override fun write(sink: OutputSink) {
@@ -116,7 +122,9 @@ class State : RObject {
             sink.writeObject(multiplayerChallenges)
         }
         sink.writeObject(inbox)
-        sink.writeObject(clubWarsSystem)
+        if (sink older "45.0.0") {
+            sink.writeObject(clubWarsSystem)
+        }
         sink.writeObject(privateLobby)
         sink.writeObject(bonusPassSystem)
         sink.writeObject(piggyBankSystem)
@@ -141,6 +149,9 @@ class State : RObject {
             sink.writeObject(vipSystem)
             sink.writeObject(activationSystem)
             sink.writeObject(tournamentSystem)
+        }
+        if (sink newer "45.0.0") {
+            sink.writeObject(userCustomizableBundleSystem)
         }
     }
 }

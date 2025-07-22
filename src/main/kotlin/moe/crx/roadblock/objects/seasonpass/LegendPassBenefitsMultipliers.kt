@@ -17,6 +17,7 @@ class LegendPassBenefitsMultipliers : RObject {
     var hasNextRefillTimePoint: Boolean = false
     var nextRefillTimePoint: Instant = now()
     var hasUnlimitedFuelInCareerMode: Boolean = false
+    var hasUnlimitedTicketsInTLE: Boolean = false
 
     override fun read(sink: InputSink) {
         timeBetweenBoxes = sink.readInt()
@@ -26,6 +27,9 @@ class LegendPassBenefitsMultipliers : RObject {
         nextRefillTimePoint = sink.readInstant()
         if (sink newer "24.6.0") {
             hasUnlimitedFuelInCareerMode = sink.readBoolean()
+        }
+        if (sink newer "45.0.0") {
+            hasUnlimitedTicketsInTLE = sink.readBoolean()
         }
     }
 
@@ -37,6 +41,9 @@ class LegendPassBenefitsMultipliers : RObject {
         sink.writeInstant(nextRefillTimePoint)
         if (sink newer "24.6.0") {
             sink.writeBoolean(hasUnlimitedFuelInCareerMode)
+        }
+        if (sink newer "45.0.0") {
+            sink.writeBoolean(hasUnlimitedTicketsInTLE)
         }
     }
 }

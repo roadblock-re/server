@@ -70,7 +70,7 @@ fun Application.configureApiRouting() {
                     matchmakerQuickLaunch()
                     authTokenEncrypt()
                     messageMe()
-                    groupChatRoomsSubscribe()
+                    //groupChatRoomsSubscribe() //FIXME
                 }
             }
             // Pandora locate -> asset

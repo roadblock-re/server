@@ -292,6 +292,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
                 throwable.printStackTrace(PrintWriter(writer))
                 writer.write("\nRequest packet bytes:\n")
                 writer.write(bytes.toHexString())
+                writer.write("\nProtocol version: ${ver.major}.${ver.minor}.${ver.build}\n")
             }
         }
     }

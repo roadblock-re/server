@@ -30,18 +30,22 @@ class SerializationVersion(var major: Short, var minor: Short, var build: Short)
         val minor = split[1].toInt()
         val build = split[2].toInt()
 
-        if (this.major < major) {
-            return false
+        if (this.major > major) {
+            return true
         }
 
-        if (this.minor < minor) {
-            return false
+        if (this.minor > minor) {
+            return true
         }
 
-        if (this.build < build) {
-            return false
+        if (this.build > build) {
+            return true
         }
 
-        return true
+        return false
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return other is SerializationVersion && other.major == major && other.minor == minor && other.build == build
     }
 }

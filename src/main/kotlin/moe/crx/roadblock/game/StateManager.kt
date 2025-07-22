@@ -28,6 +28,9 @@ import kotlin.concurrent.withLock
 import kotlin.time.Duration.Companion.days
 
 class StateManager {
+
+    // TODO Version-agnostic read/write system
+
     companion object {
         var stateFile = File("gamestate.saved")
         var lock: ReentrantLock = ReentrantLock()
@@ -284,14 +287,15 @@ class StateManager {
                             currentBalance = 0
                         },
                     )
-                    iapWallets = buildMap {
-                        repeat(6) {
-                            put(RInt().apply { value = it }, WalletState())
-                        }
-                    }
+                    iapWallets = mapOf()
                     wildcardBlueprints = buildList {
                         repeat(5) {
                             add(WildcardBlueprintClassState())
+                        }
+                    } // enumerated list
+                    wildcardUpgradeItems = buildList {
+                        repeat(5) {
+                            add(RInt())
                         }
                     } // enumerated list
                     upgradeInfoState = buildList {
@@ -364,7 +368,7 @@ class StateManager {
                     deviceCountry = RString().apply { value = "US" }
                     claimedEnableSystemNotificationsReward = false
                     channelName = null
-                    privacyPolicy = RByte(0)
+                    privacyPolicy = RByte(3)
                     underageDisclaimerShown = false
                     platform = null
                     xboxLiveOnlyEnabled = null
@@ -389,9 +393,9 @@ class StateManager {
                     }
                     garageValue = 2860 // Lancer 1* garage value
                     tutorialOrderTracking = listOf()
-                    menuTutorials = buildList { repeat(MenuTutorialType.lastEntryFor(ver).ordinal + 1) { add(RInt()) } }
+                    menuTutorials = buildList { repeat(MenuTutorialType.lastEntryFor(ver).ordinal + 1) { add(RInt(2)) } }
                     gameplayTutorials =
-                        buildList { repeat(GameplayTutorialType.lastEntryFor(ver).ordinal + 1) { add(RInt()) } }
+                        buildList { repeat(GameplayTutorialType.lastEntryFor(ver).ordinal + 1) { add(RInt(2)) } }
                     rewardForLevelUpClaimed = true
                 }
 

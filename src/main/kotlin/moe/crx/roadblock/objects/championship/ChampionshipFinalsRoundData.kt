@@ -28,10 +28,15 @@ class ChampionshipFinalsRoundData : RObject {
 
     override fun read(sink: InputSink) {
         attemptCount = sink.readByte()
+        if (sink newer "45.0.0") {
+            obtainedRewardCounts = sink.readList()
+        }
         bestPracticeRace = sink.readObject()
         bestRace = sink.readObject()
         leaderboard = sink.readObject()
-        obtainedRewardCounts = sink.readList()
+        if (sink older "45.0.0") {
+            obtainedRewardCounts = sink.readList()
+        }
         evidences = sink.readMap()
         isDisqualified = sink.readBoolean()
         state = sink.readEnum()
@@ -40,10 +45,15 @@ class ChampionshipFinalsRoundData : RObject {
 
     override fun write(sink: OutputSink) {
         sink.writeByte(attemptCount)
+        if (sink newer "45.0.0") {
+            sink.writeList(obtainedRewardCounts)
+        }
         sink.writeObject(bestPracticeRace)
         sink.writeObject(bestRace)
         sink.writeObject(leaderboard)
-        sink.writeList(obtainedRewardCounts)
+        if (sink older "45.0.0") {
+            sink.writeList(obtainedRewardCounts)
+        }
         sink.writeMap(evidences)
         sink.writeBoolean(isDisqualified)
         sink.writeEnum(state)

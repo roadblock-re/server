@@ -58,6 +58,7 @@ class LoginResponse : RObject {
             isForcedUserName = sink.readBoolean()
         }
         signatureValue = sink.readInt()
+        check(signatureValue == GAME_SIGNATURE)
         serializationVersion = sink.readObject()
         state = sink.readObject()
     }
