@@ -373,6 +373,7 @@ class StateManager {
                     platform = null
                     xboxLiveOnlyEnabled = null
                     uniqueUserNameChangeCount = RInt().apply { value = 1 }
+                    resetAdsReplacementTimepoint = specificTime(0, 0, 1)
                 }
 
                 multiplayerSeries.apply {
