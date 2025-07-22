@@ -11,8 +11,8 @@ class ListRegionsResponse : ResponsePacket() {
 
     var regions: List<GameRegion> = listOf()
 
-    // TODO Is this long?
-    var nextRefreshDelay: Long = Long.MAX_VALUE
+    // TODO Is this long? Last 4 bytes should be nil.
+    var nextRefreshDelay: Long = Int.MAX_VALUE.toLong()
 
     override fun read(sink: InputSink) {
         super.read(sink)

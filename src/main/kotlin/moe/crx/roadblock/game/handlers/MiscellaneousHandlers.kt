@@ -25,6 +25,7 @@ suspend fun handleListRegions(
 ) {
     // TODO What is this ping address?
     session.send(ListRegionsResponse().apply {
+        nextRefreshDelay = 1800
         regions = listOf(
             GameRegion().apply {
                 region = "default"
