@@ -141,7 +141,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
             // TODO
             LOG.info("TODO AlertControlRequest")
             bytes[0] = 9
-            send(bytes)
+            //send(bytes)
             return
         }
 

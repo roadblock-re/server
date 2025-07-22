@@ -6,6 +6,7 @@ import moe.crx.roadblock.io.OptionalIO.readOptional
 import moe.crx.roadblock.io.OptionalIO.writeOptional
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.objects.base.RBoolean
 import moe.crx.roadblock.objects.base.RInt
 import moe.crx.roadblock.objects.base.RObject
 import moe.crx.roadblock.objects.base.RShort
@@ -24,6 +25,8 @@ class ClubData : RObject {
     var membershipType: RInt? = null
     var memberCount: RInt? = null
     var managerCredential: Credentials? = null
+    var isUGCValidated: RBoolean? = null
+    var lastEditor: ClubLastEditorData? = null
     var clubSeasonEventReputations: Map<RString, RInt> = mapOf()
     var recommendationFilter: RString? = null
     var clubWarsEventParticipations: Map<RString, ClubWarsEventParticipation> = mapOf()
@@ -39,9 +42,15 @@ class ClubData : RObject {
         membershipType = sink.readOptional()
         memberCount = sink.readOptional()
         managerCredential = sink.readOptional()
+        if (sink newer "45.0.0") {
+            isUGCValidated = sink.readOptional()
+            lastEditor = sink.readOptional()
+        }
         clubSeasonEventReputations = sink.readMap()
         recommendationFilter = sink.readOptional()
-        clubWarsEventParticipations = sink.readMap()
+        if (sink older "45.0.0") {
+            clubWarsEventParticipations = sink.readMap()
+        }
     }
 
     override fun write(sink: OutputSink) {
@@ -55,8 +64,14 @@ class ClubData : RObject {
         sink.writeOptional(membershipType)
         sink.writeOptional(memberCount)
         sink.writeOptional(managerCredential)
+        if (sink newer "45.0.0") {
+            sink.writeOptional(isUGCValidated)
+            sink.writeOptional(lastEditor)
+        }
         sink.writeMap(clubSeasonEventReputations)
         sink.writeOptional(recommendationFilter)
-        sink.writeMap(clubWarsEventParticipations)
+        if (sink older "45.0.0") {
+            sink.writeMap(clubWarsEventParticipations)
+        }
     }
 }

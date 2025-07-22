@@ -393,7 +393,8 @@ class StateManager {
                     }
                     garageValue = 2860 // Lancer 1* garage value
                     tutorialOrderTracking = listOf()
-                    menuTutorials = buildList { repeat(MenuTutorialType.lastEntryFor(ver).ordinal + 1) { add(RInt(2)) } }
+                    menuTutorials =
+                        buildList { repeat(MenuTutorialType.lastEntryFor(ver).ordinal + 1) { add(RInt(2)) } }
                     gameplayTutorials =
                         buildList { repeat(GameplayTutorialType.lastEntryFor(ver).ordinal + 1) { add(RInt(2)) } }
                     rewardForLevelUpClaimed = true
@@ -450,6 +451,12 @@ class StateManager {
                 bonusPassSystem = BonusPassSystemState()
                 piggyBankSystem = PiggyBankSystemState()
                 legendFundSystem = LegendFundSystemState()
+
+                gauntletSystem = GauntletSystemState().apply {
+                    market.apply {
+                        nextAutoRefreshTime = specificTime(0, 0, 7)
+                    }
+                }
             }
         }
     }

@@ -16,6 +16,7 @@ class RaceStats : RObject {
     var timeStats: List<RInt> = listOf()
     var playModeStats: PlayModeStats? = null
     var playModeType: RInt? = RInt()
+    var teamVsTeamStats: TeamVsTeamStats? = null
 
     override fun read(sink: InputSink) {
         position = sink.readByte()
@@ -23,6 +24,9 @@ class RaceStats : RObject {
         timeStats = sink.readList()
         playModeStats = sink.readOptional()
         playModeType = sink.readOptional()
+        if (sink newer "45.0.0") {
+            teamVsTeamStats = sink.readOptional()
+        }
     }
 
     override fun write(sink: OutputSink) {
@@ -31,5 +35,8 @@ class RaceStats : RObject {
         sink.writeList(timeStats)
         sink.writeOptional(playModeStats)
         sink.writeOptional(playModeType)
+        if (sink newer "45.0.0") {
+            sink.writeOptional(teamVsTeamStats)
+        }
     }
 }
