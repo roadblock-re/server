@@ -4,13 +4,13 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import moe.crx.roadblock.plugins.*
 
-fun httpServer() = embeddedServer(
+fun httpServer(workingDirectory: String, config: Configuration) = embeddedServer(
     factory = Netty,
     configure = {
-        sslConfig(443)
+        sslConfig(workingDirectory, config.httpsPort)
 
         connector {
-            port = 80
+            port = config.httpPort
         }
     },
 ) {
@@ -18,5 +18,5 @@ fun httpServer() = embeddedServer(
     configureLogging()
     configureLimits()
     configureStatusPages()
-    configureApiRouting()
+    configureApiRouting(workingDirectory, config)
 }

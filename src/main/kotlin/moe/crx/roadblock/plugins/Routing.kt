@@ -3,11 +3,12 @@ package moe.crx.roadblock.plugins
 import io.ktor.server.application.*
 import io.ktor.server.plugins.ratelimit.*
 import io.ktor.server.routing.*
+import moe.crx.roadblock.Configuration
 import moe.crx.roadblock.routes.*
 
 // TODO cleanup routes code and response data
 
-fun Application.configureApiRouting() {
+fun Application.configureApiRouting(workingDirectory: String, config: Configuration) {
     routing {
         rateLimit {
             // Eve server
@@ -65,9 +66,9 @@ fun Application.configureApiRouting() {
                 }
                 route("/v1") {
                     socialMeRequests()
-                    assetsGetAsset()
-                    assetsGetAssetMetadata()
-                    matchmakerQuickLaunch()
+                    assetsGetAsset(workingDirectory, config)
+                    assetsGetAssetMetadata(workingDirectory, config)
+                    matchmakerQuickLaunch(config)
                     authTokenEncrypt()
                     messageMe()
                     //groupChatRoomsSubscribe() //FIXME
@@ -75,8 +76,8 @@ fun Application.configureApiRouting() {
             }
             // Pandora locate -> asset
             route("/asset") {
-                assetsGetAsset()
-                assetsGetAssetMetadata()
+                assetsGetAsset(workingDirectory, config)
+                assetsGetAssetMetadata(workingDirectory, config)
             }
             // Pandora locate -> auth
             route("/auth") {
@@ -94,7 +95,7 @@ fun Application.configureApiRouting() {
             }
             // Pandora locate -> matchmaker
             route("/matchmaker") {
-                matchmakerQuickLaunch()
+                matchmakerQuickLaunch(config)
             }
             // Pandora locate -> message
             route("/message") {

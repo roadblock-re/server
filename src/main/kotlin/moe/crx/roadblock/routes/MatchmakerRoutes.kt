@@ -3,11 +3,10 @@ package moe.crx.roadblock.routes
 import io.ktor.http.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import moe.crx.roadblock.Configuration
 import moe.crx.roadblock.utils.realRemoteHost
 
-val forceWebsocket = false
-
-fun Route.matchmakerQuickLaunch() = post("/rooms/{clientId}/quick_launch") {
+fun Route.matchmakerQuickLaunch(config: Configuration) = post("/rooms/{clientId}/quick_launch") {
     val clientId = call.parameters["clientId"]
 
     checkNotNull(clientId)
@@ -21,7 +20,7 @@ fun Route.matchmakerQuickLaunch() = post("/rooms/{clientId}/quick_launch") {
     //but it seems that game could work in WebSocket if gs_connection_info is present
     call.respondText(
         contentType = ContentType.Application.Json,
-        text = if (clientSplit.first() == "a9win" || forceWebsocket) {
+        text = if (clientSplit.first() == "a9win" || config.forceWebsocket) {
             """
             {
                 "success": true,

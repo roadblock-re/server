@@ -33,7 +33,7 @@ import java.util.concurrent.locks.ReentrantLock
 // TODO plugin system
 // TODO UpdatesConsumer for State and it's members (create updates to send, and then apply them to state)
 
-class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend (ByteArray, Boolean) -> Unit) {
+class GameConnection(val workingDirectory: String, val ignoreConnect: Boolean = false, val sendBlock: suspend (ByteArray, Boolean) -> Unit) {
     companion object {
         val LOG: Logger = LoggerFactory.getLogger("roadblock.game")
     }
@@ -43,7 +43,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
     }
 
     var ver = SerializationVersion(0, 0, 0)
-    var layer = GameLayer(ver)
+    var layer = GameLayer(workingDirectory, ver)
 
     var connectionState = ConnectionState.NOT_INITIALIZED
     var onlineInformationSent = false
@@ -54,7 +54,8 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
     var requestSequence = 0
     var requestType: Short = 0
 
-    var gameState = StateManager.default(ver)
+    val stateManager = StateManager(workingDirectory)
+    var gameState = stateManager.default(ver)
 
     init {
         LOG.info("Game connection created")
@@ -128,7 +129,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
         if (bytes.first().toInt() == 2 && connectionState == ConnectionState.NOT_AUTHORIZED) {
             connectionState = ConnectionState.AUTHORIZED
 
-            gameState = StateManager.read(ver)
+            gameState = stateManager.read(ver)
 
             send(ReconnectionResponse().apply {
                 lastActionId = lastRequestSequence
@@ -165,7 +166,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
             val loginRequest = bytes.sink(ver).readFully<LoginRequest>()
 
             ver = GameLayer.selectVersion(loginRequest.gameVersion)
-            layer = GameLayer(ver)
+            layer = GameLayer(workingDirectory, ver)
 
             LOG.info(
                 "[I] Game authorized, negotiated version {}.{}.{}, {} packet types",
@@ -176,7 +177,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
             )
             connectionState = ConnectionState.AUTHORIZED
 
-            gameState = StateManager.read(ver)
+            gameState = stateManager.read(ver)
 
             LoginResponse().apply {
                 userSessionId = "506746a9-0f5e-4827-9dfc-eb9ccbad8b81"
@@ -284,7 +285,7 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
     }
 
     fun reportHandlingError(request: RequestPacket, bytes: ByteArray, throwable: Throwable) {
-        File("reports", "${System.currentTimeMillis()}.report").run {
+        File(File(workingDirectory, "reports"), "${System.currentTimeMillis()}.report").run {
             parentFile.mkdirs()
 
             FileWriter(this).use { writer ->
@@ -307,6 +308,6 @@ class GameConnection(val ignoreConnect: Boolean = false, val sendBlock: suspend 
     }
 
     fun saveState() {
-        StateManager.write(gameState, ver)
+        stateManager.write(gameState, ver)
     }
 }

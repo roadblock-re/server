@@ -6,7 +6,7 @@ import moe.crx.roadblock.rpc.base.RequestPacket
 import java.io.File
 import kotlin.reflect.KClass
 
-class GameLayer(private val ver: SerializationVersion) {
+class GameLayer(private val workingDirectory: String, private val ver: SerializationVersion) {
 
     companion object {
         val versionRegex = Regex("(\\d+)\\.(\\d+)\\.(\\d+)(\\w*)")
@@ -571,13 +571,10 @@ class GameLayer(private val ver: SerializationVersion) {
             "Handler with ID $currentId was already registered."
         }
 
-        handlers.put(
-            currentId,
-            PacketHandler(
-                requestName ?: "<unknown name>",
-                RequestPacket::class,
-                null,
-            )
+        handlers[currentId] = PacketHandler(
+            requestName ?: "<unknown name>",
+            RequestPacket::class,
+            null,
         )
 
         ++currentId
@@ -591,23 +588,22 @@ class GameLayer(private val ver: SerializationVersion) {
             "Handler with ID $currentId was already registered."
         }
 
-        handlers.put(
-            currentId,
-            PacketHandler(
-                T::class.java.simpleName,
-                T::class,
-                handle as suspend (GameConnection, RequestPacket) -> Unit,
-            )
+        handlers[currentId] = PacketHandler(
+            T::class.java.simpleName,
+            T::class,
+            handle as suspend (GameConnection, RequestPacket) -> Unit,
         )
 
         ++currentId
     }
 
+    val gameDirectory = File(File(workingDirectory, "game"), "${ver.major}.${ver.minor}.${ver.build}")
+
     fun getConfig(): File {
-        return File(File("game", "${ver.major}.${ver.minor}.${ver.build}"), "clientconfig.json")
+        return File(gameDirectory, "clientconfig.json")
     }
 
     fun getGameDb(): File {
-        return File(File("game", "${ver.major}.${ver.minor}.${ver.build}"), "A9-business.gdb")
+        return File(gameDirectory, "A9-business.gdb")
     }
 }

@@ -38,7 +38,7 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinxDatetimeVersion")
 
-    implementation("ch.qos.logback:logback-classic:$logbackVersion")
+    implementation("org.slf4j:slf4j-simple:2.0.1")
 
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
 

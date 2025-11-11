@@ -28,8 +28,8 @@ val serverSalt = byteArrayOf(0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x00, 0x00) // 
 
 val scope = CoroutineScope(Dispatchers.IO)
 
-fun tcpServer(wait: Boolean): Job {
-    val socket = ServerSocket(4447)
+fun tcpServer(workingDirectory: String, config: Configuration, wait: Boolean): Job {
+    val socket = ServerSocket(config.tcpPort)
 
     val job = scope.launch {
         while (true) {
@@ -80,7 +80,7 @@ fun tcpServer(wait: Boolean): Job {
                         output.flush()
                     }
 
-                    val gameConnection = GameConnection(ignoreConnect = true) { payloadBytes, preferDeflated ->
+                    val gameConnection = GameConnection(workingDirectory, ignoreConnect = true) { payloadBytes, preferDeflated ->
                         var (bytes, type) = if (preferDeflated) {
                             var compressed = highCompressor.compress(payloadBytes)
                             val hash = xxHash32.hash(compressed, 0, compressed.size, payloadBytes.size)

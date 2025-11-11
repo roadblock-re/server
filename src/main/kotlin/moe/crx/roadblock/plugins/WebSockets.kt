@@ -7,7 +7,7 @@ import io.ktor.websocket.*
 import moe.crx.roadblock.game.GameConnection
 import kotlin.time.Duration.Companion.seconds
 
-fun Application.configureWebSockets() {
+fun Application.configureWebSockets(workingDirectory: String) {
     install(WebSockets) {
         pingPeriod = 60.seconds
         timeout = 60.seconds
@@ -17,7 +17,7 @@ fun Application.configureWebSockets() {
 
     routing {
         webSocket("/") {
-            val connection = GameConnection { bytes, preferDeflated ->
+            val connection = GameConnection(workingDirectory) { bytes, preferDeflated ->
                 send(bytes)
             }
 

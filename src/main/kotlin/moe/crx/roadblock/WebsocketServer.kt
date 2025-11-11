@@ -4,15 +4,15 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import moe.crx.roadblock.plugins.configureWebSockets
 
-fun webSocketServer() = embeddedServer(
+fun webSocketServer(workingDirectory: String, config: Configuration) = embeddedServer(
     factory = Netty,
     configure = {
-        sslConfig(4443)
+        sslConfig(workingDirectory, config.wssPort)
 
         connector {
-            port = 480
+            port = config.wsPort
         }
     },
 ) {
-    configureWebSockets()
+    configureWebSockets(workingDirectory)
 }

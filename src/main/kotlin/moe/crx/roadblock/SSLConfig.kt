@@ -81,16 +81,18 @@ fun generateKeyStore(
     }
 }
 
-fun ApplicationEngine.Configuration.sslConfig(sslPort: Int) {
+fun ApplicationEngine.Configuration.sslConfig(workingDirectory: String, sslPort: Int) {
     Security.addProvider(BouncyCastleProvider())
 
-    File("certs").mkdirs()
+    val certsDirectory = File(workingDirectory, "certs")
+
+    certsDirectory.mkdirs()
 
     val keyAlias = "roadblock"
     val keyStorePassword = "password"
     val privateKeyPassword = "password"
-    val keyStoreFile = File("certs", "roadblock.jks")
-    val pemFile = File("certs", "roadblock.cer")
+    val keyStoreFile = File(certsDirectory, "roadblock.jks")
+    val pemFile = File(certsDirectory, "roadblock.cer")
 
     if (!keyStoreFile.exists()) {
         generateKeyStore(

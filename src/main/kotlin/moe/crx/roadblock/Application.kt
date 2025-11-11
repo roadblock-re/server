@@ -1,21 +1,21 @@
 package moe.crx.roadblock
 
-import ch.qos.logback.classic.Level
 import org.fusesource.jansi.AnsiConsole
-import org.slf4j.LoggerFactory
+import java.io.File
+
+object RoadblockServer {
+    fun start(workingDirectory: String, wait: Boolean) {
+        val config = readConfig(workingDirectory)
+        httpServer(workingDirectory, config).start(wait = false)
+        webSocketServer(workingDirectory, config).start(wait = false)
+        tcpServer(workingDirectory, config, wait)
+    }
+}
 
 fun main() {
-    LoggerFactory.getLogger("ROOT").let {
-        it as ch.qos.logback.classic.Logger
-    }.apply {
-        level = Level.INFO
-    }
-
     //IntelliJ IDEA workaround
     System.setProperty("jansi.passthrough", "true")
     AnsiConsole.systemInstall()
 
-    httpServer().start(wait = false)
-    webSocketServer().start(wait = false)
-    tcpServer(wait = true)
+    RoadblockServer.start(File("").absolutePath, true)
 }
