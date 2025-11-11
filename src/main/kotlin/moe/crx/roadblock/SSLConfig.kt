@@ -28,6 +28,7 @@ fun generateKeyStore(
     keyStorePassword: String,
     privateKeyPassword: String,
     keyStoreFile: File,
+    ksProvider: KeyStore,
     pemFile: File,
 ) {
     val keyPairGen = KeyPairGenerator.getInstance("RSA")
@@ -67,7 +68,7 @@ fun generateKeyStore(
         .setProvider(BouncyCastleProvider())
         .getCertificate(certBuilder.build(signer))
 
-    val keyStore = KeyStore.getInstance("JKS").apply {
+    val keyStore = ksProvider.apply {
         load(null, null)
         setKeyEntry(keyAlias, keyPair.private, privateKeyPassword.toCharArray(), arrayOf(certificate))
     }
@@ -88,10 +89,15 @@ fun ApplicationEngine.Configuration.sslConfig(workingDirectory: String, sslPort:
 
     certsDirectory.mkdirs()
 
+    val (ksProvider, keyStoreFile) = try {
+        KeyStore.getInstance("JKS") to File(certsDirectory, "roadblock.jks")
+    } catch (_: Exception) {
+        KeyStore.getInstance("PKCS12") to File(certsDirectory, "roadblock.p12")
+    }
+
     val keyAlias = "roadblock"
     val keyStorePassword = "password"
     val privateKeyPassword = "password"
-    val keyStoreFile = File(certsDirectory, "roadblock.jks")
     val pemFile = File(certsDirectory, "roadblock.cer")
 
     if (!keyStoreFile.exists()) {
@@ -100,11 +106,12 @@ fun ApplicationEngine.Configuration.sslConfig(workingDirectory: String, sslPort:
             keyStorePassword,
             privateKeyPassword,
             keyStoreFile,
+            ksProvider,
             pemFile,
         )
     }
 
-    val keyStore = KeyStore.getInstance("JKS").apply {
+    val keyStore = ksProvider.apply {
         load(FileInputStream(keyStoreFile), keyStorePassword.toCharArray())
     }
 
