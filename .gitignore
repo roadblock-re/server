@@ -54,3 +54,4 @@ uploads
 *.saved
 /stubs/
 *.report
+config.json
