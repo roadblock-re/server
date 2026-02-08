@@ -7,7 +7,7 @@ import moe.crx.roadblock.plugins.configureWebSockets
 fun webSocketServer(workingDirectory: String, config: Configuration) = embeddedServer(
     factory = Netty,
     configure = {
-        sslConfig(workingDirectory, config.wssPort)
+        sslConfig(workingDirectory, config.wssPort, config.eveDomain)
 
         connector {
             port = config.wsPort

@@ -7,7 +7,7 @@ import moe.crx.roadblock.plugins.*
 fun httpServer(workingDirectory: String, config: Configuration) = embeddedServer(
     factory = Netty,
     configure = {
-        sslConfig(workingDirectory, config.httpsPort)
+        sslConfig(workingDirectory, config.httpsPort, config.eveDomain)
 
         connector {
             port = config.httpPort

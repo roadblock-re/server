@@ -30,6 +30,7 @@ fun generateKeyStore(
     keyStoreFile: File,
     ksProvider: KeyStore,
     pemFile: File,
+    eveDomain: String,
 ) {
     val keyPairGen = KeyPairGenerator.getInstance("RSA")
     keyPairGen.initialize(1024)
@@ -39,7 +40,7 @@ fun generateKeyStore(
     val validUntil = Date(now.time + 3650L * 24 * 60 * 60 * 1000)
     val serialNumber = BigInteger.valueOf(System.currentTimeMillis())
 
-    val subject = X500Principal("CN=eve.gameloft.com,OU=Unknown,O=Unknown,L=Unknown,ST=Unknown,C=Unknown")
+    val subject = X500Principal("CN=$eveDomain,OU=Unknown,O=Unknown,L=Unknown,ST=Unknown,C=Unknown")
 
     val certBuilder: X509v3CertificateBuilder = JcaX509v3CertificateBuilder(
         subject, serialNumber, now, validUntil, subject, keyPair.public
@@ -53,7 +54,7 @@ fun generateKeyStore(
 
     val san = GeneralNames(
         arrayOf(
-            GeneralName(GeneralName.dNSName, "eve.gameloft.com")
+            GeneralName(GeneralName.dNSName, eveDomain)
         )
     )
 
@@ -82,7 +83,7 @@ fun generateKeyStore(
     }
 }
 
-fun ApplicationEngine.Configuration.sslConfig(workingDirectory: String, sslPort: Int) {
+fun ApplicationEngine.Configuration.sslConfig(workingDirectory: String, sslPort: Int, eveDomain: String) {
     Security.addProvider(BouncyCastleProvider())
 
     val certsDirectory = File(workingDirectory, "certs")
@@ -108,6 +109,7 @@ fun ApplicationEngine.Configuration.sslConfig(workingDirectory: String, sslPort:
             keyStoreFile,
             ksProvider,
             pemFile,
+            eveDomain,
         )
     }
 
