@@ -19,13 +19,13 @@ class CarState : RObject {
     var blueprints: Blueprints = 0
     var unlockedTiers: CarUpgradeTier = 0
     var unlockedLevels: CarUpgradeLevel = 0
-    var carTuningState: List<CarStatState> = listOf()
+    var carTuning: List<CarStat> = listOf()
     var epicItems: UpgradeItems = 0
     var freeUpgrades: List<RInt> = listOf()
-    var maintenanceStats: CarMaintenanceStats = CarMaintenanceStats()
-    var usageState: CarUsageStats = CarUsageStats()
+    var maintenance: CarMaintenanceStats = CarMaintenanceStats()
+    var usageStats: CarUsageStats = CarUsageStats()
     var ownedEvoTuningParts: EvoTuningParts = EvoTuningParts()
-    var customizationState: CarCustomizationState = CarCustomizationState()
+    var customization: CarCustomizationState = CarCustomizationState()
     var tierBlueprints: Blueprints = 0
     var ownedDecalVisuals: List<RInt> = listOf()
     var isOwned: Boolean = false
@@ -40,15 +40,15 @@ class CarState : RObject {
         blueprints = sink.readInt()
         unlockedTiers = sink.readByte()
         unlockedLevels = sink.readByte()
-        carTuningState = sink.readList()
+        carTuning = sink.readList()
         epicItems = sink.readInt()
         freeUpgrades = sink.readList()
-        maintenanceStats = sink.readObject()
-        usageState = sink.readObject()
+        maintenance = sink.readObject()
+        usageStats = sink.readObject()
         if (sink newer "45.0.0") {
             ownedEvoTuningParts = sink.readObject()
         }
-        customizationState = sink.readObject()
+        customization = sink.readObject()
         tierBlueprints = sink.readInt()
         ownedDecalVisuals = sink.readList()
         isOwned = sink.readBoolean()
@@ -70,15 +70,15 @@ class CarState : RObject {
         sink.writeInt(blueprints)
         sink.writeByte(unlockedTiers)
         sink.writeByte(unlockedLevels)
-        sink.writeList(carTuningState)
+        sink.writeList(carTuning)
         sink.writeInt(epicItems)
         sink.writeList(freeUpgrades)
-        sink.writeObject(maintenanceStats)
-        sink.writeObject(usageState)
+        sink.writeObject(maintenance)
+        sink.writeObject(usageStats)
         if (sink newer "45.0.0") {
             sink.writeObject(ownedEvoTuningParts)
         }
-        sink.writeObject(customizationState)
+        sink.writeObject(customization)
         sink.writeInt(tierBlueprints)
         sink.writeList(ownedDecalVisuals)
         sink.writeBoolean(isOwned)

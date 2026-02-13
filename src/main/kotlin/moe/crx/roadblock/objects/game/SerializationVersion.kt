@@ -8,6 +8,13 @@ class SerializationVersion(var major: Short, var minor: Short, var build: Short)
 
     constructor() : this(0, 0, 0)
 
+    constructor(version: String) : this() {
+        val split = version.split('.')
+        major = split[0].toShort()
+        minor = split[1].toShort()
+        build = split[2].toShort()
+    }
+
     override fun read(sink: InputSink) {
         major = sink.readShort()
         minor = sink.readShort()
@@ -26,9 +33,9 @@ class SerializationVersion(var major: Short, var minor: Short, var build: Short)
 
     infix fun newer(version: String): Boolean {
         val split = version.split('.')
-        val major = split[0].toInt()
-        val minor = split[1].toInt()
-        val build = split[2].toInt()
+        val major = split[0].toShort()
+        val minor = split[1].toShort()
+        val build = split[2].toShort()
 
         if (this.major > major) {
             return true
@@ -47,5 +54,12 @@ class SerializationVersion(var major: Short, var minor: Short, var build: Short)
 
     override fun equals(other: Any?): Boolean {
         return other is SerializationVersion && other.major == major && other.minor == minor && other.build == build
+    }
+
+    override fun hashCode(): Int {
+        var result = major.toInt()
+        result = 31 * result + minor
+        result = 31 * result + build
+        return result
     }
 }

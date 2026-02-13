@@ -218,14 +218,14 @@ class StateManager(workingDirectory: String) {
                         blueprints = 0
                         unlockedTiers = 1
                         unlockedLevels = 4
-                        carTuningState = buildList { repeat(4) { add(CarStatState()) } } // Enumerated list?
+                        carTuning = buildList { repeat(4) { add(CarStat()) } } // Enumerated list?
                         epicItems = 0
                         freeUpgrades = buildList { repeat(4) { add(RInt()) } } // Enumerated list?
-                        maintenanceStats = CarMaintenanceStats().apply {
+                        maintenance = CarMaintenanceStats().apply {
                             maintenanceSlots = 6
                         }
-                        usageState = CarUsageStats()
-                        customizationState = CarCustomizationState().apply {
+                        usageStats = CarUsageStats()
+                        customization = CarCustomizationState().apply {
                             visualConfiguration.configuration = CarOfficialVisualOption()
                             lockedCustomization = false
                             lockedCalipers = true

@@ -7,7 +7,7 @@ import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RInt
 import moe.crx.roadblock.objects.base.RObject
 
-class CarStatState : RObject {
+class CarStat : RObject {
 
     var currentUpgradeLevel: Byte = 0
     var upgradeItems: List<RInt> = listOf()
