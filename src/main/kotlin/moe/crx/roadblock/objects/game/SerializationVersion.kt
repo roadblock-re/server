@@ -32,20 +32,17 @@ class SerializationVersion(var major: Short, var minor: Short, var build: Short)
     }
 
     infix fun newer(version: String): Boolean {
-        val split = version.split('.')
-        val major = split[0].toShort()
-        val minor = split[1].toShort()
-        val build = split[2].toShort()
+        val compared = SerializationVersion(version)
 
-        if (this.major > major) {
+        if (this.major > compared.major) {
             return true
         }
 
-        if (this.minor > minor) {
+        if (this.minor > compared.minor) {
             return true
         }
 
-        if (this.build > build) {
+        if (this.build > compared.build) {
             return true
         }
 
