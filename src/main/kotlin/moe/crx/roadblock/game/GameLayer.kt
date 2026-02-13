@@ -71,6 +71,9 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
             register("AcquireAndInstallUpgradeItem")
         }
         register(::handleConvertWildcardBlueprints)
+        if (ver newer "47.1.0") {
+            register("ApplyWildcardStarUpItem")
+        }
         register(::handleTrashItem)
         if (ver newer "45.0.0") {
             register("EquipEvoTuningEngine")
@@ -79,16 +82,22 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
             register("EquipEvoTuningNOS")
             register("EquipEvoTuningSKit")
         }
+        if (ver newer "47.1.0") {
+            register("ReceiveEvoTicketsOnCarMaxed")
+        }
         register(::handleGainAllCarItemsCheat)
         register(::handleGainAllCarsCheat)
         register(::handleGainCurrencyCheat)
         register(::handleGainCarBlueprintsCheat)
         register(::handleGainWildcardBlueprintsCheat)
+        if (ver older "24.0.0") {
+            register(::handleGainCarEvoBlueprintsCheat)
+        }
         if (ver newer "24.6.0") {
             register("GainWildcardUpgradeItemsCheat")
         }
-        if (ver older "24.0.0") {
-            register(::handleGainCarEvoBlueprintsCheat)
+        if (ver newer "47.1.0") {
+            register("GainWildcardStarUpItemsCheat")
         }
         if (ver newer "45.0.0") {
             register("GetAllEvoTuningCarPartsCheat")
@@ -98,6 +107,10 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
         register(::handleBuyTimeLimitedGachaBox)
         if (ver newer "24.0.0") {
             register("ClaimSponsorshipGachaBox")
+        }
+        if (ver newer "47.1.0") {
+            register("ConvertEvoTicketsToCurrency")
+            register("BuyEvoGachaBox")
         }
         register(::handleClaimLevelUpGachaBoxes)
         register(::handleClaimMissionReward)
@@ -239,6 +252,13 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
         register(::handleTimeLimitedSpecialEventClaimProgressionReward)
         register(::handleTLEventAutoclaimRewards)
         register(::handleTLEventResetNitroGhost)
+        if (ver newer "47.1.0") {
+            register("TLEventEquipEvoEngineFreeTry")
+            register("TLEventEquipEvoDriveTrainFreeTry")
+            register("TLEventEquipEvoNOSFreeTry")
+            register("TLEventEquipEvoIntakeFreeTry")
+            register("TLEventEquipEvoSKitFreeTry")
+        }
         register(::handleTLEventResetCheat)
         register(::handleRetrievePlaybackCheat)
         register(::handleForceConfigRefresh)
@@ -340,7 +360,7 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
             register(::handleClubWarsMarketRefresh)
         }
         register(::handleInboxMarkAsRead)
-        // TODO PrivateLobby renamed to Party
+        // TODO PrivateLobby renamed to Party (separate them?)
         register(::handlePrivateLobbyCreateRoom)
         register(::handlePrivateLobbyJoinRoom)
         if (ver newer "24.0.0") {
