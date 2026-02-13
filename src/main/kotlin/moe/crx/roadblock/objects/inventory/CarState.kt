@@ -19,12 +19,13 @@ class CarState : RObject {
     var blueprints: Blueprints = 0
     var unlockedTiers: CarUpgradeTier = 0
     var unlockedLevels: CarUpgradeLevel = 0
-    var carTuning: List<CarStat> = listOf()
+    var carTuning: CarTuningState = CarTuningState()
     var epicItems: UpgradeItems = 0
     var freeUpgrades: List<RInt> = listOf()
     var maintenance: CarMaintenanceStats = CarMaintenanceStats()
     var usageStats: CarUsageStats = CarUsageStats()
     var ownedEvoTuningParts: EvoTuningParts = EvoTuningParts()
+    var hasReceivedEvoTickets: Boolean = false
     var customization: CarCustomizationState = CarCustomizationState()
     var tierBlueprints: Blueprints = 0
     var ownedDecalVisuals: List<RInt> = listOf()
@@ -35,18 +36,22 @@ class CarState : RObject {
     var evoTierBlueprints: Blueprints = 0
     var overclockExpirationDate: RInstant? = null
     var unlockedAssemblyBlueprints: Int = 0
+    var overclockState: CarOverclockState = CarOverclockState()
 
     override fun read(sink: InputSink) {
         blueprints = sink.readInt()
         unlockedTiers = sink.readByte()
         unlockedLevels = sink.readByte()
-        carTuning = sink.readList()
+        carTuning = sink.readObject()
         epicItems = sink.readInt()
         freeUpgrades = sink.readList()
         maintenance = sink.readObject()
         usageStats = sink.readObject()
         if (sink newer "45.0.0") {
             ownedEvoTuningParts = sink.readObject()
+        }
+        if (sink newer "47.1.0") {
+            hasReceivedEvoTickets = sink.readBoolean()
         }
         customization = sink.readObject()
         tierBlueprints = sink.readInt()
@@ -58,11 +63,14 @@ class CarState : RObject {
             currentEvoTier = sink.readOptional()
             evoTierBlueprints = sink.readInt()
         }
-        if (sink newer "24.0.0") {
+        if (sink newer "24.0.0" && sink older "47.1.0") {
             overclockExpirationDate = sink.readOptional()
         }
         if (sink newer "24.6.0") {
             unlockedAssemblyBlueprints = sink.readInt()
+        }
+        if (sink newer "47.1.0") {
+            overclockState = sink.readObject()
         }
     }
 
@@ -70,7 +78,7 @@ class CarState : RObject {
         sink.writeInt(blueprints)
         sink.writeByte(unlockedTiers)
         sink.writeByte(unlockedLevels)
-        sink.writeList(carTuning)
+        sink.writeObject(carTuning)
         sink.writeInt(epicItems)
         sink.writeList(freeUpgrades)
         sink.writeObject(maintenance)

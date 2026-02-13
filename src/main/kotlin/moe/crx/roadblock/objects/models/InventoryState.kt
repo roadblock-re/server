@@ -30,10 +30,11 @@ class InventoryState : RObject {
     var iapWallets: Map<RInt, WalletState> = mapOf() // 3.9+ only (also maybe 3.8)
     var wildcardBlueprints: List<WildcardBlueprintClassState> = listOf()
     var wildcardUpgradeItems: List<RInt> = listOf()
-    var upgradeInfoState: List<StatUpgradeInfoState> = listOf()
+    var wildcardStarUpItems: List<RInt> = listOf()
+    var upgrades: List<StatUpgradeInfoState> = listOf()
     var lastActionTime: Instant = now()
     var maintenanceBooking: MaintenanceBooking? = null
-    var emojisState: EmojisState = EmojisState()
+    var emojis: EmojisState = EmojisState()
     var overclockChips: OverclockChips = 0
 
     override fun read(sink: InputSink) {
@@ -44,10 +45,13 @@ class InventoryState : RObject {
         if (sink newer "24.6.0") {
             wildcardUpgradeItems = sink.readList()
         }
-        upgradeInfoState = sink.readList()
+        if (sink newer "47.1.0") {
+            wildcardStarUpItems = sink.readList()
+        }
+        upgrades = sink.readList()
         lastActionTime = sink.readInstant()
         maintenanceBooking = sink.readOptional()
-        emojisState = sink.readObject()
+        emojis = sink.readObject()
         if (sink newer "24.0.0") {
             overclockChips = sink.readInt()
         }
@@ -61,10 +65,10 @@ class InventoryState : RObject {
         if (sink newer "24.6.0") {
             sink.writeList(wildcardUpgradeItems)
         }
-        sink.writeList(upgradeInfoState)
+        sink.writeList(upgrades)
         sink.writeInstant(lastActionTime)
         sink.writeOptional(maintenanceBooking)
-        sink.writeObject(emojisState)
+        sink.writeObject(emojis)
         if (sink newer "24.0.0") {
             sink.writeInt(overclockChips)
         }

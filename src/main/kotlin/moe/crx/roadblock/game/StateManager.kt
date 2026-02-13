@@ -218,7 +218,9 @@ class StateManager(workingDirectory: String) {
                         blueprints = 0
                         unlockedTiers = 1
                         unlockedLevels = 4
-                        carTuning = buildList { repeat(4) { add(CarStat()) } } // Enumerated list?
+                        carTuning = CarTuningState().apply {
+                            stats = buildList { repeat(4) { add(CarStat()) } } // Enumerated list?
+                        }
                         epicItems = 0
                         freeUpgrades = buildList { repeat(4) { add(RInt()) } } // Enumerated list?
                         maintenance = CarMaintenanceStats().apply {
@@ -297,7 +299,7 @@ class StateManager(workingDirectory: String) {
                         add(RInt())
                     }
                 } // enumerated list
-                upgradeInfoState = buildList {
+                upgrades = buildList {
                     repeat(4) {
                         add(StatUpgradeInfoState().apply {
                             classInfo = buildList {
@@ -310,7 +312,7 @@ class StateManager(workingDirectory: String) {
                 } // enumerated list
                 lastActionTime = now()
                 maintenanceBooking = null
-                emojisState = EmojisState()
+                emojis = EmojisState()
             }
 
             miscellaneous.apply {
