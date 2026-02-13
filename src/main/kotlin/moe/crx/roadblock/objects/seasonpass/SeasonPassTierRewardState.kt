@@ -4,4 +4,5 @@ enum class SeasonPassTierRewardState {
     Locked,
     Claimable,
     Claimed,
+    UnknownEnum3,
 }

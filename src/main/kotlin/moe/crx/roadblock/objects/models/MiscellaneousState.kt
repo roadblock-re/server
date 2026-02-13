@@ -35,6 +35,7 @@ class MiscellaneousState : RObject {
     var platform: RInt? = null // PlatformType
     var xboxLiveOnlyEnabled: RBoolean? = null
     var uniqueUserNameChangeCount: RInt? = null
+    var hasPlayedOnAdsPlatform: Boolean = false
     var hiddenEndRaceAdsOfferIds: List<RInt> = listOf()
     var lastLoginTimestamp: Instant = now()
     var lastAdWatchedTimestamp: Instant = now()
@@ -77,6 +78,9 @@ class MiscellaneousState : RObject {
         }
         if (sink older "24.0.0") {
             uniqueUserNameChangeCount = sink.readOptional()
+        }
+        if (sink newer "47.1.0") {
+            hasPlayedOnAdsPlatform = sink.readBoolean()
         }
         if (sink newer "24.0.0") {
             hiddenEndRaceAdsOfferIds = sink.readList()

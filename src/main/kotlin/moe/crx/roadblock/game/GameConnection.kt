@@ -242,7 +242,7 @@ class GameConnection(val workingDirectory: String, val ignoreConnect: Boolean = 
                 bytes.toHexString()
             )
 
-            sendConcurrentAccess()
+            //sendConcurrentAccess() // TODO config option
 
             packetLock.unlock()
 

@@ -1,7 +1,10 @@
 package moe.crx.roadblock.objects.tle
 
+import moe.crx.roadblock.io.OptionalIO.readOptional
+import moe.crx.roadblock.io.OptionalIO.writeOptional
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.objects.base.RInt
 import moe.crx.roadblock.objects.base.RObject
 
 class TLEventRaceData : RObject {
@@ -12,6 +15,7 @@ class TLEventRaceData : RObject {
     var isCarOverclocked: Boolean = false
     var collectedItemCount: Int = 0
     var driveMeters: Int = 0
+    var optEvoTuningVisualArchetype: RInt? = null
 
     override fun read(sink: InputSink) {
         timeInMicroseconds = sink.readInt()
@@ -23,6 +27,9 @@ class TLEventRaceData : RObject {
         if (sink newer "24.6.0") {
             collectedItemCount = sink.readInt()
             driveMeters = sink.readInt()
+        }
+        if (sink newer "47.1.0") {
+            optEvoTuningVisualArchetype = sink.readOptional()
         }
     }
 
@@ -36,6 +43,9 @@ class TLEventRaceData : RObject {
         if (sink newer "24.6.0") {
             sink.writeInt(collectedItemCount)
             sink.writeInt(driveMeters)
+        }
+        if (sink newer "47.1.0") {
+            sink.writeOptional(optEvoTuningVisualArchetype)
         }
     }
 }

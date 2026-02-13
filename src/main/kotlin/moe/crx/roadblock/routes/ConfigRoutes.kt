@@ -8,7 +8,7 @@ import moe.crx.roadblock.utils.realRemoteHost
 fun Route.eveAbout() = get("/") {
     call.respondText(
         contentType = ContentType.Application.Json,
-        text = "{\"eve\": \"on\", \"version\": \"3.9.38-0\"}",
+        text = "{\"eve\": \"on\", \"version\": \"3.9.59\"}",
     )
 }
 
