@@ -257,7 +257,7 @@ class GameConnection(val workingDirectory: String, val ignoreConnect: Boolean = 
 
             reportHandlingError(header, bytes, throwable)
 
-            sendConcurrentAccess()
+            //sendConcurrentAccess() // TODO config option
 
             packetLock.unlock()
 
@@ -274,7 +274,7 @@ class GameConnection(val workingDirectory: String, val ignoreConnect: Boolean = 
 
             reportHandlingError(request, bytes, throwable)
 
-            sendConcurrentAccess()
+            //sendConcurrentAccess() // TODO config option
 
             packetLock.unlock()
 

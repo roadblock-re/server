@@ -14,16 +14,16 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
         fun selectVersion(gameVersion: String): SerializationVersion {
             val match = versionRegex.find(gameVersion)
 
-            var ver = SerializationVersion(
+            val ver = SerializationVersion(
                 match?.groups[1]?.value?.toShortOrNull() ?: 0,
                 match?.groups[2]?.value?.toShortOrNull() ?: 0,
-                match?.groups[4]?.value?.toShortOrNull(16) ?: 0,
+                match?.groups[3]?.value?.toShortOrNull() ?: 0,
             )
 
             // TODO Add game version to serialization version mapping?
-            if (ver == SerializationVersion(45, 0, 10)) {
-                ver = SerializationVersion(45, 0, 6)
-            }
+            //if (ver == SerializationVersion(45, 0, 10)) {
+            //    return SerializationVersion(45, 0, 6)
+            //}
 
             return ver
         }
