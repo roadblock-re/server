@@ -7,10 +7,14 @@ class BlackMarketItemVariant : RVariant(
     Blueprint::class,
     CarUnlockItem::class,
     Currency::class,
-    CustomizationUnlockReward::class,
+    CustomizationUnlock::class,
     EmojiItem::class,
     UpgradeItem::class,
     VanityBadge::class,
     WildcardBlueprint::class,
-    OverclockChip::class
+    OverclockChip::class,
+    BlackMarketItemVariant9::class,
+    BlackMarketItemVariant10::class,
+    BlackMarketItemVariant11::class,
+    BlackMarketItemVariant12::class,
 )

@@ -49,9 +49,6 @@ class State : RObject {
         blackMarket = sink.readObject()
         career = sink.readObject()
         gachaSystem = sink.readObject()
-        if (sink newer "47.1.0") {
-            sink.readBytes(52) // TODO
-        }
         inventory = sink.readObject()
         miscellaneous = sink.readObject()
         multiplayerSeries = sink.readObject()

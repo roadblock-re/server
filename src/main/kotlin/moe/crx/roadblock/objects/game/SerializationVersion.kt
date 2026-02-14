@@ -59,4 +59,8 @@ class SerializationVersion(var major: Short, var minor: Short, var build: Short)
         result = 31 * result + build
         return result
     }
+
+    override fun toString(): String {
+        return "$major.$minor.$build"
+    }
 }
