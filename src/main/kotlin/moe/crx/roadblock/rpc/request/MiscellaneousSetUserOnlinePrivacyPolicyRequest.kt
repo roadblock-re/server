@@ -5,20 +5,29 @@ import moe.crx.roadblock.io.OptionalIO.writeOptional
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RBoolean
+import moe.crx.roadblock.objects.base.RByte
 import moe.crx.roadblock.rpc.base.RequestPacket
 
 class MiscellaneousSetUserOnlinePrivacyPolicyRequest :
     RequestPacket() {
 
-    var isGPDRCompliant: RBoolean? = null
+    var privacyPolicy: RByte? = null
 
     override fun read(sink: InputSink) {
         super.read(sink)
-        isGPDRCompliant = sink.readOptional()
+        privacyPolicy = if (sink older "24.6.0") {
+            sink.readOptional()
+        } else {
+            RByte(sink.readInt().toByte())
+        }
     }
 
     override fun write(sink: OutputSink) {
         super.write(sink)
-        sink.writeOptional(isGPDRCompliant)
+        if (sink older "24.6.0") {
+            sink.writeOptional(privacyPolicy)
+        } else {
+            sink.writeInt(privacyPolicy?.value?.toInt() ?: 0)
+        }
     }
 }
