@@ -255,7 +255,7 @@ class GameConnection(val workingDirectory: String, val ignoreConnect: Boolean = 
             LOG.error("[I] Error reading packet {} (ID {})", handlerEntry.requestName, header.type)
             throwable.printStackTrace()
 
-            reportHandlingError(header, bytes, throwable)
+            reportHandlingError(handlerEntry.requestName, header.type, bytes, throwable)
 
             //sendConcurrentAccess() // TODO config option
 
@@ -272,7 +272,7 @@ class GameConnection(val workingDirectory: String, val ignoreConnect: Boolean = 
             LOG.error("[I] Error handling packet {} (ID {})", request.javaClass.simpleName, request.type)
             throwable.printStackTrace()
 
-            reportHandlingError(request, bytes, throwable)
+            reportHandlingError(request.javaClass.simpleName, request.type, bytes, throwable)
 
             //sendConcurrentAccess() // TODO config option
 
@@ -284,12 +284,12 @@ class GameConnection(val workingDirectory: String, val ignoreConnect: Boolean = 
         packetLock.unlock()
     }
 
-    fun reportHandlingError(request: RequestPacket, bytes: ByteArray, throwable: Throwable) {
+    fun reportHandlingError(name: String, type: Short, bytes: ByteArray, throwable: Throwable) {
         File(File(workingDirectory, "reports"), "${System.currentTimeMillis()}.report").run {
             parentFile.mkdirs()
 
             FileWriter(this).use { writer ->
-                writer.write("Error handling packet ${request.javaClass.simpleName} (ID ${request.type}):\n\n")
+                writer.write("Error handling packet $name (ID $type):\n\n")
                 throwable.printStackTrace(PrintWriter(writer))
                 writer.write("\nRequest packet bytes:\n")
                 writer.write(bytes.toHexString())
