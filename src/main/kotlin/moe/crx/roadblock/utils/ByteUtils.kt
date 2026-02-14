@@ -4,9 +4,11 @@ import moe.crx.roadblock.io.ObjectIO.readObject
 import moe.crx.roadblock.io.ObjectIO.writeObject
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.InputStreamSink
+import moe.crx.roadblock.io.sinks.OutputAnsiSink
 import moe.crx.roadblock.io.sinks.OutputStreamSink
 import moe.crx.roadblock.objects.base.RObject
 import moe.crx.roadblock.objects.game.SerializationVersion
+import org.fusesource.jansi.Ansi
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.security.MessageDigest
@@ -50,6 +52,12 @@ fun RObject.bytes(ver: SerializationVersion): ByteArray {
     return byteOutputSink(ver).apply {
         writeObject(this@bytes)
     }.bytes()
+}
+
+fun RObject.ansi(ver: SerializationVersion): Ansi {
+    return OutputAnsiSink(ver).also {
+        this.write(it)
+    }.result()
 }
 
 fun ByteArray.sha256() = MessageDigest.getInstance("SHA-256").digest(this).toHexString()
