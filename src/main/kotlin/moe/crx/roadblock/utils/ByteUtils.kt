@@ -55,8 +55,12 @@ fun RObject.bytes(ver: SerializationVersion): ByteArray {
 }
 
 fun RObject.ansi(ver: SerializationVersion): Ansi {
-    return OutputAnsiSink(ver).also {
-        this.write(it)
+    return OutputAnsiSink(ver).also { sink ->
+        runCatching {
+            this.write(sink)
+        }.onFailure {
+            sink.writeString("...")
+        }
     }.result()
 }
 
