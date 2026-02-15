@@ -16,8 +16,18 @@ class RoadblockEncoder(
     override val serializersModule: SerializersModule = EmptySerializersModule()
 ) : AbstractEncoder() {
 
-    val byteArrayDescriptor = serializersModule.serializer<ByteArray>().descriptor
-    val instantDescriptor = serializersModule.serializer<Instant>().descriptor
+    private var byteEnumFlag = false
+
+    override fun encodeElement(descriptor: SerialDescriptor, index: Int): Boolean {
+        val annotations = descriptor.getElementAnnotations(index)
+
+        byteEnumFlag = annotations.any { it is ByteEnum }
+
+        return true
+    }
+
+    private val byteArrayDescriptor = serializersModule.serializer<ByteArray>().descriptor
+    private val instantDescriptor = serializersModule.serializer<Instant>().descriptor
 
     override fun <T> encodeSerializableValue(serializer: SerializationStrategy<T>, value: T) =
         when (serializer.descriptor) {
@@ -38,7 +48,14 @@ class RoadblockEncoder(
     override fun encodeFloat(value: Float) = encodeInt(value.toRawBits())
     override fun encodeDouble(value: Double) = encodeLong(value.toRawBits())
     override fun encodeString(value: String) = encodeByteArray(value.toByteArray(Charsets.UTF_8))
-    override fun encodeEnum(enumDescriptor: SerialDescriptor, index: Int) = encodeInt(index)
+
+    override fun encodeEnum(enumDescriptor: SerialDescriptor, index: Int) {
+        if (byteEnumFlag) {
+            encodeByte(index.toByte())
+        } else {
+            encodeInt(index)
+        }
+    }
 
     private val scratchBuffer = ByteArray(8)
 

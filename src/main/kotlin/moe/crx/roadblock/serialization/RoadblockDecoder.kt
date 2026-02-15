@@ -20,11 +20,20 @@ class RoadblockDecoder(
 
     private var elementIndex = 0
 
-    override fun decodeElementIndex(descriptor: SerialDescriptor) =
-        if (elementIndex == descriptor.elementsCount) DECODE_DONE else elementIndex++
+    private var byteEnumFlag = false
 
-    val byteArrayDescriptor = serializersModule.serializer<ByteArray>().descriptor
-    val instantDescriptor = serializersModule.serializer<Instant>().descriptor
+    override fun decodeElementIndex(descriptor: SerialDescriptor): Int {
+        val index = if (elementIndex == descriptor.elementsCount) DECODE_DONE else elementIndex++
+
+        val annotations = descriptor.getElementAnnotations(index)
+
+        byteEnumFlag = annotations.any { it is ByteEnum }
+
+        return index
+    }
+
+    private val byteArrayDescriptor = serializersModule.serializer<ByteArray>().descriptor
+    private val instantDescriptor = serializersModule.serializer<Instant>().descriptor
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> decodeSerializableValue(deserializer: DeserializationStrategy<T>) =
@@ -51,7 +60,14 @@ class RoadblockDecoder(
     override fun decodeFloat() = Float.fromBits(decodeInt())
     override fun decodeDouble() = Double.fromBits(decodeLong())
     override fun decodeString() = decodeByteArray().toString(Charsets.UTF_8)
-    override fun decodeEnum(enumDescriptor: SerialDescriptor) = decodeInt()
+
+    override fun decodeEnum(enumDescriptor: SerialDescriptor): Int {
+        return if (byteEnumFlag) {
+            decodeByte().toInt() and 0xFF
+        } else {
+            decodeInt()
+        }
+    }
 
     private val scratchBuffer = ByteArray(8)
 
