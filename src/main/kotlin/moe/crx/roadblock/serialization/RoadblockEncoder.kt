@@ -13,6 +13,7 @@ import java.io.OutputStream
 @OptIn(ExperimentalSerializationApi::class)
 class RoadblockEncoder(
     private val output: OutputStream,
+    private val version: SerializationVersion,
     override val serializersModule: SerializersModule = EmptySerializersModule()
 ) : AbstractEncoder() {
 
@@ -20,9 +21,11 @@ class RoadblockEncoder(
     private var currentDescriptor: SerialDescriptor? = null
 
     override fun encodeElement(descriptor: SerialDescriptor, index: Int): Boolean {
-        elementIndex = index
         currentDescriptor = descriptor
-        return true
+        
+        elementIndex = index
+        val annotations = currentDescriptor?.getElementAnnotations(elementIndex)
+        return annotations.isPresentIn(version)
     }
 
     private val byteArrayDescriptor = serializersModule.serializer<ByteArray>().descriptor
@@ -50,7 +53,6 @@ class RoadblockEncoder(
 
     override fun encodeEnum(enumDescriptor: SerialDescriptor, index: Int) {
         val annotations = currentDescriptor?.getElementAnnotations(elementIndex)
-
         if (annotations.byteEnum()) {
             encodeByte(index.toByte())
         } else {

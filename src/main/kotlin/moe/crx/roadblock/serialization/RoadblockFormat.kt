@@ -8,7 +8,7 @@ import kotlinx.serialization.modules.SerializersModule
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 
-class RoadblockProtocol(
+class RoadblockFormat(
     val version: SerializationVersion,
     override val serializersModule: SerializersModule = EmptySerializersModule()
 ) : BinaryFormat {
@@ -18,7 +18,7 @@ class RoadblockProtocol(
         value: T
     ): ByteArray {
         val output = ByteArrayOutputStream()
-        RoadblockEncoder(output, serializersModule).encodeSerializableValue(serializer, value)
+        RoadblockEncoder(output, version, serializersModule).encodeSerializableValue(serializer, value)
         return output.toByteArray()
     }
 
@@ -27,6 +27,6 @@ class RoadblockProtocol(
         bytes: ByteArray
     ): T {
         val input = ByteArrayInputStream(bytes)
-        return RoadblockDecoder(input, serializersModule).decodeSerializableValue(deserializer)
+        return RoadblockDecoder(input, version, serializersModule).decodeSerializableValue(deserializer)
     }
 }
