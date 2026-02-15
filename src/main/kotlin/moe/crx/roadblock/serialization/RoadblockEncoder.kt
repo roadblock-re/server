@@ -16,13 +16,13 @@ class RoadblockEncoder(
     override val serializersModule: SerializersModule = EmptySerializersModule()
 ) : AbstractEncoder() {
 
-    val byteArraySerializer = serializersModule.serializer<ByteArray>()
-    val instantSerializer = serializersModule.serializer<Instant>()
+    val byteArrayDescriptor = serializersModule.serializer<ByteArray>().descriptor
+    val instantDescriptor = serializersModule.serializer<Instant>().descriptor
 
     override fun <T> encodeSerializableValue(serializer: SerializationStrategy<T>, value: T) =
         when (serializer.descriptor) {
-            byteArraySerializer.descriptor -> encodeByteArray(value as ByteArray)
-            instantSerializer.descriptor -> encodeInstant(value as Instant)
+            byteArrayDescriptor -> encodeByteArray(value as ByteArray)
+            instantDescriptor -> encodeInstant(value as Instant)
             else -> super.encodeSerializableValue(serializer, value)
         }
 
@@ -33,47 +33,43 @@ class RoadblockEncoder(
 
     fun encodeInstant(value: Instant) = encodeLong(value.epochSeconds)
 
-    @ExperimentalSerializationApi
-    override fun encodeNotNullMark() = encodeBoolean(true)
+    override fun encodeBoolean(value: Boolean) = output.write(if (value) 1 else 0)
+    override fun encodeByte(value: Byte) = output.write(value.toInt() and 0xFF)
+    override fun encodeFloat(value: Float) = encodeInt(value.toRawBits())
+    override fun encodeDouble(value: Double) = encodeLong(value.toRawBits())
+    override fun encodeString(value: String) = encodeByteArray(value.toByteArray(Charsets.UTF_8))
+    override fun encodeEnum(enumDescriptor: SerialDescriptor, index: Int) = encodeInt(index)
 
-    override fun encodeNull() = encodeBoolean(false)
-
-    override fun encodeBoolean(value: Boolean) {
-        output.write(if (value) 1 else 0)
-    }
-
-    override fun encodeByte(value: Byte) {
-        output.write(value.toInt() and 0xFF)
-    }
+    private val scratchBuffer = ByteArray(8)
 
     override fun encodeShort(value: Short) {
-        output.write(value.toInt() and 0xFF)
-        output.write(value.toInt() ushr 8 and 0xFF)
+        val value = value.toInt()
+        scratchBuffer[0] = (value and 0xFF).toByte()
+        scratchBuffer[1] = ((value ushr 8) and 0xFF).toByte()
+        output.write(scratchBuffer, 0, 2)
     }
 
     override fun encodeInt(value: Int) {
-        output.write(value and 0xFF)
-        output.write(value ushr 8 and 0xFF)
-        output.write(value ushr 16 and 0xFF)
-        output.write(value ushr 24 and 0xFF)
+        scratchBuffer[0] = (value and 0xFF).toByte()
+        scratchBuffer[1] = ((value ushr 8) and 0xFF).toByte()
+        scratchBuffer[2] = ((value ushr 16) and 0xFF).toByte()
+        scratchBuffer[3] = ((value ushr 24) and 0xFF).toByte()
+        output.write(scratchBuffer, 0, 4)
     }
 
     override fun encodeLong(value: Long) {
-        output.write(value.toInt() and 0xFF)
-        output.write((value ushr 8).toInt() and 0xFF)
-        output.write((value ushr 16).toInt() and 0xFF)
-        output.write((value ushr 24).toInt() and 0xFF)
-        output.write((value ushr 32).toInt() and 0xFF)
-        output.write((value ushr 40).toInt() and 0xFF)
-        output.write((value ushr 48).toInt() and 0xFF)
-        output.write((value ushr 56).toInt() and 0xFF)
+        scratchBuffer[0] = (value and 0xFF).toByte()
+        scratchBuffer[1] = ((value ushr 8) and 0xFF).toByte()
+        scratchBuffer[2] = ((value ushr 16) and 0xFF).toByte()
+        scratchBuffer[3] = ((value ushr 24) and 0xFF).toByte()
+        scratchBuffer[4] = ((value ushr 32) and 0xFF).toByte()
+        scratchBuffer[5] = ((value ushr 40) and 0xFF).toByte()
+        scratchBuffer[6] = ((value ushr 48) and 0xFF).toByte()
+        scratchBuffer[7] = ((value ushr 56) and 0xFF).toByte()
+        output.write(scratchBuffer, 0, 8)
     }
 
-    override fun encodeFloat(value: Float) = encodeInt(value.toRawBits())
-
-    override fun encodeDouble(value: Double) = encodeLong(value.toRawBits())
-
-    override fun encodeString(value: String) = encodeByteArray(value.toByteArray())
-
-    override fun encodeEnum(enumDescriptor: SerialDescriptor, index: Int) = encodeInt(index)
+    @ExperimentalSerializationApi
+    override fun encodeNotNullMark() = encodeBoolean(true)
+    override fun encodeNull() = encodeBoolean(false)
 }
