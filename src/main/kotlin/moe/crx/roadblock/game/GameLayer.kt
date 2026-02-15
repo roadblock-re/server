@@ -1,24 +1,16 @@
 package moe.crx.roadblock.game
 
 import moe.crx.roadblock.game.handlers.*
-import moe.crx.roadblock.serialization.SerializationVersion
 import moe.crx.roadblock.rpc.base.RequestPacket
+import moe.crx.roadblock.serialization.SerializationVersion
 import java.io.File
 import kotlin.reflect.KClass
 
 class GameLayer(private val workingDirectory: String, private val ver: SerializationVersion) {
 
     companion object {
-        val versionRegex = Regex("(\\d+)\\.(\\d+)\\.(\\d+)(\\w*)")
-
         fun selectVersion(gameVersion: String): SerializationVersion {
-            val match = versionRegex.find(gameVersion)
-
-            val ver = SerializationVersion(
-                match?.groups[1]?.value?.toShortOrNull() ?: 0,
-                match?.groups[2]?.value?.toShortOrNull() ?: 0,
-                match?.groups[3]?.value?.toShortOrNull() ?: 0,
-            )
+            val ver = SerializationVersion(gameVersion)
 
             // TODO Add game version to serialization version mapping?
             //if (ver == SerializationVersion(45, 0, 10)) {

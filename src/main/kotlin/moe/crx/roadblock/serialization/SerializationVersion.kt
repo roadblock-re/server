@@ -4,15 +4,20 @@ import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
 
-class SerializationVersion(var major: Short, var minor: Short, var build: Short) : RObject {
+class SerializationVersion(var major: Short, var minor: Short, var build: Short) : RObject,
+    Comparable<SerializationVersion> {
+
+    companion object {
+        val versionRegex = Regex("(\\d+)\\.(\\d+)\\.(\\d+)(\\w*)")
+    }
 
     constructor() : this(0, 0, 0)
 
     constructor(version: String) : this() {
-        val split = version.split('.')
-        major = split[0].toShort()
-        minor = split[1].toShort()
-        build = split[2].toShort()
+        val match = versionRegex.find(version)
+        major = match?.groups[1]?.value?.toShortOrNull() ?: 0
+        minor = match?.groups[2]?.value?.toShortOrNull() ?: 0
+        build = match?.groups[3]?.value?.toShortOrNull() ?: 0
     }
 
     override fun read(sink: InputSink) {
@@ -27,27 +32,15 @@ class SerializationVersion(var major: Short, var minor: Short, var build: Short)
         sink.writeShort(build)
     }
 
-    infix fun older(version: String): Boolean {
-        return !newer(version)
+    override fun compareTo(other: SerializationVersion): Int {
+        if (this.major != other.major) return this.major.compareTo(other.major)
+        if (this.minor != other.minor) return this.minor.compareTo(other.minor)
+        return this.build.compareTo(other.build)
     }
 
-    infix fun newer(version: String): Boolean {
-        val compared = SerializationVersion(version)
-
-        if (this.major >= compared.major) {
-            return true
-        }
-
-        if (this.minor >= compared.minor) {
-            return true
-        }
-
-        if (this.build >= compared.build) {
-            return true
-        }
-
-        return false
-    }
+    infix fun newer(v: String) = this >= SerializationVersion(v)
+    
+    infix fun older(v: String) = this < SerializationVersion(v)
 
     override fun equals(other: Any?): Boolean {
         return other is SerializationVersion && other.major == major && other.minor == minor && other.build == build
