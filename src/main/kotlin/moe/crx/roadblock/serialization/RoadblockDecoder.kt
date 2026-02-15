@@ -14,22 +14,18 @@ import java.io.InputStream
 
 @OptIn(ExperimentalSerializationApi::class)
 class RoadblockDecoder(
-    val input: InputStream,
-    override val serializersModule: SerializersModule = EmptySerializersModule()
+    private val input: InputStream,
+    override val serializersModule: SerializersModule = EmptySerializersModule(),
+    private var elementsCount: Int = 0,
 ) : AbstractDecoder() {
 
-    private var elementIndex = 0
-
-    private var byteEnumFlag = false
+    private var elementIndex = -1
+    private var currentDescriptor: SerialDescriptor? = null
 
     override fun decodeElementIndex(descriptor: SerialDescriptor): Int {
-        val index = if (elementIndex == descriptor.elementsCount) DECODE_DONE else elementIndex++
-
-        val annotations = descriptor.getElementAnnotations(index)
-
-        byteEnumFlag = annotations.any { it is ByteEnum }
-
-        return index
+        if (++elementIndex >= elementsCount) return DECODE_DONE
+        currentDescriptor = descriptor
+        return elementIndex
     }
 
     private val byteArrayDescriptor = serializersModule.serializer<ByteArray>().descriptor
@@ -38,10 +34,10 @@ class RoadblockDecoder(
     @Suppress("UNCHECKED_CAST")
     override fun <T> decodeSerializableValue(deserializer: DeserializationStrategy<T>) =
         when (deserializer.descriptor) {
-            byteArrayDescriptor -> decodeByteArray() as T
-            instantDescriptor -> decodeInstant() as T
+            byteArrayDescriptor -> decodeByteArray()
+            instantDescriptor -> decodeInstant()
             else -> super.decodeSerializableValue(deserializer)
-        }
+        } as T
 
     fun decodeByteArray(): ByteArray {
         val size = decodeInt()
@@ -62,7 +58,9 @@ class RoadblockDecoder(
     override fun decodeString() = decodeByteArray().toString(Charsets.UTF_8)
 
     override fun decodeEnum(enumDescriptor: SerialDescriptor): Int {
-        return if (byteEnumFlag) {
+        val annotations = currentDescriptor?.getElementAnnotations(elementIndex)
+
+        return if (annotations.byteEnum()) {
             decodeByte().toInt() and 0xFF
         } else {
             decodeInt()
@@ -102,4 +100,8 @@ class RoadblockDecoder(
 
     override fun decodeNotNullMark() = decodeBoolean()
     override fun decodeNull() = null
+
+    override fun decodeCollectionSize(descriptor: SerialDescriptor) = decodeInt().also { elementsCount = it }
+    override fun beginStructure(descriptor: SerialDescriptor) =
+        RoadblockDecoder(input, serializersModule, descriptor.elementsCount)
 }
