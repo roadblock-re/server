@@ -1,7 +1,7 @@
 package moe.crx.roadblock.updates.groups
 
 import moe.crx.roadblock.objects.base.RVariant
-import moe.crx.roadblock.objects.game.SerializationVersion
+import moe.crx.roadblock.serialization.SerializationVersion
 
 class StatusUpdateGroup(ver: SerializationVersion) : RVariant(buildList {
     add(BlackMarketStatusUpdateGroup::class)

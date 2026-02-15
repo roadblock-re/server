@@ -1,4 +1,4 @@
-package moe.crx.roadblock.objects.game
+package moe.crx.roadblock.serialization
 
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink

@@ -1,7 +1,7 @@
 package moe.crx.roadblock.game.updates
 
 import moe.crx.roadblock.objects.base.RInt
-import moe.crx.roadblock.objects.game.SerializationVersion
+import moe.crx.roadblock.serialization.SerializationVersion
 import moe.crx.roadblock.objects.game.StatusUpdatesQueueNode
 import moe.crx.roadblock.objects.game.StatusUpdatesQueueWithRootReactions
 

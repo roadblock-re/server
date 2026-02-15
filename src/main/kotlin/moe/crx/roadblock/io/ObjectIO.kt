@@ -3,7 +3,7 @@ package moe.crx.roadblock.io
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.game.SerializationVersion
+import moe.crx.roadblock.serialization.SerializationVersion
 import kotlin.reflect.KClass
 
 object ObjectIO {

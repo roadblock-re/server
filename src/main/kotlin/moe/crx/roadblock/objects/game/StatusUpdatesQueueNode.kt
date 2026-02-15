@@ -8,6 +8,7 @@ import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RInt
 import moe.crx.roadblock.objects.base.RObject
+import moe.crx.roadblock.serialization.SerializationVersion
 import moe.crx.roadblock.updates.groups.StatusUpdateGroup
 
 class StatusUpdatesQueueNode(ver: SerializationVersion) : RObject {

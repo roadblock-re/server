@@ -1,5 +1,7 @@
 package moe.crx.roadblock.objects.game
 
+import moe.crx.roadblock.serialization.SerializationVersion
+
 enum class MenuTutorialType {
     MainMenuCareer,
     CareerMap,

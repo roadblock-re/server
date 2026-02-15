@@ -16,6 +16,7 @@ import moe.crx.roadblock.rpc.auth.LoginResponse.Companion.GAME_SIGNATURE
 import moe.crx.roadblock.rpc.base.ReconnectionResponse
 import moe.crx.roadblock.rpc.base.RequestPacket
 import moe.crx.roadblock.rpc.base.ResponsePacket
+import moe.crx.roadblock.serialization.SerializationVersion
 import moe.crx.roadblock.utils.*
 import org.fusesource.jansi.Ansi.ansi
 import org.slf4j.Logger
@@ -33,7 +34,11 @@ import java.util.concurrent.locks.ReentrantLock
 // TODO plugin system
 // TODO UpdatesConsumer for State and it's members (create updates to send, and then apply them to state)
 
-class GameConnection(val workingDirectory: String, val ignoreConnect: Boolean = false, val sendBlock: suspend (ByteArray, Boolean) -> Unit) {
+class GameConnection(
+    val workingDirectory: String,
+    val ignoreConnect: Boolean = false,
+    val sendBlock: suspend (ByteArray, Boolean) -> Unit
+) {
     companion object {
         val LOG: Logger = LoggerFactory.getLogger("roadblock.game")
     }

@@ -1,7 +1,7 @@
 package moe.crx.roadblock.game
 
 import moe.crx.roadblock.game.handlers.*
-import moe.crx.roadblock.objects.game.SerializationVersion
+import moe.crx.roadblock.serialization.SerializationVersion
 import moe.crx.roadblock.rpc.base.RequestPacket
 import java.io.File
 import kotlin.reflect.KClass

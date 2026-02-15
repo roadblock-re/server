@@ -1,7 +1,7 @@
 package moe.crx.roadblock.io.sinks
 
 import kotlinx.datetime.Instant
-import moe.crx.roadblock.objects.game.SerializationVersion
+import moe.crx.roadblock.serialization.SerializationVersion
 
 abstract class OutputSink(ver: SerializationVersion) : Sink(ver) {
 

@@ -1,6 +1,6 @@
 package moe.crx.roadblock.io.sinks
 
-import moe.crx.roadblock.objects.game.SerializationVersion
+import moe.crx.roadblock.serialization.SerializationVersion
 
 abstract class Sink(var ver: SerializationVersion) {
 

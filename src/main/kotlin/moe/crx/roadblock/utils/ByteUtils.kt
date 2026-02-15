@@ -7,7 +7,7 @@ import moe.crx.roadblock.io.sinks.InputStreamSink
 import moe.crx.roadblock.io.sinks.OutputAnsiSink
 import moe.crx.roadblock.io.sinks.OutputStreamSink
 import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.game.SerializationVersion
+import moe.crx.roadblock.serialization.SerializationVersion
 import org.fusesource.jansi.Ansi
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream

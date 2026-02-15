@@ -1,6 +1,6 @@
 package moe.crx.roadblock.io.sinks
 
-import moe.crx.roadblock.objects.game.SerializationVersion
+import moe.crx.roadblock.serialization.SerializationVersion
 import org.fusesource.jansi.Ansi
 
 class InputAnsiSink(val sink: InputSink, ver: SerializationVersion) : InputSink(ver) {

@@ -1,6 +1,6 @@
 package moe.crx.roadblock.io.sinks
 
-import moe.crx.roadblock.objects.game.SerializationVersion
+import moe.crx.roadblock.serialization.SerializationVersion
 import moe.crx.roadblock.utils.toHexString
 import org.fusesource.jansi.Ansi
 import org.fusesource.jansi.Ansi.ansi

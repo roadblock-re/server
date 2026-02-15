@@ -19,6 +19,7 @@ import moe.crx.roadblock.objects.inventory.*
 import moe.crx.roadblock.objects.item.*
 import moe.crx.roadblock.objects.models.*
 import moe.crx.roadblock.objects.settings.Localization
+import moe.crx.roadblock.serialization.SerializationVersion
 import moe.crx.roadblock.utils.bytes
 import moe.crx.roadblock.utils.readFully
 import moe.crx.roadblock.utils.sink

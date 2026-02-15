@@ -9,6 +9,7 @@ import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
 import moe.crx.roadblock.objects.game.*
 import moe.crx.roadblock.objects.models.State
+import moe.crx.roadblock.serialization.SerializationVersion
 
 class LoginResponse : RObject {
     companion object {
