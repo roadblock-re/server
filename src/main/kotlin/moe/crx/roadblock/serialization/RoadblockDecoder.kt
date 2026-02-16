@@ -61,6 +61,10 @@ class RoadblockDecoder(
             deserializer
         }
 
+        if (deserializer.descriptor.kind == StructureKind.OBJECT) {
+            throw SerializationException("Objects are not supported.")
+        }
+
         return when (effectiveDeserializer.descriptor.serialName) {
             byteArrayDescriptor -> decodeByteArray()
             instantDescriptor -> decodeInstant()

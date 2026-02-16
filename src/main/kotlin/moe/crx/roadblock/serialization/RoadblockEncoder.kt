@@ -1,15 +1,13 @@
 package moe.crx.roadblock.serialization
 
 import kotlinx.datetime.Instant
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.InternalSerializationApi
-import kotlinx.serialization.SerializationStrategy
+import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.encoding.AbstractEncoder
 import kotlinx.serialization.internal.AbstractPolymorphicSerializer
 import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.serializer
 import java.io.OutputStream
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -43,6 +41,10 @@ class RoadblockEncoder(
             (custom as? SerializationStrategy<T>) ?: serializer
         } else {
             serializer
+        }
+
+        if (serializer.descriptor.kind == StructureKind.OBJECT) {
+            throw SerializationException("Objects are not supported.")
         }
 
         when (effectiveSerializer.descriptor.serialName) {
