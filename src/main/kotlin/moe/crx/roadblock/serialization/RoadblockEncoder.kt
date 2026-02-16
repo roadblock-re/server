@@ -8,8 +8,9 @@ import kotlinx.serialization.encoding.AbstractEncoder
 import kotlinx.serialization.internal.AbstractPolymorphicSerializer
 import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.SerializersModule
+import moe.crx.roadblock.serialization.VariantCompanionRegistry.getVariantCompanion
+import moe.crx.roadblock.serialization.VersionedMappingRegistry.getMapping
 import java.io.OutputStream
-import kotlin.reflect.full.companionObjectInstance
 
 @OptIn(ExperimentalSerializationApi::class)
 class RoadblockEncoder(
@@ -51,10 +52,8 @@ class RoadblockEncoder(
         }
 
         if (serializer is AbstractPolymorphicSerializer<*>) {
-            // TODO Optimize this?
-            val companion = serializer.baseClass.companionObjectInstance as? VariantCompanion<*>
-            companion?.let {
-                return encodeVariant(it, value)
+            serializer.baseClass.getVariantCompanion()?.let {
+                return encodeVariant(it, value as Any)
             }
         }
 
@@ -63,14 +62,13 @@ class RoadblockEncoder(
 
     @Suppress("UNCHECKED_CAST")
     @OptIn(InternalSerializationApi::class)
-    fun <T> encodeVariant(companion: VariantCompanion<*>, value: T) {
-        checkNotNull(value)
-        // TODO Optimize this?
-        val variants = companion.variants(version)
-        val valueClass = value::class
-        val index = variants.indexOf(valueClass)
-        val serializer = valueClass.serializer() as KSerializer<T>
+    fun <T : Any> encodeVariant(companion: VariantCompanion<*>, value: T) {
+        val mapping = companion.getMapping(version)
+        val index = mapping.classToIndex[value::class]
+            ?: throw SerializationException("${value::class} not in protocol version $version")
+
         encodeInt(index)
+        val serializer = mapping.indexToSerializer[index] as KSerializer<T>
         encodeSerializableValue(serializer, value)
     }
 

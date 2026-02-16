@@ -10,8 +10,9 @@ import kotlinx.serialization.encoding.CompositeDecoder.Companion.DECODE_DONE
 import kotlinx.serialization.internal.AbstractPolymorphicSerializer
 import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.SerializersModule
+import moe.crx.roadblock.serialization.VariantCompanionRegistry.getVariantCompanion
+import moe.crx.roadblock.serialization.VersionedMappingRegistry.getMapping
 import java.io.InputStream
-import kotlin.reflect.full.companionObjectInstance
 
 @OptIn(ExperimentalSerializationApi::class)
 class RoadblockDecoder(
@@ -78,9 +79,7 @@ class RoadblockDecoder(
         }
 
         if (deserializer is AbstractPolymorphicSerializer<*>) {
-            // TODO Optimize this?
-            val companion = deserializer.baseClass.companionObjectInstance as? VariantCompanion<*>
-            companion?.let {
+            deserializer.baseClass.getVariantCompanion()?.let {
                 return decodeVariant(it)
             }
         }
@@ -91,11 +90,14 @@ class RoadblockDecoder(
     @Suppress("UNCHECKED_CAST")
     @OptIn(InternalSerializationApi::class)
     fun <T : Any> decodeVariant(companion: VariantCompanion<*>): T {
-        // TODO Optimize this?
-        val variants = companion.variants(version)
+        val mapping = companion.getMapping(version)
         val index = decodeInt()
-        val valueClass = variants[index]
-        val serializer = valueClass.serializer() as KSerializer<T>
+
+        if (index !in mapping.indexToSerializer.indices) {
+            throw SerializationException("Invalid variant index $index for version $version")
+        }
+
+        val serializer = mapping.indexToSerializer[index] as KSerializer<T>
         return decodeSerializableValue(serializer)
     }
 
