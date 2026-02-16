@@ -10,6 +10,7 @@ import kotlinx.serialization.internal.AbstractPolymorphicSerializer
 import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.SerializersModule
 import java.io.InputStream
+import kotlin.reflect.full.companionObjectInstance
 
 @OptIn(ExperimentalSerializationApi::class)
 class RoadblockDecoder(
@@ -54,22 +55,32 @@ class RoadblockDecoder(
     @Suppress("UNCHECKED_CAST")
     @OptIn(InternalSerializationApi::class)
     override fun <T> decodeSerializableValue(deserializer: DeserializationStrategy<T>): T {
-        val effectiveDeserializer = if (deserializer is AbstractPolymorphicSerializer<*>) {
-            val custom = serializersModule.getContextual(deserializer.baseClass)
-            (custom as? DeserializationStrategy<T>) ?: deserializer
-        } else {
-            deserializer
-        }
-
         if (deserializer.descriptor.kind == StructureKind.OBJECT) {
             throw SerializationException("Objects are not supported.")
         }
 
-        return when (effectiveDeserializer.descriptor.serialName) {
+        if (!deserializer.descriptor.isNullable && deserializer is AbstractPolymorphicSerializer<*>) {
+            val companion = deserializer.baseClass.companionObjectInstance as? VariantCompanion<*>
+            companion?.let {
+                return decodeVariant(it)
+            }
+        }
+
+        return when (deserializer.descriptor.serialName) {
             byteArrayDescriptor -> decodeByteArray()
             instantDescriptor -> decodeInstant()
-            else -> super.decodeSerializableValue(effectiveDeserializer)
+            else -> super.decodeSerializableValue(deserializer)
         } as T
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    @OptIn(InternalSerializationApi::class)
+    fun <T : Any> decodeVariant(companion: VariantCompanion<*>): T {
+        val variants = companion.variants(version)
+        val index = decodeInt()
+        val valueClass = variants[index]
+        val serializer = valueClass.serializer() as KSerializer<T>
+        return decodeSerializableValue(serializer)
     }
 
     fun decodeByteArray(): ByteArray {

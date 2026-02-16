@@ -2,6 +2,11 @@ package moe.crx.roadblock.serialization
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialInfo
+import kotlin.reflect.KClass
+
+interface VariantCompanion<T : Any> {
+    fun variants(version: SerializationVersion): List<KClass<out T>>
+}
 
 @OptIn(ExperimentalSerializationApi::class)
 @SerialInfo

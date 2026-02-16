@@ -9,6 +9,7 @@ import kotlinx.serialization.internal.AbstractPolymorphicSerializer
 import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.SerializersModule
 import java.io.OutputStream
+import kotlin.reflect.full.companionObjectInstance
 
 @OptIn(ExperimentalSerializationApi::class)
 class RoadblockEncoder(
@@ -33,25 +34,36 @@ class RoadblockEncoder(
         return annotations.isPresentIn(version)
     }
 
-    @Suppress("UNCHECKED_CAST")
     @OptIn(InternalSerializationApi::class)
     override fun <T> encodeSerializableValue(serializer: SerializationStrategy<T>, value: T) {
-        val effectiveSerializer = if (serializer is AbstractPolymorphicSerializer<*>) {
-            val custom = serializersModule.getContextual(serializer.baseClass)
-            (custom as? SerializationStrategy<T>) ?: serializer
-        } else {
-            serializer
-        }
-
         if (serializer.descriptor.kind == StructureKind.OBJECT) {
             throw SerializationException("Objects are not supported.")
         }
 
-        when (effectiveSerializer.descriptor.serialName) {
+        if (!serializer.descriptor.isNullable && serializer is AbstractPolymorphicSerializer<*>) {
+            val companion = serializer.baseClass.companionObjectInstance as? VariantCompanion<*>
+            companion?.let {
+                return encodeVariant(it, value)
+            }
+        }
+
+        when (serializer.descriptor.serialName) {
             byteArrayDescriptor -> encodeByteArray(value as ByteArray)
             instantDescriptor -> encodeInstant(value as Instant)
-            else -> super.encodeSerializableValue(effectiveSerializer, value)
+            else -> super.encodeSerializableValue(serializer, value)
         }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    @OptIn(InternalSerializationApi::class)
+    fun <T> encodeVariant(companion: VariantCompanion<*>, value: T) {
+        checkNotNull(value)
+        val variants = companion.variants(version)
+        val valueClass = value::class
+        val index = variants.indexOf(valueClass)
+        val serializer = valueClass.serializer() as KSerializer<T>
+        encodeInt(index)
+        encodeSerializableValue(serializer, value)
     }
 
     fun encodeByteArray(value: ByteArray) {
