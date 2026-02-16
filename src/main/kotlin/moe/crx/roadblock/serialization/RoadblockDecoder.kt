@@ -5,6 +5,7 @@ import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.encoding.AbstractDecoder
+import kotlinx.serialization.encoding.CompositeDecoder
 import kotlinx.serialization.encoding.CompositeDecoder.Companion.DECODE_DONE
 import kotlinx.serialization.internal.AbstractPolymorphicSerializer
 import kotlinx.serialization.modules.EmptySerializersModule
@@ -31,25 +32,22 @@ class RoadblockDecoder(
     override fun decodeElementIndex(descriptor: SerialDescriptor): Int {
         currentDescriptor = descriptor
 
-        return when (descriptor.kind) {
+        when (descriptor.kind) {
             StructureKind.CLASS -> {
                 while (++elementIndex < elementsCount) {
                     val annotations = descriptor.getElementAnnotations(elementIndex)
                     if (annotations.isPresentIn(version)) return elementIndex
                 }
-                DECODE_DONE
             }
 
             StructureKind.LIST, StructureKind.MAP -> {
-                if (elementIndex == -1) {
-                    elementsCount = decodeCollectionSize(descriptor)
-                    if (descriptor.kind == StructureKind.MAP) elementsCount *= 2
-                }
-                if (++elementIndex < elementsCount) elementIndex else DECODE_DONE
+                if (++elementIndex < elementsCount) return elementIndex
             }
 
             else -> DECODE_DONE
         }
+
+        return DECODE_DONE
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -151,6 +149,19 @@ class RoadblockDecoder(
     override fun decodeCollectionSize(descriptor: SerialDescriptor) =
         decodeInt()
 
-    override fun beginStructure(descriptor: SerialDescriptor) =
-        RoadblockDecoder(input, version, serializersModule, descriptor.elementsCount)
+    override fun beginStructure(descriptor: SerialDescriptor): CompositeDecoder {
+        val count = when (descriptor.kind) {
+            StructureKind.LIST -> {
+                decodeCollectionSize(descriptor)
+            }
+
+            StructureKind.MAP -> {
+                decodeCollectionSize(descriptor) * 2
+            }
+
+            else -> descriptor.elementsCount
+        }
+
+        return RoadblockDecoder(input, version, serializersModule, count)
+    }
 }
