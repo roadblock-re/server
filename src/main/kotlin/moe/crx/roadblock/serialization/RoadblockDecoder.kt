@@ -62,10 +62,6 @@ class RoadblockDecoder(
     @Suppress("UNCHECKED_CAST")
     @OptIn(InternalSerializationApi::class)
     override fun <T> decodeSerializableValue(deserializer: DeserializationStrategy<T>): T {
-        if (deserializer.descriptor.kind == StructureKind.OBJECT) {
-            throw SerializationException("Objects are not supported.")
-        }
-
         if (deserializer.descriptor.isNullable) {
             return super.decodeSerializableValue(deserializer)
         }
@@ -108,8 +104,7 @@ class RoadblockDecoder(
 
     fun decodeInstant() = Instant.fromEpochSeconds(decodeLong(), 0)
 
-    override fun decodeBoolean() = readBytesOrThrow(1).let { scratchBuffer[0] != 0.toByte() }
-    override fun decodeByte() = readBytesOrThrow(1).let { scratchBuffer[0] }
+    override fun decodeBoolean() = decodeByte() != 0.toByte()
     override fun decodeFloat() = Float.fromBits(decodeInt())
     override fun decodeDouble() = Double.fromBits(decodeLong())
     override fun decodeString() = decodeByteArray().toString(Charsets.UTF_8)
@@ -121,6 +116,12 @@ class RoadblockDecoder(
         } else {
             decodeInt()
         }
+    }
+
+    override fun decodeByte(): Byte {
+        readBytesOrThrow(1)
+        val ch1 = scratchBuffer[0]
+        return ch1
     }
 
     override fun decodeShort(): Short {

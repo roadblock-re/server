@@ -3,7 +3,6 @@ package moe.crx.roadblock.serialization
 import kotlinx.datetime.Instant
 import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.encoding.AbstractEncoder
 import kotlinx.serialization.internal.AbstractPolymorphicSerializer
 import kotlinx.serialization.modules.EmptySerializersModule
@@ -35,10 +34,6 @@ class RoadblockEncoder(
 
     @OptIn(InternalSerializationApi::class)
     override fun <T> encodeSerializableValue(serializer: SerializationStrategy<T>, value: T) {
-        if (serializer.descriptor.kind == StructureKind.OBJECT) {
-            throw SerializationException("Objects are not supported.")
-        }
-
         if (serializer.descriptor.isNullable) {
             return super.encodeSerializableValue(serializer, value)
         }
@@ -79,8 +74,7 @@ class RoadblockEncoder(
 
     fun encodeInstant(value: Instant) = encodeLong(value.epochSeconds)
 
-    override fun encodeBoolean(value: Boolean) = output.write(if (value) 1 else 0)
-    override fun encodeByte(value: Byte) = output.write(value.toInt() and 0xFF)
+    override fun encodeBoolean(value: Boolean) = encodeByte(if (value) 1 else 0)
     override fun encodeFloat(value: Float) = encodeInt(value.toRawBits())
     override fun encodeDouble(value: Double) = encodeLong(value.toRawBits())
     override fun encodeString(value: String) = encodeByteArray(value.toByteArray(Charsets.UTF_8))
@@ -92,6 +86,12 @@ class RoadblockEncoder(
         } else {
             encodeInt(index)
         }
+    }
+
+    override fun encodeByte(value: Byte) {
+        val value = value.toInt()
+        scratchBuffer[0] = (value and 0xFF).toByte()
+        output.write(scratchBuffer, 0, 1)
     }
 
     override fun encodeShort(value: Short) {
