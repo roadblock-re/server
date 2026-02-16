@@ -3,6 +3,7 @@ package moe.crx.roadblock.serialization
 import kotlinx.datetime.Instant
 import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.encoding.AbstractDecoder
 import kotlinx.serialization.encoding.CompositeDecoder.Companion.DECODE_DONE
 import kotlinx.serialization.internal.AbstractPolymorphicSerializer
@@ -29,12 +30,25 @@ class RoadblockDecoder(
     override fun decodeElementIndex(descriptor: SerialDescriptor): Int {
         currentDescriptor = descriptor
 
-        while (++elementIndex < elementsCount) {
-            val annotations = currentDescriptor?.getElementAnnotations(elementIndex)
-            if (annotations.isPresentIn(version)) return elementIndex
-        }
+        return when (descriptor.kind) {
+            StructureKind.CLASS -> {
+                while (++elementIndex < elementsCount) {
+                    val annotations = descriptor.getElementAnnotations(elementIndex)
+                    if (annotations.isPresentIn(version)) return elementIndex
+                }
+                DECODE_DONE
+            }
 
-        return DECODE_DONE
+            StructureKind.LIST, StructureKind.MAP -> {
+                if (elementIndex == -1) {
+                    elementsCount = decodeCollectionSize(descriptor)
+                    if (descriptor.kind == StructureKind.MAP) elementsCount *= 2
+                }
+                if (++elementIndex < elementsCount) elementIndex else DECODE_DONE
+            }
+
+            else -> DECODE_DONE
+        }
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -120,7 +134,7 @@ class RoadblockDecoder(
     override fun decodeNull() = null
 
     override fun decodeCollectionSize(descriptor: SerialDescriptor) =
-        decodeInt().also { elementsCount = it }
+        decodeInt()
 
     override fun beginStructure(descriptor: SerialDescriptor) =
         RoadblockDecoder(input, version, serializersModule, descriptor.elementsCount)

@@ -31,7 +31,7 @@ class RoadblockEncoder(
         currentDescriptor = descriptor
 
         elementIndex = index
-        val annotations = currentDescriptor?.getElementAnnotations(elementIndex)
+        val annotations = descriptor.getElementAnnotations(elementIndex)
         return annotations.isPresentIn(version)
     }
 
@@ -108,5 +108,8 @@ class RoadblockEncoder(
     override fun encodeNull() = encodeBoolean(false)
 
     override fun beginCollection(descriptor: SerialDescriptor, collectionSize: Int) =
-        encodeInt(collectionSize).let { this }
+        encodeInt(collectionSize).let { RoadblockEncoder(output, version, serializersModule) }
+
+    override fun beginStructure(descriptor: SerialDescriptor) =
+        RoadblockEncoder(output, version, serializersModule)
 }
