@@ -2,7 +2,19 @@ package moe.crx.roadblock.serialization
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialInfo
+import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
+
+@Serializable
+data class Blob(val bytes: ByteArray) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Blob) return false
+        return bytes.contentEquals(other.bytes)
+    }
+
+    override fun hashCode() = bytes.contentHashCode()
+}
 
 interface VariantCompanion<T : Any> {
     fun variants(version: SerializationVersion): List<KClass<out T>>

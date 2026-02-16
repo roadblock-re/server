@@ -18,12 +18,20 @@ class RoadblockDecoder(
     private val input: InputStream,
     private val version: SerializationVersion,
     override val serializersModule: SerializersModule = EmptySerializersModule(),
+    private val instantSerialName: String = serializersModule.serializer<Instant>().descriptor.serialName,
+    private val byteArraySerialName: String = serializersModule.serializer<ByteArray>().descriptor.serialName,
+    private val scratchBuffer: ByteArray = ByteArray(8),
     private var elementsCount: Int = 0,
 ) : AbstractDecoder() {
 
-    companion object {
-        private val byteArrayDescriptor = EmptySerializersModule().serializer<ByteArray>().descriptor.serialName
-        private val instantDescriptor = EmptySerializersModule().serializer<Instant>().descriptor.serialName
+    private fun readBytesOrThrow(count: Int, buffer: ByteArray = scratchBuffer) {
+        check(count <= buffer.size) { "Bytes count can't be bigger than buffer size." }
+        var totalRead = 0
+        while (totalRead < count) {
+            val read = input.read(buffer, totalRead, count - totalRead)
+            if (read == -1) throw SerializationException("Unexpected EOF")
+            totalRead += read
+        }
     }
 
     private var elementIndex = -1
@@ -57,23 +65,33 @@ class RoadblockDecoder(
             throw SerializationException("Objects are not supported.")
         }
 
-        if (!deserializer.descriptor.isNullable && deserializer is AbstractPolymorphicSerializer<*>) {
+        if (deserializer.descriptor.isNullable) {
+            return super.decodeSerializableValue(deserializer)
+        }
+
+        if (deserializer.descriptor.serialName == instantSerialName) {
+            return decodeInstant() as T
+        }
+
+        if (deserializer.descriptor.serialName == byteArraySerialName) {
+            return decodeByteArray() as T
+        }
+
+        if (deserializer is AbstractPolymorphicSerializer<*>) {
+            // TODO Optimize this?
             val companion = deserializer.baseClass.companionObjectInstance as? VariantCompanion<*>
             companion?.let {
                 return decodeVariant(it)
             }
         }
 
-        return when (deserializer.descriptor.serialName) {
-            byteArrayDescriptor -> decodeByteArray()
-            instantDescriptor -> decodeInstant()
-            else -> super.decodeSerializableValue(deserializer)
-        } as T
+        return super.decodeSerializableValue(deserializer)
     }
 
     @Suppress("UNCHECKED_CAST")
     @OptIn(InternalSerializationApi::class)
     fun <T : Any> decodeVariant(companion: VariantCompanion<*>): T {
+        // TODO Optimize this?
         val variants = companion.variants(version)
         val index = decodeInt()
         val valueClass = variants[index]
@@ -87,15 +105,6 @@ class RoadblockDecoder(
     }
 
     fun decodeInstant() = Instant.fromEpochSeconds(decodeLong(), 0)
-
-    private fun readBytesOrThrow(count: Int, buffer: ByteArray = scratchBuffer) {
-        var totalRead = 0
-        while (totalRead < count) {
-            val read = input.read(buffer, totalRead, count - totalRead)
-            if (read == -1) throw SerializationException("Unexpected EOF")
-            totalRead += read
-        }
-    }
 
     override fun decodeBoolean() = readBytesOrThrow(1).let { scratchBuffer[0] != 0.toByte() }
     override fun decodeByte() = readBytesOrThrow(1).let { scratchBuffer[0] }
@@ -111,8 +120,6 @@ class RoadblockDecoder(
             decodeInt()
         }
     }
-
-    private val scratchBuffer = ByteArray(8)
 
     override fun decodeShort(): Short {
         readBytesOrThrow(2)
@@ -150,18 +157,20 @@ class RoadblockDecoder(
         decodeInt()
 
     override fun beginStructure(descriptor: SerialDescriptor): CompositeDecoder {
-        val count = when (descriptor.kind) {
-            StructureKind.LIST -> {
-                decodeCollectionSize(descriptor)
-            }
-
-            StructureKind.MAP -> {
-                decodeCollectionSize(descriptor) * 2
-            }
-
+        val elementsCount = when (descriptor.kind) {
+            StructureKind.LIST -> decodeCollectionSize(descriptor)
+            StructureKind.MAP -> decodeCollectionSize(descriptor) * 2
             else -> descriptor.elementsCount
         }
 
-        return RoadblockDecoder(input, version, serializersModule, count)
+        return RoadblockDecoder(
+            input,
+            version,
+            serializersModule,
+            instantSerialName,
+            byteArraySerialName,
+            scratchBuffer,
+            elementsCount,
+        )
     }
 }

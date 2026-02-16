@@ -15,13 +15,11 @@ import kotlin.reflect.full.companionObjectInstance
 class RoadblockEncoder(
     private val output: OutputStream,
     private val version: SerializationVersion,
-    override val serializersModule: SerializersModule = EmptySerializersModule()
+    override val serializersModule: SerializersModule = EmptySerializersModule(),
+    private val instantSerialName: String = serializersModule.serializer<Instant>().descriptor.serialName,
+    private val byteArraySerialName: String = serializersModule.serializer<ByteArray>().descriptor.serialName,
+    private val scratchBuffer: ByteArray = ByteArray(8),
 ) : AbstractEncoder() {
-
-    companion object {
-        private val byteArrayDescriptor = EmptySerializersModule().serializer<ByteArray>().descriptor.serialName
-        private val instantDescriptor = EmptySerializersModule().serializer<Instant>().descriptor.serialName
-    }
 
     private var elementIndex = -1
     private var currentDescriptor: SerialDescriptor? = null
@@ -40,24 +38,34 @@ class RoadblockEncoder(
             throw SerializationException("Objects are not supported.")
         }
 
-        if (!serializer.descriptor.isNullable && serializer is AbstractPolymorphicSerializer<*>) {
+        if (serializer.descriptor.isNullable) {
+            return super.encodeSerializableValue(serializer, value)
+        }
+
+        if (serializer.descriptor.serialName == instantSerialName) {
+            return encodeInstant(value as Instant)
+        }
+
+        if (serializer.descriptor.serialName == byteArraySerialName) {
+            return encodeByteArray(value as ByteArray)
+        }
+
+        if (serializer is AbstractPolymorphicSerializer<*>) {
+            // TODO Optimize this?
             val companion = serializer.baseClass.companionObjectInstance as? VariantCompanion<*>
             companion?.let {
                 return encodeVariant(it, value)
             }
         }
 
-        when (serializer.descriptor.serialName) {
-            byteArrayDescriptor -> encodeByteArray(value as ByteArray)
-            instantDescriptor -> encodeInstant(value as Instant)
-            else -> super.encodeSerializableValue(serializer, value)
-        }
+        return super.encodeSerializableValue(serializer, value)
     }
 
     @Suppress("UNCHECKED_CAST")
     @OptIn(InternalSerializationApi::class)
     fun <T> encodeVariant(companion: VariantCompanion<*>, value: T) {
         checkNotNull(value)
+        // TODO Optimize this?
         val variants = companion.variants(version)
         val valueClass = value::class
         val index = variants.indexOf(valueClass)
@@ -87,8 +95,6 @@ class RoadblockEncoder(
             encodeInt(index)
         }
     }
-
-    private val scratchBuffer = ByteArray(8)
 
     override fun encodeShort(value: Short) {
         val value = value.toInt()
@@ -122,8 +128,8 @@ class RoadblockEncoder(
     override fun encodeNull() = encodeBoolean(false)
 
     override fun beginCollection(descriptor: SerialDescriptor, collectionSize: Int) =
-        encodeInt(collectionSize).let { RoadblockEncoder(output, version, serializersModule) }
+        encodeInt(collectionSize).let { beginStructure(descriptor) }
 
     override fun beginStructure(descriptor: SerialDescriptor) =
-        RoadblockEncoder(output, version, serializersModule)
+        RoadblockEncoder(output, version, serializersModule, instantSerialName, byteArraySerialName, scratchBuffer)
 }
