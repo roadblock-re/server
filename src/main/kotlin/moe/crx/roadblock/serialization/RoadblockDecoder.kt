@@ -1,15 +1,13 @@
 package moe.crx.roadblock.serialization
 
 import kotlinx.datetime.Instant
-import kotlinx.serialization.DeserializationStrategy
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.SerializationException
+import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.AbstractDecoder
 import kotlinx.serialization.encoding.CompositeDecoder.Companion.DECODE_DONE
+import kotlinx.serialization.internal.AbstractPolymorphicSerializer
 import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.serializer
 import java.io.InputStream
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -19,6 +17,11 @@ class RoadblockDecoder(
     override val serializersModule: SerializersModule = EmptySerializersModule(),
     private var elementsCount: Int = 0,
 ) : AbstractDecoder() {
+
+    companion object {
+        private val byteArrayDescriptor = EmptySerializersModule().serializer<ByteArray>().descriptor.serialName
+        private val instantDescriptor = EmptySerializersModule().serializer<Instant>().descriptor.serialName
+    }
 
     private var elementIndex = -1
     private var currentDescriptor: SerialDescriptor? = null
@@ -34,27 +37,37 @@ class RoadblockDecoder(
         return DECODE_DONE
     }
 
-    private val byteArrayDescriptor = serializersModule.serializer<ByteArray>().descriptor
-    private val instantDescriptor = serializersModule.serializer<Instant>().descriptor
-
     @Suppress("UNCHECKED_CAST")
-    override fun <T> decodeSerializableValue(deserializer: DeserializationStrategy<T>) =
-        when (deserializer.descriptor) {
+    @OptIn(InternalSerializationApi::class)
+    override fun <T> decodeSerializableValue(deserializer: DeserializationStrategy<T>): T {
+        val effectiveDeserializer = if (deserializer is AbstractPolymorphicSerializer<*>) {
+            val custom = serializersModule.getContextual(deserializer.baseClass)
+            (custom as? DeserializationStrategy<T>) ?: deserializer
+        } else {
+            deserializer
+        }
+
+        return when (effectiveDeserializer.descriptor.serialName) {
             byteArrayDescriptor -> decodeByteArray()
             instantDescriptor -> decodeInstant()
-            else -> super.decodeSerializableValue(deserializer)
+            else -> super.decodeSerializableValue(effectiveDeserializer)
         } as T
+    }
 
     fun decodeByteArray(): ByteArray {
         val size = decodeInt()
-        return input.readNBytes(size)
+        return ByteArray(size).also { readBytesOrThrow(size, it) }
     }
 
     fun decodeInstant() = Instant.fromEpochSeconds(decodeLong(), 0)
 
-    private fun readBytesOrThrow(count: Int) {
-        val read = input.readNBytes(scratchBuffer, 0, count)
-        if (read < count) throw SerializationException("Required $count bytes, but only got $read")
+    private fun readBytesOrThrow(count: Int, buffer: ByteArray = scratchBuffer) {
+        var totalRead = 0
+        while (totalRead < count) {
+            val read = input.read(buffer, totalRead, count - totalRead)
+            if (read == -1) throw SerializationException("Unexpected EOF")
+            totalRead += read
+        }
     }
 
     override fun decodeBoolean() = readBytesOrThrow(1).let { scratchBuffer[0] != 0.toByte() }
@@ -106,7 +119,9 @@ class RoadblockDecoder(
     override fun decodeNotNullMark() = decodeBoolean()
     override fun decodeNull() = null
 
-    override fun decodeCollectionSize(descriptor: SerialDescriptor) = decodeInt().also { elementsCount = it }
+    override fun decodeCollectionSize(descriptor: SerialDescriptor) =
+        decodeInt().also { elementsCount = it }
+
     override fun beginStructure(descriptor: SerialDescriptor) =
         RoadblockDecoder(input, version, serializersModule, descriptor.elementsCount)
 }

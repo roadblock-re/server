@@ -2,9 +2,11 @@ package moe.crx.roadblock.serialization
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.AbstractEncoder
+import kotlinx.serialization.internal.AbstractPolymorphicSerializer
 import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.serializer
@@ -17,26 +19,38 @@ class RoadblockEncoder(
     override val serializersModule: SerializersModule = EmptySerializersModule()
 ) : AbstractEncoder() {
 
+    companion object {
+        private val byteArrayDescriptor = EmptySerializersModule().serializer<ByteArray>().descriptor.serialName
+        private val instantDescriptor = EmptySerializersModule().serializer<Instant>().descriptor.serialName
+    }
+
     private var elementIndex = -1
     private var currentDescriptor: SerialDescriptor? = null
 
     override fun encodeElement(descriptor: SerialDescriptor, index: Int): Boolean {
         currentDescriptor = descriptor
-        
+
         elementIndex = index
         val annotations = currentDescriptor?.getElementAnnotations(elementIndex)
         return annotations.isPresentIn(version)
     }
 
-    private val byteArrayDescriptor = serializersModule.serializer<ByteArray>().descriptor
-    private val instantDescriptor = serializersModule.serializer<Instant>().descriptor
+    @Suppress("UNCHECKED_CAST")
+    @OptIn(InternalSerializationApi::class)
+    override fun <T> encodeSerializableValue(serializer: SerializationStrategy<T>, value: T) {
+        val effectiveSerializer = if (serializer is AbstractPolymorphicSerializer<*>) {
+            val custom = serializersModule.getContextual(serializer.baseClass)
+            (custom as? SerializationStrategy<T>) ?: serializer
+        } else {
+            serializer
+        }
 
-    override fun <T> encodeSerializableValue(serializer: SerializationStrategy<T>, value: T) =
-        when (serializer.descriptor) {
+        when (effectiveSerializer.descriptor.serialName) {
             byteArrayDescriptor -> encodeByteArray(value as ByteArray)
             instantDescriptor -> encodeInstant(value as Instant)
-            else -> super.encodeSerializableValue(serializer, value)
+            else -> super.encodeSerializableValue(effectiveSerializer, value)
         }
+    }
 
     fun encodeByteArray(value: ByteArray) {
         encodeInt(value.size)
