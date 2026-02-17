@@ -5,17 +5,16 @@ import moe.crx.roadblock.io.ObjectIO.writeObject
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.base.RVector2F
 
 class TouchControlSettings : RObject {
 
     var touchDriveSensitivity: Float = 0f
     var tappingSensitivity: Float = 0f
     var iconsScale: Float = 0f
-    var leftNitroOffset: RVector2F = RVector2F()
-    var leftDriftOffset: RVector2F = RVector2F()
-    var rightNitroOffset: RVector2F = RVector2F()
-    var rightDriftOffset: RVector2F = RVector2F()
+    var leftNitroOffset: Vector2f = Vector2f(0f, 0f)
+    var leftDriftOffset: Vector2f = Vector2f(0f, 0f)
+    var rightNitroOffset: Vector2f = Vector2f(0f, 0f)
+    var rightDriftOffset: Vector2f = Vector2f(0f, 0f)
     var tiltingSensitivity: Float = 0f
     var isHorizonTiltEnabled: Boolean = false
     var isTiltSteeringEnabled: Int = 0

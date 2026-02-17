@@ -5,7 +5,6 @@ import kotlinx.datetime.Clock.System.now
 import moe.crx.roadblock.objects.base.RByte
 import moe.crx.roadblock.objects.base.RInt
 import moe.crx.roadblock.objects.base.RString
-import moe.crx.roadblock.objects.base.RVector2F
 import moe.crx.roadblock.objects.blackmarket.BlackMarketFatigue
 import moe.crx.roadblock.objects.blackmarket.BlackMarketItemVariant
 import moe.crx.roadblock.objects.blackmarket.BlackMarketSlot
@@ -19,6 +18,7 @@ import moe.crx.roadblock.objects.inventory.*
 import moe.crx.roadblock.objects.item.*
 import moe.crx.roadblock.objects.models.*
 import moe.crx.roadblock.objects.settings.Localization
+import moe.crx.roadblock.objects.settings.Vector2f
 import moe.crx.roadblock.serialization.SerializationVersion
 import moe.crx.roadblock.utils.bytes
 import moe.crx.roadblock.utils.readFully
@@ -334,10 +334,10 @@ class StateManager(workingDirectory: String) {
                             touchDriveSensitivity = 0.85f
                             tappingSensitivity = 0.5f
                             iconsScale = 1.0f
-                            leftNitroOffset = RVector2F()
-                            leftDriftOffset = RVector2F()
-                            rightNitroOffset = RVector2F()
-                            rightDriftOffset = RVector2F()
+                            leftNitroOffset = Vector2f(0f, 0f)
+                            leftDriftOffset = Vector2f(0f, 0f)
+                            rightNitroOffset = Vector2f(0f, 0f)
+                            rightDriftOffset = Vector2f(0f, 0f)
                             tiltingSensitivity = 0.5f
                             isHorizonTiltEnabled = true
                             isTiltSteeringEnabled = 1

@@ -1,11 +1,10 @@
-package moe.crx.roadblock.objects.base
+package moe.crx.roadblock.objects.settings
 
 import moe.crx.roadblock.io.sinks.InputSink
 import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.objects.base.RObject
 
-open class RVector2F(var x: Float, var y: Float) : RObject {
-
-    constructor() : this(0f, 0f)
+open class Vector2f(var x: Float, var y: Float) : RObject {
 
     override fun read(sink: InputSink) {
         x = sink.readFloat()
@@ -18,7 +17,7 @@ open class RVector2F(var x: Float, var y: Float) : RObject {
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other is RVector2F) {
+        if (other is Vector2f) {
             return x == other.x && y == other.y
         }
 
