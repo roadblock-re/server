@@ -34,8 +34,15 @@ class RoadblockEncoder(
         return annotations.isPresentIn(version)
     }
 
+    override fun <T> encodeSerializableValue(serializer: SerializationStrategy<T>, value: T) =
+        encodeSerializableValueInternal(serializer, value, false)
+
     @OptIn(InternalSerializationApi::class)
-    override fun <T> encodeSerializableValue(serializer: SerializationStrategy<T>, value: T) {
+    private fun <T> encodeSerializableValueInternal(
+        serializer: SerializationStrategy<T>,
+        value: T,
+        ignoreVariantAnnotation: Boolean,
+    ) {
         if (serializer.descriptor.isNullable) {
             return super.encodeSerializableValue(serializer, value)
         }
@@ -48,10 +55,14 @@ class RoadblockEncoder(
             return encodeByteArray(value as ByteArray)
         }
 
-        if (serializer is AbstractPolymorphicSerializer<*>) {
-            serializer.baseClass.getVariantCompanion()?.let {
-                return encodeVariant(it, value as Any)
-            }
+        val annotationVariant = if (ignoreVariantAnnotation) null else {
+            currentDescriptor?.getElementAnnotations(elementIndex).getVariantCompanion()
+                ?: elementAnnotations.getVariantCompanion()
+        }
+        val baseVariant = (serializer as? AbstractPolymorphicSerializer<*>)?.baseClass?.getVariantCompanion()
+
+        (annotationVariant ?: baseVariant)?.let {
+            return encodeVariant(it, value as Any)
         }
 
         return super.encodeSerializableValue(serializer, value)
@@ -59,14 +70,14 @@ class RoadblockEncoder(
 
     @Suppress("UNCHECKED_CAST")
     @OptIn(InternalSerializationApi::class)
-    fun <T : Any> encodeVariant(companion: VariantCompanion<*>, value: T) {
+    fun <T : Any> encodeVariant(companion: Variant<*>, value: T) {
         val mapping = companion.getMapping(version)
         val index = mapping.classToIndex[value::class]
             ?: throw SerializationException("${value::class} not in protocol version $version")
 
         encodeInt(index)
         val serializer = mapping.indexToSerializer[index] as KSerializer<T>
-        encodeSerializableValue(serializer, value)
+        encodeSerializableValueInternal(serializer, value, true)
     }
 
     fun encodeByteArray(value: ByteArray) {
@@ -82,10 +93,11 @@ class RoadblockEncoder(
     override fun encodeString(value: String) = encodeByteArray(value.toByteArray(Charsets.UTF_8))
 
     override fun encodeEnum(enumDescriptor: SerialDescriptor, index: Int) {
-        val annotations = { currentDescriptor?.getElementAnnotations(elementIndex) }
-        val classAnnotations = enumDescriptor.annotations
-
-        if (classAnnotations.isByteEnum() || elementAnnotations.isByteEnum() || annotations().isByteEnum()) {
+        if (
+            enumDescriptor.annotations.isByteEnum()
+            || elementAnnotations.isByteEnum()
+            || currentDescriptor?.getElementAnnotations(elementIndex).isByteEnum()
+        ) {
             encodeByte(index.toByte())
         } else {
             encodeInt(index)

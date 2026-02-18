@@ -7,23 +7,23 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 import kotlin.reflect.full.companionObjectInstance
 
-interface VariantCompanion<T : Any> {
+interface Variant<T : Any> {
     fun variants(version: SerializationVersion): List<KClass<out T>>
 }
 
-private object NoCompanion : VariantCompanion<Any> {
+private object NoVariant : Variant<Any> {
     override fun variants(version: SerializationVersion) = emptyList<KClass<out Any>>()
 }
 
 object VariantCompanionRegistry {
-    private val cache = ConcurrentHashMap<KClass<*>, VariantCompanion<*>>()
+    private val cache = ConcurrentHashMap<KClass<*>, Variant<*>>()
 
-    fun KClass<*>.getVariantCompanion(): VariantCompanion<*>? {
+    fun KClass<*>.getVariantCompanion(): Variant<*>? {
         val companion = cache.computeIfAbsent(this) {
-            (it.companionObjectInstance as? VariantCompanion<*>) ?: NoCompanion
+            (it.objectInstance as? Variant<*>) ?: (it.companionObjectInstance as? Variant<*>) ?: NoVariant
         }
 
-        return if (companion === NoCompanion) null else companion
+        return if (companion === NoVariant) null else companion
     }
 }
 
@@ -33,10 +33,10 @@ class VersionedMapping(
 )
 
 object VersionedMappingRegistry {
-    private val cache = ConcurrentHashMap<Pair<VariantCompanion<*>, SerializationVersion>, VersionedMapping>()
+    private val cache = ConcurrentHashMap<Pair<Variant<*>, SerializationVersion>, VersionedMapping>()
 
     @OptIn(InternalSerializationApi::class)
-    fun VariantCompanion<*>.getMapping(version: SerializationVersion): VersionedMapping {
+    fun Variant<*>.getMapping(version: SerializationVersion): VersionedMapping {
         return cache.computeIfAbsent(this to version) {
             val list = variants(version)
 

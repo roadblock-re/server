@@ -2,6 +2,8 @@ package moe.crx.roadblock.game.serialization
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialInfo
+import moe.crx.roadblock.game.serialization.VariantCompanionRegistry.getVariantCompanion
+import kotlin.reflect.KClass
 
 @OptIn(ExperimentalSerializationApi::class)
 @SerialInfo
@@ -40,4 +42,19 @@ fun List<Annotation>?.isPresentIn(version: SerializationVersion): Boolean {
     }
 
     return (from == null || version newer from) && (until == null || version older until)
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@SerialInfo
+@Target(AnnotationTarget.PROPERTY)
+annotation class VariantOf(val of: KClass<*>)
+
+fun List<Annotation>?.getVariantCompanion(): Variant<*>? {
+    if (this == null) return null
+
+    for (annotation in this) {
+        if (annotation is VariantOf) return annotation.of.getVariantCompanion()
+    }
+
+    return null
 }

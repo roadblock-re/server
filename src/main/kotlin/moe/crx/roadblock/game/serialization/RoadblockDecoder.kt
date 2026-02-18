@@ -60,9 +60,15 @@ class RoadblockDecoder(
         return DECODE_DONE
     }
 
+    override fun <T> decodeSerializableValue(deserializer: DeserializationStrategy<T>) =
+        decodeSerializableValueInternal(deserializer, false)
+
     @Suppress("UNCHECKED_CAST")
     @OptIn(InternalSerializationApi::class)
-    override fun <T> decodeSerializableValue(deserializer: DeserializationStrategy<T>): T {
+    private fun <T> decodeSerializableValueInternal(
+        deserializer: DeserializationStrategy<T>,
+        ignoreVariantAnnotation: Boolean,
+    ): T {
         if (deserializer.descriptor.isNullable) {
             return super.decodeSerializableValue(deserializer)
         }
@@ -75,10 +81,14 @@ class RoadblockDecoder(
             return decodeByteArray() as T
         }
 
-        if (deserializer is AbstractPolymorphicSerializer<*>) {
-            deserializer.baseClass.getVariantCompanion()?.let {
-                return decodeVariant(it)
-            }
+        val annotationVariant = if (ignoreVariantAnnotation) null else {
+            currentDescriptor?.getElementAnnotations(elementIndex).getVariantCompanion()
+                ?: elementAnnotations.getVariantCompanion()
+        }
+        val baseVariant = (deserializer as? AbstractPolymorphicSerializer<*>)?.baseClass?.getVariantCompanion()
+
+        (annotationVariant ?: baseVariant)?.let {
+            return decodeVariant(it)
         }
 
         return super.decodeSerializableValue(deserializer)
@@ -86,7 +96,7 @@ class RoadblockDecoder(
 
     @Suppress("UNCHECKED_CAST")
     @OptIn(InternalSerializationApi::class)
-    fun <T : Any> decodeVariant(companion: VariantCompanion<*>): T {
+    fun <T : Any> decodeVariant(companion: Variant<*>): T {
         val mapping = companion.getMapping(version)
         val index = decodeInt()
 
@@ -95,7 +105,7 @@ class RoadblockDecoder(
         }
 
         val serializer = mapping.indexToSerializer[index] as KSerializer<T>
-        return decodeSerializableValue(serializer)
+        return decodeSerializableValueInternal(serializer, true)
     }
 
     fun decodeByteArray(): ByteArray {
@@ -111,10 +121,11 @@ class RoadblockDecoder(
     override fun decodeString() = decodeByteArray().toString(Charsets.UTF_8)
 
     override fun decodeEnum(enumDescriptor: SerialDescriptor): Int {
-        val annotations = { currentDescriptor?.getElementAnnotations(elementIndex) }
-        val classAnnotations = enumDescriptor.annotations
-
-        return if (classAnnotations.isByteEnum() || elementAnnotations.isByteEnum() || annotations().isByteEnum()) {
+        return if (
+            enumDescriptor.annotations.isByteEnum()
+            || elementAnnotations.isByteEnum()
+            || currentDescriptor?.getElementAnnotations(elementIndex).isByteEnum()
+        ) {
             decodeByte().toInt() and 0xFF
         } else {
             decodeInt()
