@@ -85,6 +85,11 @@ class RoadblockDecoder(
             currentDescriptor?.getElementAnnotations(elementIndex).getVariantCompanion()
                 ?: elementAnnotations.getVariantCompanion()
         }
+
+        annotationVariant?.let {
+            check(deserializer.descriptor.kind != StructureKind.MAP) { "@VariantOf is not allowed on Map structures." }
+        }
+
         val baseVariant = (deserializer as? AbstractPolymorphicSerializer<*>)?.baseClass?.getVariantCompanion()
 
         (annotationVariant ?: baseVariant)?.let {

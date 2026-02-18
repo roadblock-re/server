@@ -3,6 +3,7 @@ package moe.crx.roadblock.game.serialization
 import kotlinx.datetime.Instant
 import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.encoding.AbstractEncoder
 import kotlinx.serialization.encoding.CompositeEncoder
 import kotlinx.serialization.internal.AbstractPolymorphicSerializer
@@ -59,6 +60,11 @@ class RoadblockEncoder(
             currentDescriptor?.getElementAnnotations(elementIndex).getVariantCompanion()
                 ?: elementAnnotations.getVariantCompanion()
         }
+
+        annotationVariant?.let {
+            check(serializer.descriptor.kind != StructureKind.MAP) { "@VariantOf is not allowed on Map structures." }
+        }
+
         val baseVariant = (serializer as? AbstractPolymorphicSerializer<*>)?.baseClass?.getVariantCompanion()
 
         (annotationVariant ?: baseVariant)?.let {
