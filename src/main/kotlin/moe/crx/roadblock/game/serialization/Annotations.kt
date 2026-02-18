@@ -10,6 +10,8 @@ import kotlin.reflect.KClass
 @Target(AnnotationTarget.PROPERTY, AnnotationTarget.CLASS)
 annotation class ByteEnum
 
+// TODO: Restrict ByteEnum when Map's both key and value types are enum.
+
 fun List<Annotation>?.isByteEnum(): Boolean {
     if (this == null) return false
 

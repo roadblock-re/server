@@ -11,7 +11,7 @@ interface Variant<T : Any> {
     fun variants(version: SerializationVersion): List<KClass<out T>>
 }
 
-private object NoVariant : Variant<Any> {
+object NoVariant : Variant<Any> {
     override fun variants(version: SerializationVersion) = emptyList<KClass<out Any>>()
 }
 
@@ -27,7 +27,7 @@ object VariantCompanionRegistry {
     }
 }
 
-class VersionedMapping(
+data class VersionedMapping(
     val classToIndex: Map<KClass<out Any>, Int>,
     val indexToSerializer: List<KSerializer<out Any>>,
 )
