@@ -2,8 +2,8 @@ package moe.crx.roadblock.objects.bonuspass
 
 import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
-import moe.crx.roadblock.io.sinks.InputSink
-import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.game.sinks.InputSink
+import moe.crx.roadblock.game.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
 
 class BonusPassState : RObject {

@@ -2,8 +2,8 @@ package moe.crx.roadblock.updates.clubwars
 
 import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
-import moe.crx.roadblock.io.sinks.InputSink
-import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.game.sinks.InputSink
+import moe.crx.roadblock.game.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
 import moe.crx.roadblock.objects.game.CalendarEventId
 import moe.crx.roadblock.objects.game.ClubWarsRoundIndex

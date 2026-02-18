@@ -1,10 +1,9 @@
 package moe.crx.roadblock.rpc.request
 
-import moe.crx.roadblock.io.OptionalIO.readOptional
-import moe.crx.roadblock.io.OptionalIO.writeOptional
-import moe.crx.roadblock.io.sinks.InputSink
-import moe.crx.roadblock.io.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RBoolean
+import moe.crx.roadblock.game.io.OptionalIO.readOptional
+import moe.crx.roadblock.game.io.OptionalIO.writeOptional
+import moe.crx.roadblock.game.sinks.InputSink
+import moe.crx.roadblock.game.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RByte
 import moe.crx.roadblock.rpc.base.RequestPacket
 

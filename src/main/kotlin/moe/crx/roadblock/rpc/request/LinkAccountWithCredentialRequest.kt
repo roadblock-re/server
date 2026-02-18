@@ -1,13 +1,13 @@
 package moe.crx.roadblock.rpc.request
 
-import moe.crx.roadblock.io.EnumIO.readEnum8
-import moe.crx.roadblock.io.EnumIO.writeEnum8
-import moe.crx.roadblock.io.ListIO.readList
-import moe.crx.roadblock.io.ListIO.writeList
-import moe.crx.roadblock.io.ObjectIO.readObject
-import moe.crx.roadblock.io.ObjectIO.writeObject
-import moe.crx.roadblock.io.sinks.InputSink
-import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.game.io.EnumIO.readEnum8
+import moe.crx.roadblock.game.io.EnumIO.writeEnum8
+import moe.crx.roadblock.game.io.ListIO.readList
+import moe.crx.roadblock.game.io.ListIO.writeList
+import moe.crx.roadblock.game.io.ObjectIO.readObject
+import moe.crx.roadblock.game.io.ObjectIO.writeObject
+import moe.crx.roadblock.game.sinks.InputSink
+import moe.crx.roadblock.game.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RInt
 import moe.crx.roadblock.objects.game.AccountLinkingRequestOrigin
 import moe.crx.roadblock.objects.game.Credentials

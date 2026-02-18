@@ -1,9 +1,9 @@
 package moe.crx.roadblock.objects.item
 
-import moe.crx.roadblock.io.VariantIO.readVariant
-import moe.crx.roadblock.io.VariantIO.writeVariant
-import moe.crx.roadblock.io.sinks.InputSink
-import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.game.io.VariantIO.readVariant
+import moe.crx.roadblock.game.io.VariantIO.writeVariant
+import moe.crx.roadblock.game.sinks.InputSink
+import moe.crx.roadblock.game.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
 import moe.crx.roadblock.objects.base.RVoid
 import moe.crx.roadblock.objects.game.CarId

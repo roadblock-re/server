@@ -1,9 +1,9 @@
 package moe.crx.roadblock.objects.game
 
-import moe.crx.roadblock.io.EnumIO.readEnum8
-import moe.crx.roadblock.io.EnumIO.writeEnum8
-import moe.crx.roadblock.io.sinks.InputSink
-import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.game.io.EnumIO.readEnum8
+import moe.crx.roadblock.game.io.EnumIO.writeEnum8
+import moe.crx.roadblock.game.sinks.InputSink
+import moe.crx.roadblock.game.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
 import net.jpountz.lz4.LZ4Compressor
 import net.jpountz.lz4.LZ4Factory

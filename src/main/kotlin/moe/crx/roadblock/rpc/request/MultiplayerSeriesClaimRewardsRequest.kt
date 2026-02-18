@@ -1,7 +1,7 @@
 package moe.crx.roadblock.rpc.request
 
-import moe.crx.roadblock.io.sinks.InputSink
-import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.game.sinks.InputSink
+import moe.crx.roadblock.game.sinks.OutputSink
 import moe.crx.roadblock.objects.game.CalendarEventId
 import moe.crx.roadblock.objects.game.MultiplayerSeriesId
 import moe.crx.roadblock.rpc.base.RequestPacket

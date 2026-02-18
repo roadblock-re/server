@@ -1,13 +1,13 @@
 package moe.crx.roadblock.objects.career
 
-import moe.crx.roadblock.io.EnumIO.readEnum
-import moe.crx.roadblock.io.EnumIO.writeEnum
-import moe.crx.roadblock.io.ListIO.readList
-import moe.crx.roadblock.io.ListIO.writeList
-import moe.crx.roadblock.io.OptionalIO.readOptional
-import moe.crx.roadblock.io.OptionalIO.writeOptional
-import moe.crx.roadblock.io.sinks.InputSink
-import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.game.io.EnumIO.readEnum
+import moe.crx.roadblock.game.io.EnumIO.writeEnum
+import moe.crx.roadblock.game.io.ListIO.readList
+import moe.crx.roadblock.game.io.ListIO.writeList
+import moe.crx.roadblock.game.io.OptionalIO.readOptional
+import moe.crx.roadblock.game.io.OptionalIO.writeOptional
+import moe.crx.roadblock.game.sinks.InputSink
+import moe.crx.roadblock.game.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RInt
 import moe.crx.roadblock.objects.base.RObject
 import moe.crx.roadblock.objects.game.ProgressState

@@ -1,6 +1,6 @@
 package moe.crx.roadblock.objects.game
 
-import moe.crx.roadblock.serialization.SerializationVersion
+import moe.crx.roadblock.game.serialization.SerializationVersion
 
 enum class MenuTutorialType {
     MainMenuCareer,

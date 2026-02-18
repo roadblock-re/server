@@ -1,13 +1,13 @@
 package moe.crx.roadblock.rpc.request
 
-import moe.crx.roadblock.io.EnumIO.readEnum
-import moe.crx.roadblock.io.EnumIO.writeEnum
-import moe.crx.roadblock.io.ObjectIO.readObject
-import moe.crx.roadblock.io.ObjectIO.writeObject
-import moe.crx.roadblock.io.OptionalIO.readOptional
-import moe.crx.roadblock.io.OptionalIO.writeOptional
-import moe.crx.roadblock.io.sinks.InputSink
-import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.game.io.EnumIO.readEnum
+import moe.crx.roadblock.game.io.EnumIO.writeEnum
+import moe.crx.roadblock.game.io.ObjectIO.readObject
+import moe.crx.roadblock.game.io.ObjectIO.writeObject
+import moe.crx.roadblock.game.io.OptionalIO.readOptional
+import moe.crx.roadblock.game.io.OptionalIO.writeOptional
+import moe.crx.roadblock.game.sinks.InputSink
+import moe.crx.roadblock.game.sinks.OutputSink
 import moe.crx.roadblock.objects.game.CalendarEventId
 import moe.crx.roadblock.objects.game.ControlSchemeType
 import moe.crx.roadblock.objects.game.Credentials

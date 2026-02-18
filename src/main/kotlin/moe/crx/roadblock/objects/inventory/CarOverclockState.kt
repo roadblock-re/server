@@ -1,10 +1,9 @@
 package moe.crx.roadblock.objects.inventory
 
-import moe.crx.roadblock.io.ObjectIO.writeObject
-import moe.crx.roadblock.io.OptionalIO.readOptional
-import moe.crx.roadblock.io.OptionalIO.writeOptional
-import moe.crx.roadblock.io.sinks.InputSink
-import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.game.io.OptionalIO.readOptional
+import moe.crx.roadblock.game.io.OptionalIO.writeOptional
+import moe.crx.roadblock.game.sinks.InputSink
+import moe.crx.roadblock.game.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RInstant
 import moe.crx.roadblock.objects.base.RObject
 

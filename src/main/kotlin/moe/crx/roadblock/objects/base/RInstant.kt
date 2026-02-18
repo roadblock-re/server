@@ -2,8 +2,8 @@ package moe.crx.roadblock.objects.base
 
 import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
-import moe.crx.roadblock.io.sinks.InputSink
-import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.game.sinks.InputSink
+import moe.crx.roadblock.game.sinks.OutputSink
 
 open class RInstant(var value: Instant) : RObject {
 

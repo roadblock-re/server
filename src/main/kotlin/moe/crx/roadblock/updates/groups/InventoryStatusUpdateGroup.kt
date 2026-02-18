@@ -1,7 +1,7 @@
 package moe.crx.roadblock.updates.groups
 
 import moe.crx.roadblock.objects.base.RVariant
-import moe.crx.roadblock.serialization.SerializationVersion
+import moe.crx.roadblock.game.serialization.SerializationVersion
 import moe.crx.roadblock.updates.inventory.*
 
 class InventoryStatusUpdateGroup(ver: SerializationVersion) : RVariant(buildList {

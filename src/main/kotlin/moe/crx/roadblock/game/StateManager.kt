@@ -19,10 +19,10 @@ import moe.crx.roadblock.objects.item.*
 import moe.crx.roadblock.objects.models.*
 import moe.crx.roadblock.objects.settings.Localization
 import moe.crx.roadblock.objects.settings.Vector2f
-import moe.crx.roadblock.serialization.SerializationVersion
-import moe.crx.roadblock.utils.bytes
-import moe.crx.roadblock.utils.readFully
-import moe.crx.roadblock.utils.sink
+import moe.crx.roadblock.game.serialization.SerializationVersion
+import moe.crx.roadblock.core.utils.bytes
+import moe.crx.roadblock.core.utils.readFully
+import moe.crx.roadblock.core.utils.sink
 import java.io.File
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock

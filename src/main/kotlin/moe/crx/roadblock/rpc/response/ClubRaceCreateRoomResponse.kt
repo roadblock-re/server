@@ -1,11 +1,11 @@
 package moe.crx.roadblock.rpc.response
 
-import moe.crx.roadblock.io.EnumIO.readEnum
-import moe.crx.roadblock.io.EnumIO.writeEnum
-import moe.crx.roadblock.io.OptionalIO.readOptional
-import moe.crx.roadblock.io.OptionalIO.writeOptional
-import moe.crx.roadblock.io.sinks.InputSink
-import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.game.io.EnumIO.readEnum
+import moe.crx.roadblock.game.io.EnumIO.writeEnum
+import moe.crx.roadblock.game.io.OptionalIO.readOptional
+import moe.crx.roadblock.game.io.OptionalIO.writeOptional
+import moe.crx.roadblock.game.sinks.InputSink
+import moe.crx.roadblock.game.sinks.OutputSink
 import moe.crx.roadblock.objects.game.RaceToken
 import moe.crx.roadblock.objects.game.RegionPreferences
 import moe.crx.roadblock.objects.game.RequiredPlaybackCondition

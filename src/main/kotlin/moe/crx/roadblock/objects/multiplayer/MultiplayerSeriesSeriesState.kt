@@ -1,11 +1,11 @@
 package moe.crx.roadblock.objects.multiplayer
 
-import moe.crx.roadblock.io.MapIO.readMap
-import moe.crx.roadblock.io.MapIO.writeMap
-import moe.crx.roadblock.io.OptionalIO.readOptional
-import moe.crx.roadblock.io.OptionalIO.writeOptional
-import moe.crx.roadblock.io.sinks.InputSink
-import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.game.io.MapIO.readMap
+import moe.crx.roadblock.game.io.MapIO.writeMap
+import moe.crx.roadblock.game.io.OptionalIO.readOptional
+import moe.crx.roadblock.game.io.OptionalIO.writeOptional
+import moe.crx.roadblock.game.sinks.InputSink
+import moe.crx.roadblock.game.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RFloat
 import moe.crx.roadblock.objects.base.RInstant
 import moe.crx.roadblock.objects.base.RObject

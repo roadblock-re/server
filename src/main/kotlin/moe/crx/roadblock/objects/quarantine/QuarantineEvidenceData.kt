@@ -2,10 +2,10 @@ package moe.crx.roadblock.objects.quarantine
 
 import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
-import moe.crx.roadblock.io.ListIO.readList
-import moe.crx.roadblock.io.ListIO.writeList
-import moe.crx.roadblock.io.sinks.InputSink
-import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.game.io.ListIO.readList
+import moe.crx.roadblock.game.io.ListIO.writeList
+import moe.crx.roadblock.game.sinks.InputSink
+import moe.crx.roadblock.game.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RInt
 import moe.crx.roadblock.objects.base.RObject
 

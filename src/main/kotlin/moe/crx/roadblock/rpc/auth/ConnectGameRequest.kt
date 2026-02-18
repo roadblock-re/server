@@ -1,8 +1,8 @@
 package moe.crx.roadblock.rpc.auth
 
 import kotlinx.serialization.json.*
-import moe.crx.roadblock.io.sinks.InputSink
-import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.game.sinks.InputSink
+import moe.crx.roadblock.game.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
 
 class ConnectGameRequest : RObject {

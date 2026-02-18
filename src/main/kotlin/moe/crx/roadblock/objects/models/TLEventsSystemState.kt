@@ -2,10 +2,10 @@ package moe.crx.roadblock.objects.models
 
 import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
-import moe.crx.roadblock.io.MapIO.readMap
-import moe.crx.roadblock.io.MapIO.writeMap
-import moe.crx.roadblock.io.sinks.InputSink
-import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.game.io.MapIO.readMap
+import moe.crx.roadblock.game.io.MapIO.writeMap
+import moe.crx.roadblock.game.sinks.InputSink
+import moe.crx.roadblock.game.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
 import moe.crx.roadblock.objects.base.RString
 import moe.crx.roadblock.objects.tle.TLEventData

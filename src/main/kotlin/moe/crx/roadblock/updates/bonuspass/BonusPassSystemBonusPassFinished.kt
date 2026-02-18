@@ -1,7 +1,7 @@
 package moe.crx.roadblock.updates.bonuspass
 
-import moe.crx.roadblock.io.sinks.InputSink
-import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.game.sinks.InputSink
+import moe.crx.roadblock.game.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
 import moe.crx.roadblock.objects.game.BonusPassId
 import moe.crx.roadblock.objects.game.CalendarEventId

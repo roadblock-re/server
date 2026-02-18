@@ -1,15 +1,15 @@
 package moe.crx.roadblock.rpc.auth
 
-import moe.crx.roadblock.io.ObjectIO.readObject
-import moe.crx.roadblock.io.ObjectIO.writeObject
-import moe.crx.roadblock.io.OptionalIO.readOptional
-import moe.crx.roadblock.io.OptionalIO.writeOptional
-import moe.crx.roadblock.io.sinks.InputSink
-import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.game.io.ObjectIO.readObject
+import moe.crx.roadblock.game.io.ObjectIO.writeObject
+import moe.crx.roadblock.game.io.OptionalIO.readOptional
+import moe.crx.roadblock.game.io.OptionalIO.writeOptional
+import moe.crx.roadblock.game.sinks.InputSink
+import moe.crx.roadblock.game.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
 import moe.crx.roadblock.objects.game.*
 import moe.crx.roadblock.objects.models.State
-import moe.crx.roadblock.serialization.SerializationVersion
+import moe.crx.roadblock.game.serialization.SerializationVersion
 
 class LoginResponse : RObject {
     companion object {

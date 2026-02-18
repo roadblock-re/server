@@ -1,9 +1,9 @@
 package moe.crx.roadblock.objects.multiplayer
 
-import moe.crx.roadblock.io.EnumIO.readEnumString
-import moe.crx.roadblock.io.EnumIO.writeEnumString
-import moe.crx.roadblock.io.sinks.InputSink
-import moe.crx.roadblock.io.sinks.OutputSink
+import moe.crx.roadblock.game.io.EnumIO.readEnumString
+import moe.crx.roadblock.game.io.EnumIO.writeEnumString
+import moe.crx.roadblock.game.sinks.InputSink
+import moe.crx.roadblock.game.sinks.OutputSink
 import moe.crx.roadblock.objects.base.RObject
 
 class GameServerConnectionInfo : RObject {
