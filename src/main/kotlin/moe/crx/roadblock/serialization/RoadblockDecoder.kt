@@ -23,6 +23,7 @@ class RoadblockDecoder(
     private val byteArraySerialName: String = serializersModule.serializer<ByteArray>().descriptor.serialName,
     private val scratchBuffer: ByteArray = ByteArray(8),
     private var elementsCount: Int = 0,
+    private val elementAnnotations: List<Annotation>? = null,
 ) : AbstractDecoder() {
 
     private fun readBytesOrThrow(count: Int, buffer: ByteArray = scratchBuffer) {
@@ -110,8 +111,10 @@ class RoadblockDecoder(
     override fun decodeString() = decodeByteArray().toString(Charsets.UTF_8)
 
     override fun decodeEnum(enumDescriptor: SerialDescriptor): Int {
-        val annotations = currentDescriptor?.getElementAnnotations(elementIndex)
-        return if (annotations.byteEnum()) {
+        val annotations = { currentDescriptor?.getElementAnnotations(elementIndex) }
+        val classAnnotations = enumDescriptor.annotations
+
+        return if (classAnnotations.isByteEnum() || elementAnnotations.isByteEnum() || annotations().isByteEnum()) {
             decodeByte().toInt() and 0xFF
         } else {
             decodeInt()
@@ -160,6 +163,8 @@ class RoadblockDecoder(
         decodeInt()
 
     override fun beginStructure(descriptor: SerialDescriptor): CompositeDecoder {
+        val elementAnnotations = currentDescriptor?.getElementAnnotations(elementIndex)
+
         val elementsCount = when (descriptor.kind) {
             StructureKind.LIST -> decodeCollectionSize(descriptor)
             StructureKind.MAP -> decodeCollectionSize(descriptor) * 2
@@ -174,6 +179,7 @@ class RoadblockDecoder(
             byteArraySerialName,
             scratchBuffer,
             elementsCount,
+            elementAnnotations,
         )
     }
 }

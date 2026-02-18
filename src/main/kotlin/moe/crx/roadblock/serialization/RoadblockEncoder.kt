@@ -4,6 +4,7 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.AbstractEncoder
+import kotlinx.serialization.encoding.CompositeEncoder
 import kotlinx.serialization.internal.AbstractPolymorphicSerializer
 import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.SerializersModule
@@ -19,6 +20,7 @@ class RoadblockEncoder(
     private val instantSerialName: String = serializersModule.serializer<Instant>().descriptor.serialName,
     private val byteArraySerialName: String = serializersModule.serializer<ByteArray>().descriptor.serialName,
     private val scratchBuffer: ByteArray = ByteArray(8),
+    private val elementAnnotations: List<Annotation>? = null,
 ) : AbstractEncoder() {
 
     private var elementIndex = -1
@@ -80,8 +82,10 @@ class RoadblockEncoder(
     override fun encodeString(value: String) = encodeByteArray(value.toByteArray(Charsets.UTF_8))
 
     override fun encodeEnum(enumDescriptor: SerialDescriptor, index: Int) {
-        val annotations = currentDescriptor?.getElementAnnotations(elementIndex)
-        if (annotations.byteEnum()) {
+        val annotations = { currentDescriptor?.getElementAnnotations(elementIndex) }
+        val classAnnotations = enumDescriptor.annotations
+
+        if (classAnnotations.isByteEnum() || elementAnnotations.isByteEnum() || annotations().isByteEnum()) {
             encodeByte(index.toByte())
         } else {
             encodeInt(index)
@@ -128,6 +132,17 @@ class RoadblockEncoder(
     override fun beginCollection(descriptor: SerialDescriptor, collectionSize: Int) =
         encodeInt(collectionSize).let { beginStructure(descriptor) }
 
-    override fun beginStructure(descriptor: SerialDescriptor) =
-        RoadblockEncoder(output, version, serializersModule, instantSerialName, byteArraySerialName, scratchBuffer)
+    override fun beginStructure(descriptor: SerialDescriptor): CompositeEncoder {
+        val elementAnnotations = currentDescriptor?.getElementAnnotations(elementIndex)
+
+        return RoadblockEncoder(
+            output,
+            version,
+            serializersModule,
+            instantSerialName,
+            byteArraySerialName,
+            scratchBuffer,
+            elementAnnotations,
+        )
+    }
 }

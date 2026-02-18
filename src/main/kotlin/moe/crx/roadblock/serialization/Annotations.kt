@@ -5,10 +5,10 @@ import kotlinx.serialization.SerialInfo
 
 @OptIn(ExperimentalSerializationApi::class)
 @SerialInfo
-@Target(AnnotationTarget.PROPERTY)
+@Target(AnnotationTarget.PROPERTY, AnnotationTarget.CLASS)
 annotation class ByteEnum
 
-fun List<Annotation>?.byteEnum(): Boolean {
+fun List<Annotation>?.isByteEnum(): Boolean {
     if (this == null) return false
 
     for (annotation in this) {
