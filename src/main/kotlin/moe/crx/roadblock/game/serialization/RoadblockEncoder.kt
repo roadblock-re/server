@@ -65,7 +65,10 @@ class RoadblockEncoder(
             check(serializer.descriptor.kind != StructureKind.MAP) { "@VariantOf is not allowed on Map structures." }
         }
 
-        val baseVariant = (serializer as? AbstractPolymorphicSerializer<*>)?.baseClass?.getVariantCompanion()
+        val baseVariant = (serializer as? AbstractPolymorphicSerializer<*>)?.baseClass?.let {
+            it.annotations.getVariantCompanion()
+                ?: it.getVariantCompanion()
+        }
 
         (annotationVariant ?: baseVariant)?.let {
             return encodeVariant(it, value as Any)
