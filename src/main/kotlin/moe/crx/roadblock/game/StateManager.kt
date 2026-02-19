@@ -2,6 +2,10 @@ package moe.crx.roadblock.game
 
 import kotlinx.datetime.*
 import kotlinx.datetime.Clock.System.now
+import moe.crx.roadblock.core.utils.bytes
+import moe.crx.roadblock.core.utils.readFully
+import moe.crx.roadblock.core.utils.sink
+import moe.crx.roadblock.game.serialization.SerializationVersion
 import moe.crx.roadblock.objects.base.RByte
 import moe.crx.roadblock.objects.base.RInt
 import moe.crx.roadblock.objects.base.RString
@@ -19,10 +23,6 @@ import moe.crx.roadblock.objects.item.*
 import moe.crx.roadblock.objects.models.*
 import moe.crx.roadblock.objects.settings.Localization
 import moe.crx.roadblock.objects.settings.Vector2f
-import moe.crx.roadblock.game.serialization.SerializationVersion
-import moe.crx.roadblock.core.utils.bytes
-import moe.crx.roadblock.core.utils.readFully
-import moe.crx.roadblock.core.utils.sink
 import java.io.File
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
@@ -334,10 +334,10 @@ class StateManager(workingDirectory: String) {
                             touchDriveSensitivity = 0.85f
                             tappingSensitivity = 0.5f
                             iconsScale = 1.0f
-                            leftNitroOffset = Vector2f(0f, 0f)
-                            leftDriftOffset = Vector2f(0f, 0f)
-                            rightNitroOffset = Vector2f(0f, 0f)
-                            rightDriftOffset = Vector2f(0f, 0f)
+                            leftNitroOffset = Vector2f()
+                            leftDriftOffset = Vector2f()
+                            rightNitroOffset = Vector2f()
+                            rightDriftOffset = Vector2f()
                             tiltingSensitivity = 0.5f
                             isHorizonTiltEnabled = true
                             isTiltSteeringEnabled = 1

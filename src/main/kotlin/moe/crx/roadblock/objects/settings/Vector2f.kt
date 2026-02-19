@@ -6,6 +6,8 @@ import moe.crx.roadblock.objects.base.RObject
 
 open class Vector2f(var x: Float, var y: Float) : RObject {
 
+    constructor() : this(0f, 0f)
+
     override fun read(sink: InputSink) {
         x = sink.readFloat()
         y = sink.readFloat()

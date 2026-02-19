@@ -11,10 +11,10 @@ class TouchControlSettings : RObject {
     var touchDriveSensitivity: Float = 0f
     var tappingSensitivity: Float = 0f
     var iconsScale: Float = 0f
-    var leftNitroOffset: Vector2f = Vector2f(0f, 0f)
-    var leftDriftOffset: Vector2f = Vector2f(0f, 0f)
-    var rightNitroOffset: Vector2f = Vector2f(0f, 0f)
-    var rightDriftOffset: Vector2f = Vector2f(0f, 0f)
+    var leftNitroOffset: Vector2f = Vector2f()
+    var leftDriftOffset: Vector2f = Vector2f()
+    var rightNitroOffset: Vector2f = Vector2f()
+    var rightDriftOffset: Vector2f = Vector2f()
     var tiltingSensitivity: Float = 0f
     var isHorizonTiltEnabled: Boolean = false
     var isTiltSteeringEnabled: Int = 0
