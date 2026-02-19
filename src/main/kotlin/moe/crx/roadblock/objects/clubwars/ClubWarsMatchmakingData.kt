@@ -1,36 +1,17 @@
 package moe.crx.roadblock.objects.clubwars
 
-import moe.crx.roadblock.game.io.OptionalIO.readOptional
-import moe.crx.roadblock.game.io.OptionalIO.writeOptional
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RInt
-import moe.crx.roadblock.objects.base.RObject
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.game.serialization.ByteEnum
+import moe.crx.roadblock.objects.account.ClubId
+import moe.crx.roadblock.objects.account.ClubWarsPoints
 
-class ClubWarsMatchmakingData : RObject {
-
-    var status: Int = 0
-    var boardSide: Byte = 0
-    var opponentClub: String = ""
-    var defenseAssignedNodes: Short = 0
-    var attackAssignedEntryPoints: Short = 0
-    var opponentRegistrationScore: RInt? = null
-
-    override fun read(sink: InputSink) {
-        status = sink.readInt()
-        boardSide = sink.readByte()
-        opponentClub = sink.readString()
-        defenseAssignedNodes = sink.readShort()
-        attackAssignedEntryPoints = sink.readShort()
-        opponentRegistrationScore = sink.readOptional()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeInt(status)
-        sink.writeByte(boardSide)
-        sink.writeString(opponentClub)
-        sink.writeShort(defenseAssignedNodes)
-        sink.writeShort(attackAssignedEntryPoints)
-        sink.writeOptional(opponentRegistrationScore)
-    }
-}
+@Serializable
+data class ClubWarsMatchmakingData(
+    var status: ClubWarsMatchmakingStatus,
+    @ByteEnum
+    var boardSide: ClubWarsBoardSideType,
+    var opponentClub: ClubId,
+    var defenseAssignedNodes: UShort,
+    var attackAssignedEntryPoints: UShort,
+    var opponentRegistrationScore: ClubWarsPoints?,
+)

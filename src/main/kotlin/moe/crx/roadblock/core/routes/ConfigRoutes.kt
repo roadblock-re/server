@@ -71,7 +71,7 @@ fun Route.configDatacenterUrls() = get("/{clientId}/datacenters/{datacenterId}/u
                     "statetrackers": "https://%1/state.gameloft.com",
                     "tapjoy": "https://%1/gllive.gameloft.com/ope/tapjoy_log.php",
                     "gameloftid_abe_url": "https://%1/api-backend.gameloftid.gameloft.com",
-                    "glclub_web_url": "https://%1/clubconnect.gameloft.com/?",
+                    "glclub_web_url": "https://%1/clubconnect/?",
                     "status": "none"
             }
         """.trimIndent().replace("%1", call.realRemoteHost()).replace("%2", clientId),

@@ -41,7 +41,14 @@ object VersionedMappingRegistry {
             val list = variants(version)
 
             VersionedMapping(
-                classToIndex = list.withIndex().associate { it.value to it.index },
+                classToIndex = buildMap {
+                    list.forEachIndexed { i, c ->
+                        put(c, i)
+                        c.sealedSubclasses.forEach {
+                            put(it, i)
+                        }
+                    }
+                },
                 indexToSerializer = list.map { it.serializer() }
             )
         }

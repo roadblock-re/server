@@ -1,26 +1,10 @@
 package moe.crx.roadblock.objects.gauntlet
 
-import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
-import moe.crx.roadblock.game.io.ListIO.readList
-import moe.crx.roadblock.game.io.ListIO.writeList
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RObject
+import kotlinx.serialization.Serializable
 
-class GauntletQualificationData : RObject {
-
-    var qualificationStats: List<GauntletRaceStats> = listOf()
-    var timestamp: Instant = now()
-
-    override fun read(sink: InputSink) {
-        qualificationStats = sink.readList()
-        timestamp = sink.readInstant()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeList(qualificationStats)
-        sink.writeInstant(timestamp)
-    }
-
-}
+@Serializable
+data class GauntletQualificationData(
+    var qualificationStats: List<GauntletRaceStats>,
+    var timestamp: Instant,
+)

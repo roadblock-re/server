@@ -30,12 +30,6 @@ fun Route.authAuthorize() = post("/authorize") {
     val deviceModel = form["device_model"]
     val deviceResolution = form["device_resolution"]
 
-    checkNotNull(deviceCountry)
-    checkNotNull(deviceFirmware)
-    checkNotNull(deviceLanguage)
-    checkNotNull(deviceModel)
-    checkNotNull(deviceResolution)
-
     call.respondText(
         contentType = ContentType.Application.Json,
         text = """

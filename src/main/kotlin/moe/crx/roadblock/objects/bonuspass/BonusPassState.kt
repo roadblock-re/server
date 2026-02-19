@@ -1,26 +1,12 @@
 package moe.crx.roadblock.objects.bonuspass
 
-import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RObject
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.objects.account.BonusPassId
 
-class BonusPassState : RObject {
-
-    var startDate: Instant = now()
-    var bonusPassId: Int = 0
-    var duration: Instant = now()
-
-    override fun read(sink: InputSink) {
-        startDate = sink.readInstant()
-        bonusPassId = sink.readInt()
-        duration = sink.readInstant()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeInstant(startDate)
-        sink.writeInt(bonusPassId)
-        sink.writeInstant(duration)
-    }
-}
+@Serializable
+data class BonusPassState(
+    var startDate: Instant,
+    var bonusPassId: BonusPassId,
+    var duration: Instant,
+)

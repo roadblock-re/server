@@ -14,5 +14,5 @@ fun webSocketServer(workingDirectory: String, config: Configuration) = embeddedS
         }
     },
 ) {
-    configureWebSockets(workingDirectory)
+    configureWebSockets(workingDirectory, config)
 }

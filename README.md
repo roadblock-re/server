@@ -2,14 +2,18 @@
 
 Server implementation for a known mobile racing game.
 
-Current implementation supports game versions:
+## Compatibility
 
-- 45.0.x: not all packets are implemented
-- 24.6.x: not all packets are implemented
-- 24.0.x: not all packets are implemented
-- 3.9.x: full network compatibility
+| Game version   | Status |
+|----------------|--------|
+| 47.1.0         | 🟢     |
+| 45.0.x         | 🟡     |
+| 24.6.x         | 🟡     |
+| 24.0.x         | 🟡     |
+| 3.9.x          | 🟢     |
+| Other versions | 🔴     |
 
-Account managements or multiplayer are not implemented in any matter.
+Multiuser or multiplayer are not implemented yet.
 
 More versions may be supported in the future.
 

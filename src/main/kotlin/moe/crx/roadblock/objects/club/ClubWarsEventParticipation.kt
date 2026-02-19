@@ -1,33 +1,15 @@
 package moe.crx.roadblock.objects.club
 
-import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.game.ClubWarsPoints
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.objects.account.ClubWarsPoints
+import moe.crx.roadblock.objects.account.ClubWarsRoundIndex
 
-class ClubWarsEventParticipation : RObject {
-
-    var score: ClubWarsPoints = 0
-    var roundId: Byte = 0
-    var joinTimestamp: Instant = now()
-    var eventScoreAfterLastFinishedRound: ClubWarsPoints = 0
-    var lastFinishedRoundIndex: Byte = 0
-
-    override fun read(sink: InputSink) {
-        score = sink.readInt()
-        roundId = sink.readByte()
-        joinTimestamp = sink.readInstant()
-        eventScoreAfterLastFinishedRound = sink.readInt()
-        lastFinishedRoundIndex = sink.readByte()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeInt(score)
-        sink.writeByte(roundId)
-        sink.writeInstant(joinTimestamp)
-        sink.writeInt(eventScoreAfterLastFinishedRound)
-        sink.writeByte(lastFinishedRoundIndex)
-    }
-}
+@Serializable
+data class ClubWarsEventParticipation(
+    var score: ClubWarsPoints,
+    var currentRoundIndex: ClubWarsRoundIndex,
+    var joinTimestamp: Instant,
+    var eventScoreAfterLastFinishedRound: ClubWarsPoints,
+    var lastFinishedRoundIndex: ClubWarsRoundIndex,
+)

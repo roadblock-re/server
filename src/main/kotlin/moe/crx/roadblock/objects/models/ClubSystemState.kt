@@ -1,59 +1,23 @@
 package moe.crx.roadblock.objects.models
 
-import moe.crx.roadblock.game.io.MapIO.readMap
-import moe.crx.roadblock.game.io.MapIO.writeMap
-import moe.crx.roadblock.game.io.ObjectIO.readObject
-import moe.crx.roadblock.game.io.ObjectIO.writeObject
-import moe.crx.roadblock.game.io.OptionalIO.readOptional
-import moe.crx.roadblock.game.io.OptionalIO.writeOptional
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RInt
-import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.base.RString
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.game.serialization.FromVersion
+import moe.crx.roadblock.game.serialization.UntilVersion
 import moe.crx.roadblock.objects.club.*
+import moe.crx.roadblock.objects.account.CalendarEventId
+import moe.crx.roadblock.objects.account.LeaveClubReason
 
-class ClubSystemState : RObject {
-
-    var clubSeason: ClubSeason = ClubSeason()
-    var clubData: CurrentClubData? = null
-    var sentRequest: ClubSentRequestData? = null
-    var isLocked: Boolean = false
-    var firstClub: FirstClubData = FirstClubData()
-    var donationData: ClubDonationData = ClubDonationData()
-    var leaveClubReason: RInt? = null
-    var cancelJoinRequest: ClubCancelJoinRequestData? = null
-    var clubWars: Map<RString, ClubWarsEventClubState> = mapOf()
-
-    override fun read(sink: InputSink) {
-        clubSeason = sink.readObject()
-        clubData = sink.readOptional()
-        sentRequest = sink.readOptional()
-        isLocked = sink.readBoolean()
-        firstClub = sink.readObject()
-        if (sink newer "24.0.0") {
-            donationData = sink.readObject()
-        }
-        leaveClubReason = sink.readOptional()
-        cancelJoinRequest = sink.readOptional()
-        if (sink older "45.0.0") {
-            clubWars = sink.readMap()
-        }
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeObject(clubSeason)
-        sink.writeOptional(clubData)
-        sink.writeOptional(sentRequest)
-        sink.writeBoolean(isLocked)
-        sink.writeObject(firstClub)
-        if (sink newer "24.0.0") {
-            sink.writeObject(donationData)
-        }
-        sink.writeOptional(leaveClubReason)
-        sink.writeOptional(cancelJoinRequest)
-        if (sink older "45.0.0") {
-            sink.writeMap(clubWars)
-        }
-    }
-}
+@Serializable
+data class ClubSystemState(
+    var clubSeason: ClubSeason = ClubSeason(),
+    var clubData: CurrentClubData? = null,
+    var sentRequest: ClubSentRequestData? = null,
+    var isLocked: Boolean = true,
+    var firstClub: FirstClubData = FirstClubData(),
+    @FromVersion("24.0.0")
+    var donationData: ClubDonationData = ClubDonationData(),
+    var leaveClubReason: LeaveClubReason? = null,
+    var cancelJoinRequestData: Pair<CancelJoinRequestReason, String>? = null,
+    @UntilVersion("45.0.0")
+    var clubWars: Map<CalendarEventId, ClubWarsEventClubState> = mapOf(),
+)

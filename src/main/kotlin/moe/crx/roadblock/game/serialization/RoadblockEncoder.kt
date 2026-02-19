@@ -82,9 +82,12 @@ class RoadblockEncoder(
     fun <T : Any> encodeVariant(companion: Variant<*>, value: T) {
         val mapping = companion.getMapping(version)
         val index = mapping.classToIndex[value::class]
-            ?: throw SerializationException("${value::class} not in protocol version $version")
 
-        encodeInt(index)
+        checkNotNull(index) {
+            "${value::class} not in protocol version $version"
+        }
+
+        encodeByte(index.toUByte().toByte())
         val serializer = mapping.indexToSerializer[index] as KSerializer<T>
         encodeSerializableValueInternal(serializer, value, true)
     }
@@ -108,6 +111,12 @@ class RoadblockEncoder(
             || currentDescriptor?.getElementAnnotations(elementIndex).isByteEnum()
         ) {
             encodeByte(index.toByte())
+        } else if (
+            enumDescriptor.annotations.isStringEnum()
+            || elementAnnotations.isStringEnum()
+            || currentDescriptor?.getElementAnnotations(elementIndex).isStringEnum()
+        ) {
+            encodeString(enumDescriptor.getElementName(index))
         } else {
             encodeInt(index)
         }

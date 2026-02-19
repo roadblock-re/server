@@ -1,34 +1,35 @@
 package moe.crx.roadblock.rpc.base
 
-import moe.crx.roadblock.game.io.ObjectIO.readObject
-import moe.crx.roadblock.game.io.ObjectIO.writeObject
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.game.ActionRequestHeader
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.game.serialization.FromVersion
+import moe.crx.roadblock.game.serialization.UntilVersion
+import moe.crx.roadblock.objects.account.ActionRequestHeader
 
-open class RequestPacket : RObject {
-
-    var header: ActionRequestHeader = ActionRequestHeader()
-    var type: Short = 0
-
-    override fun read(sink: InputSink) {
-        check(sink.readByte() == 3.toByte())
-        header = sink.readObject()
-        type = if (sink newer "24.0.0") {
-            sink.readShort()
-        } else {
-            sink.readByte().toShort()
-        }
+@Serializable
+open class RequestPacket(
+    var magic: UByte = MAGIC,
+    var header: ActionRequestHeader = ActionRequestHeader(),
+    @FromVersion("24.0.0")
+    var modernType: UShort = 0u,
+    @UntilVersion("24.0.0")
+    var legacyType: UByte = 0u,
+) {
+    companion object {
+        const val MAGIC: UByte = 3u
     }
 
-    override fun write(sink: OutputSink) {
-        sink.writeByte(3)
-        sink.writeObject(header)
-        if (sink newer "24.0.0") {
-            sink.writeShort(type)
-        } else {
-            sink.writeByte(type.toByte())
-        }
+    init {
+        check(magic == MAGIC)
     }
+
+    var type: UShort
+        get() = if (modernType != 0u.toUShort()) {
+            modernType
+        } else {
+            legacyType.toUShort()
+        }
+        set(value) {
+            modernType = value
+            legacyType = value.toUByte()
+        }
 }

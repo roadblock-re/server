@@ -1,38 +1,16 @@
 package moe.crx.roadblock.objects.blackmarket
 
-import moe.crx.roadblock.game.io.OptionalIO.readOptional
-import moe.crx.roadblock.game.io.OptionalIO.writeOptional
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RObject
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.objects.inventory.CurrencyType
+import moe.crx.roadblock.objects.account.Money
 
-class BlackMarketSlot : RObject {
-
-    var item: BlackMarketItemVariant? = null
-    var totalAmount: Int = 0
-    var remainingAmount: Int = 0
-    var currencyType: Int = 0
-    var basePrice: Int = 0
-    var stepAmount: Int = 0
-    var slotType: Int = 0
-
-    override fun read(sink: InputSink) {
-        item = sink.readOptional()
-        totalAmount = sink.readInt()
-        remainingAmount = sink.readInt()
-        currencyType = sink.readInt()
-        basePrice = sink.readInt()
-        stepAmount = sink.readInt()
-        slotType = sink.readInt()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeOptional(item)
-        sink.writeInt(totalAmount)
-        sink.writeInt(remainingAmount)
-        sink.writeInt(currencyType)
-        sink.writeInt(basePrice)
-        sink.writeInt(stepAmount)
-        sink.writeInt(slotType)
-    }
-}
+@Serializable
+data class BlackMarketSlot(
+    var item: BlackMarketItem?,
+    var totalAmount: UInt,
+    var remainingAmount: UInt,
+    var currency: CurrencyType,
+    var basePrice: Money,
+    var stepAmount: Money,
+    var slotType: BlackMarketSlotType,
+)

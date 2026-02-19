@@ -2,75 +2,42 @@ package moe.crx.roadblock.objects.models
 
 import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
-import moe.crx.roadblock.game.io.ListIO.readList
-import moe.crx.roadblock.game.io.ListIO.writeList
-import moe.crx.roadblock.game.io.MapIO.readMap
-import moe.crx.roadblock.game.io.MapIO.writeMap
-import moe.crx.roadblock.game.io.ObjectIO.readObject
-import moe.crx.roadblock.game.io.ObjectIO.writeObject
-import moe.crx.roadblock.game.io.OptionalIO.readOptional
-import moe.crx.roadblock.game.io.OptionalIO.writeOptional
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RInt
-import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.game.EmojisState
-import moe.crx.roadblock.objects.game.OverclockChips
-import moe.crx.roadblock.objects.game.WalletState
-import moe.crx.roadblock.objects.inventory.CarState
-import moe.crx.roadblock.objects.inventory.MaintenanceBooking
-import moe.crx.roadblock.objects.inventory.StatUpgradeInfoState
-import moe.crx.roadblock.objects.inventory.WildcardBlueprintClassState
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.game.serialization.EnumList
+import moe.crx.roadblock.game.serialization.FromVersion
+import moe.crx.roadblock.game.serialization.enumListOf
+import moe.crx.roadblock.objects.account.*
+import moe.crx.roadblock.objects.inventory.*
 
-class InventoryState : RObject {
-
-    var cars: Map<RInt, CarState> = mapOf()
-    var wallets: List<WalletState> = listOf()
-
-    var iapWallets: Map<RInt, WalletState> = mapOf() // 3.9+ only (also maybe 3.8)
-    var wildcardBlueprints: List<WildcardBlueprintClassState> = listOf()
-    var wildcardUpgradeItems: List<RInt> = listOf()
-    var wildcardStarUpItems: List<RInt> = listOf()
-    var upgrades: List<StatUpgradeInfoState> = listOf()
-    var lastActionTime: Instant = now()
-    var maintenanceBooking: MaintenanceBooking? = null
-    var emojis: EmojisState = EmojisState()
-    var overclockChips: OverclockChips = 0
-
-    override fun read(sink: InputSink) {
-        cars = sink.readMap()
-        wallets = sink.readList()
-        iapWallets = sink.readMap()
-        wildcardBlueprints = sink.readList()
-        if (sink newer "24.6.0") {
-            wildcardUpgradeItems = sink.readList()
-        }
-        if (sink newer "47.1.0") {
-            wildcardStarUpItems = sink.readList()
-        }
-        upgrades = sink.readList()
-        lastActionTime = sink.readInstant()
-        maintenanceBooking = sink.readOptional()
-        emojis = sink.readObject()
-        if (sink newer "24.0.0") {
-            overclockChips = sink.readInt()
-        }
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeMap(cars)
-        sink.writeList(wallets)
-        sink.writeMap(iapWallets)
-        sink.writeList(wildcardBlueprints)
-        if (sink newer "24.6.0") {
-            sink.writeList(wildcardUpgradeItems)
-        }
-        sink.writeList(upgrades)
-        sink.writeInstant(lastActionTime)
-        sink.writeOptional(maintenanceBooking)
-        sink.writeObject(emojis)
-        if (sink newer "24.0.0") {
-            sink.writeInt(overclockChips)
-        }
-    }
-}
+@Serializable
+data class InventoryState(
+    var cars: Map<CarId, CarState> = mapOf(
+        // Lancer
+        0x25u to CarState(
+            maintenance = CarMaintenanceState(6u),
+            isOwned = true,
+        ),
+    ),
+    var wallets: List<WalletState> = listOf(
+        WalletState(
+            currency = CurrencyType.Credits,
+            balance = 15000,
+        ),
+        WalletState(
+            currency = CurrencyType.Tokens,
+            balance = 50,
+        ),
+    ),
+    var iapWallets: Map<CurrencyType, WalletState> = mapOf(),
+    var wildcardBlueprints: EnumList<Map<CarUpgradeTier, Blueprints>, CarClass> = enumListOf { mapOf() },
+    @FromVersion("24.6.0")
+    var wildcardUpgradeItems: EnumList<UpgradeItems, CarClass> = enumListOf { 0u },
+    @FromVersion("47.1.0")
+    var wildcardStarUpItems: EnumList<UpgradeItems, CarClass> = enumListOf { 0u },
+    var upgradeInfoState: EnumList<StatUpgradeInfoState, CarStatType> = enumListOf { StatUpgradeInfoState() },
+    var lastActionTime: Instant = now(),
+    var booking: List<MaintenanceBooking>? = null,
+    var emojis: EmojisState = EmojisState(),
+    @FromVersion("24.0.0")
+    var overclockChips: OverclockChips = 0u,
+)

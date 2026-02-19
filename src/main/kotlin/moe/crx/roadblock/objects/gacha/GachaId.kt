@@ -1,26 +1,13 @@
 package moe.crx.roadblock.objects.gacha
 
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RObject
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.game.serialization.FromVersion
+import moe.crx.roadblock.game.serialization.UntilVersion
 
-class GachaId : RObject {
-
-    var id: Int = 0
-
-    override fun read(sink: InputSink) {
-        id = if (sink newer "24.0.0") {
-            sink.readInt()
-        } else {
-            sink.readShort().toInt()
-        }
-    }
-
-    override fun write(sink: OutputSink) {
-        if (sink newer "24.0.0") {
-            sink.writeInt(id)
-        } else {
-            sink.writeShort(id.toShort())
-        }
-    }
-}
+@Serializable
+data class GachaId(
+    @FromVersion("24.0.0")
+    var id: UInt = 0u,
+    @UntilVersion("24.0.0")
+    var legacyId: UShort = 0u,
+)

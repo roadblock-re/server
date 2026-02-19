@@ -5,12 +5,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import moe.crx.roadblock.core.utils.evpBytesToKey
-import moe.crx.roadblock.core.utils.toBigEndianBytes
-import moe.crx.roadblock.core.utils.toBigEndianInt
-import moe.crx.roadblock.core.utils.toHexString
-import moe.crx.roadblock.core.utils.toLittleEndianBytes
-import moe.crx.roadblock.core.utils.toLittleEndianInt
+import moe.crx.roadblock.core.utils.*
 import moe.crx.roadblock.game.GameConnection
 import net.jpountz.lz4.LZ4Compressor
 import net.jpountz.lz4.LZ4Factory
@@ -86,7 +81,7 @@ fun tcpServer(workingDirectory: String, config: Configuration, wait: Boolean): J
                     }
 
                     val gameConnection =
-                        GameConnection(workingDirectory, ignoreConnect = true) { payloadBytes, preferDeflated ->
+                        GameConnection(workingDirectory, config, ignoreConnect = true) { payloadBytes, preferDeflated ->
                             var (bytes, type) = if (preferDeflated) {
                                 var compressed = highCompressor.compress(payloadBytes)
                                 val hash = xxHash32.hash(compressed, 0, compressed.size, payloadBytes.size)

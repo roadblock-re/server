@@ -106,10 +106,10 @@ class RoadblockDecoder(
     @OptIn(InternalSerializationApi::class)
     fun <T : Any> decodeVariant(companion: Variant<*>): T {
         val mapping = companion.getMapping(version)
-        val index = decodeInt()
+        val index = decodeByte().toUByte().toInt()
 
-        if (index !in mapping.indexToSerializer.indices) {
-            throw SerializationException("Invalid variant index $index for version $version")
+        check(index in mapping.indexToSerializer.indices) {
+            "Invalid variant index $index for version $version"
         }
 
         val serializer = mapping.indexToSerializer[index] as KSerializer<T>
@@ -135,6 +135,12 @@ class RoadblockDecoder(
             || currentDescriptor?.getElementAnnotations(elementIndex).isByteEnum()
         ) {
             decodeByte().toInt() and 0xFF
+        } else if (
+            enumDescriptor.annotations.isStringEnum()
+            || elementAnnotations.isStringEnum()
+            || currentDescriptor?.getElementAnnotations(elementIndex).isStringEnum()
+        ) {
+            enumDescriptor.getElementIndex(decodeString())
         } else {
             decodeInt()
         }

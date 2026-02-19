@@ -1,45 +1,16 @@
 package moe.crx.roadblock.objects.championship
 
-import moe.crx.roadblock.game.io.EnumIO.readEnum
-import moe.crx.roadblock.game.io.EnumIO.writeEnum
-import moe.crx.roadblock.game.io.MapIO.readMap
-import moe.crx.roadblock.game.io.MapIO.writeMap
-import moe.crx.roadblock.game.io.ObjectIO.readObject
-import moe.crx.roadblock.game.io.ObjectIO.writeObject
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RInt
-import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.game.ChampionshipGroupId
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.objects.account.ChampionshipGroupId
+import moe.crx.roadblock.objects.quarantine.QuarantineEvidenceType
 
-class ChampionshipQualifyingRoundData : RObject {
-
-    var groupId: ChampionshipGroupId = 0
-    var attemptCount: Byte = 0
-    var bestRace: ChampionshipRaceData = ChampionshipRaceData()
-    var leaderboard: ChampionshipLeaderboardData = ChampionshipLeaderboardData()
-    var evidences: Map<RInt, ChampionshipEvidenceData> = mapOf()
-    var isDisqualified: Boolean = false
-    var state: ChampionshipRoundState = ChampionshipRoundState.Unknown
-
-    override fun read(sink: InputSink) {
-        groupId = sink.readInt()
-        attemptCount = sink.readByte()
-        bestRace = sink.readObject()
-        leaderboard = sink.readObject()
-        evidences = sink.readMap()
-        isDisqualified = sink.readBoolean()
-        state = sink.readEnum()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeInt(groupId)
-        sink.writeByte(attemptCount)
-        sink.writeObject(bestRace)
-        sink.writeObject(leaderboard)
-        sink.writeMap(evidences)
-        sink.writeBoolean(isDisqualified)
-        sink.writeEnum(state)
-    }
-
-}
+@Serializable
+data class ChampionshipQualifyingRoundData(
+    var groupId: ChampionshipGroupId,
+    var attemptCount: UByte,
+    var bestRace: ChampionshipRaceData,
+    var leaderboard: ChampionshipLeaderboardData,
+    var evidences: Map<QuarantineEvidenceType, ChampionshipEvidenceData>,
+    var isDisqualified: Boolean,
+    var state: ChampionshipRoundState,
+)

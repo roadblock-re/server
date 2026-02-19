@@ -1,24 +1,10 @@
 package moe.crx.roadblock.objects.clubwars
 
-import moe.crx.roadblock.game.io.MapIO.readMap
-import moe.crx.roadblock.game.io.MapIO.writeMap
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.base.RString
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.objects.account.CalendarEventId
 
-class ClubWarsState : RObject {
-
-    var events: Map<RString, ClubWarsEventData> = mapOf() // CalendarEventId
-    var isLocked: Boolean = false
-
-    override fun read(sink: InputSink) {
-        events = sink.readMap()
-        isLocked = sink.readBoolean()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeMap(events)
-        sink.writeBoolean(isLocked)
-    }
-}
+@Serializable
+data class ClubWarsState(
+    var eventDataById: Map<CalendarEventId, ClubWarsEventData> = mapOf(),
+    var isLocked: Boolean = true,
+)

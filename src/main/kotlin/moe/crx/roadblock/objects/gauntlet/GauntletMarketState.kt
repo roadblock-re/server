@@ -1,40 +1,21 @@
 package moe.crx.roadblock.objects.gauntlet
 
 import kotlinx.datetime.Clock.System.now
+import kotlinx.datetime.DateTimeUnit.Companion.HOUR
 import kotlinx.datetime.Instant
-import moe.crx.roadblock.game.io.ListIO.readList
-import moe.crx.roadblock.game.io.ListIO.writeList
-import moe.crx.roadblock.game.io.MapIO.readMap
-import moe.crx.roadblock.game.io.MapIO.writeMap
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RInt
-import moe.crx.roadblock.objects.base.RObject
+import kotlinx.datetime.plus
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.core.utils.midnight
+import moe.crx.roadblock.objects.account.GauntletDivision
+import moe.crx.roadblock.objects.account.GauntletLeague
+import moe.crx.roadblock.objects.account.GauntletMarketProductId
 
-class GauntletMarketState : RObject {
-
-    var productsBought: List<RInt> = listOf()
-    var timesProductBoughtInCurrentRefresh: Map<RInt, RInt> = mapOf()
-    var nextAutoRefreshTime: Instant = now()
-    var lastPlayedGauntletDivision: Byte = 0
-    var isLocked: Boolean = false
-    var lastPlayedGauntletLeague: Byte = 0
-
-    override fun read(sink: InputSink) {
-        productsBought = sink.readList()
-        timesProductBoughtInCurrentRefresh = sink.readMap()
-        nextAutoRefreshTime = sink.readInstant()
-        lastPlayedGauntletDivision = sink.readByte()
-        isLocked = sink.readBoolean()
-        lastPlayedGauntletLeague = sink.readByte()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeList(productsBought)
-        sink.writeMap(timesProductBoughtInCurrentRefresh)
-        sink.writeInstant(nextAutoRefreshTime)
-        sink.writeByte(lastPlayedGauntletDivision)
-        sink.writeBoolean(isLocked)
-        sink.writeByte(lastPlayedGauntletLeague)
-    }
-}
+@Serializable
+data class GauntletMarketState(
+    var productsBought: List<GauntletMarketProductId> = listOf(),
+    var timesProductBoughtInCurrentRefresh: Map<GauntletMarketProductId, UInt> = mapOf(),
+    var nextAutoRefreshTime: Instant = now().midnight().plus(24, HOUR),
+    var lastPlayedGauntletDivision: GauntletDivision = 0u,
+    var isLocked: Boolean = true,
+    var lastPlayedGauntletLeague: GauntletLeague = 0u,
+)

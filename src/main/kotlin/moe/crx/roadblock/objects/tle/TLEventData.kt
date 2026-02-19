@@ -1,71 +1,26 @@
 package moe.crx.roadblock.objects.tle
 
-import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
-import moe.crx.roadblock.game.io.MapIO.readMap
-import moe.crx.roadblock.game.io.MapIO.writeMap
-import moe.crx.roadblock.game.io.ObjectIO.readObject
-import moe.crx.roadblock.game.io.ObjectIO.writeObject
-import moe.crx.roadblock.game.io.OptionalIO.readOptional
-import moe.crx.roadblock.game.io.OptionalIO.writeOptional
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.base.RString
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.game.serialization.FromVersion
+import moe.crx.roadblock.objects.account.EvoTryEventId
 
-class TLEventData : RObject {
-
-    var soloData: SoloTLEventData = SoloTLEventData()
-    var rankData: RankTLEventData = RankTLEventData()
-    var clubData: ClubTLEventData = ClubTLEventData()
-    var bestRace: TLEventRaceData = TLEventRaceData()
-    var quarantine: TLEventQuarantineData? = null
-    var timestamp: Instant = now()
-    var forceQuarantine: Boolean = false
-    var isAutoClaimed: Boolean = false
-    var nitroGhostResetCount: Int = 0 // 3.9+ only (also maybe 3.8)
-    var bestNitroGhostTimeInSeconds: Int = 0 // 3.9+ only (also maybe 3.8)
-    var lastRace: TLEventLastRace = TLEventLastRace()
-    var optAutoplayData: TLEventAutoplayData? = null
-    var evoFreeTryData: Map<RString, EvoFreeTryData> = mapOf()
-
-    override fun read(sink: InputSink) {
-        soloData = sink.readObject()
-        rankData = sink.readObject()
-        clubData = sink.readObject()
-        bestRace = sink.readObject()
-        quarantine = sink.readOptional()
-        timestamp = sink.readInstant()
-        forceQuarantine = sink.readBoolean()
-        isAutoClaimed = sink.readBoolean()
-        nitroGhostResetCount = sink.readInt()
-        bestNitroGhostTimeInSeconds = sink.readInt()
-        if (sink newer "24.6.0") {
-            lastRace = sink.readObject()
-            optAutoplayData = sink.readOptional()
-        }
-        if (sink newer "47.1.0") {
-            evoFreeTryData = sink.readMap()
-        }
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeObject(soloData)
-        sink.writeObject(rankData)
-        sink.writeObject(clubData)
-        sink.writeObject(bestRace)
-        sink.writeOptional(quarantine)
-        sink.writeInstant(timestamp)
-        sink.writeBoolean(forceQuarantine)
-        sink.writeBoolean(isAutoClaimed)
-        sink.writeInt(nitroGhostResetCount)
-        sink.writeInt(bestNitroGhostTimeInSeconds)
-        if (sink newer "24.6.0") {
-            sink.writeObject(lastRace)
-            sink.writeOptional(optAutoplayData)
-        }
-        if (sink newer "47.1.0") {
-            sink.writeMap(evoFreeTryData)
-        }
-    }
-}
+@Serializable
+data class TLEventData(
+    var soloData: SoloTLEventData,
+    var rankData: RankTLEventData,
+    var clubData: ClubTLEventData,
+    var bestRace: TLEventRaceData,
+    var quarantine: TLEventQuarantineData?,
+    var timestamp: Instant,
+    var forceQuarantine: Boolean,
+    var isAutoClaimed: Boolean,
+    var nitroGhostResetCount: UInt,
+    var bestNitroGhostTimeInSeconds: UInt,
+    @FromVersion("24.6.0")
+    var lastRace: TLEventLastRace = TLEventLastRace(),
+    @FromVersion("24.6.0")
+    var autoplayData: TLEventAutoplayData? = null,
+    @FromVersion("47.1.0")
+    var evoFreeTryData: Map<EvoTryEventId, EvoFreeTryData> = mapOf(),
+)

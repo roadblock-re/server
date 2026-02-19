@@ -4,45 +4,7 @@ import io.ktor.server.application.*
 import io.ktor.server.plugins.ratelimit.*
 import io.ktor.server.routing.*
 import moe.crx.roadblock.core.Configuration
-import moe.crx.roadblock.core.routes.assetsGetAsset
-import moe.crx.roadblock.core.routes.assetsGetAssetMetadata
-import moe.crx.roadblock.core.routes.authAuthorize
-import moe.crx.roadblock.core.routes.authTokenEncrypt
-import moe.crx.roadblock.core.routes.authUsersAuthorize
-import moe.crx.roadblock.core.routes.authUsersAuthorizeSpecific
-import moe.crx.roadblock.core.routes.authUsersMe
-import moe.crx.roadblock.core.routes.configDatacenterUrls
-import moe.crx.roadblock.core.routes.configDatacenters
-import moe.crx.roadblock.core.routes.etsV2Binary
-import moe.crx.roadblock.core.routes.eveAbout
-import moe.crx.roadblock.core.routes.gameportalAuthToken
-import moe.crx.roadblock.core.routes.gameportalMigrate
-import moe.crx.roadblock.core.routes.gdidAssignGlobalId
-import moe.crx.roadblock.core.routes.glidAuthorize
-import moe.crx.roadblock.core.routes.glidUserInfo
-import moe.crx.roadblock.core.routes.groupChatListenChatGet
-import moe.crx.roadblock.core.routes.groupChatListenChatPost
-import moe.crx.roadblock.core.routes.groupChatRoomsSubscribe
-import moe.crx.roadblock.core.routes.iapIndexGet
-import moe.crx.roadblock.core.routes.iapIndexPost
-import moe.crx.roadblock.core.routes.iapOrders
-import moe.crx.roadblock.core.routes.leaderboardRankings
-import moe.crx.roadblock.core.routes.leaderboardRankingsFedId
-import moe.crx.roadblock.core.routes.leaderboardRankingsMeClans
-import moe.crx.roadblock.core.routes.leaderboardRankingsMeLocation
-import moe.crx.roadblock.core.routes.lobbyRegions
-import moe.crx.roadblock.core.routes.marketingInGameNews
-import moe.crx.roadblock.core.routes.marketingRedirUpdate
-import moe.crx.roadblock.core.routes.matchmakerQuickLaunch
-import moe.crx.roadblock.core.routes.messageMe
-import moe.crx.roadblock.core.routes.octConnectionStatus
-import moe.crx.roadblock.core.routes.pandoraLocate
-import moe.crx.roadblock.core.routes.socialGroups
-import moe.crx.roadblock.core.routes.socialGroupsFindKeyword
-import moe.crx.roadblock.core.routes.socialGroupsFindRecommended
-import moe.crx.roadblock.core.routes.socialGroupsMembers
-import moe.crx.roadblock.core.routes.socialMeRequests
-import moe.crx.roadblock.core.routes.socialMeRequestsSent
+import moe.crx.roadblock.core.routes.*
 
 // TODO cleanup routes code and response data
 
@@ -52,6 +14,7 @@ fun Application.configureApiRouting(workingDirectory: String, config: Configurat
             // Eve server
             eveAbout()
             octConnectionStatus()
+            clubConnect()
 
             route("/config") {
                 configDatacenterUrls()
@@ -109,6 +72,8 @@ fun Application.configureApiRouting(workingDirectory: String, config: Configurat
                     matchmakerQuickLaunch(config)
                     authTokenEncrypt()
                     messageMe()
+                    transactionsGifts()
+                    transactionsGiftBundles()
                     //groupChatRoomsSubscribe() //FIXME
                 }
             }
@@ -164,6 +129,10 @@ fun Application.configureApiRouting(workingDirectory: String, config: Configurat
             route("/glid") {
                 glidAuthorize()
                 glidUserInfo()
+            }
+            route("/transaction") {
+                transactionsGifts()
+                transactionsGiftBundles()
             }
         }
     }

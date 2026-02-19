@@ -1,30 +1,14 @@
 package moe.crx.roadblock.objects.club
 
-import moe.crx.roadblock.game.io.ObjectIO.readObject
-import moe.crx.roadblock.game.io.ObjectIO.writeObject
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RObject
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.objects.account.CalendarEventId
+import moe.crx.roadblock.objects.account.ClubId
+import moe.crx.roadblock.objects.account.ReputationPoints
 
-class CurrentClubData : RObject {
-
-    var id: String = ""
-    var joinedEventId: String = ""
-    var originalReputation: Int = 0
-    var cachedClubInfo: CachedClubInfo = CachedClubInfo()
-
-    override fun read(sink: InputSink) {
-        id = sink.readString()
-        joinedEventId = sink.readString()
-        originalReputation = sink.readInt()
-        cachedClubInfo = sink.readObject()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeString(id)
-        sink.writeString(joinedEventId)
-        sink.writeInt(originalReputation)
-        sink.writeObject(cachedClubInfo)
-    }
-
-}
+@Serializable
+data class CurrentClubData(
+    var id: ClubId,
+    var joinedEventId: CalendarEventId,
+    var originalReputation: ReputationPoints,
+    var cachedInfo: CachedClubInfo,
+)

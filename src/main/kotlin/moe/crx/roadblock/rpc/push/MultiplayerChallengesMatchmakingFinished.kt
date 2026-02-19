@@ -1,41 +1,17 @@
 package moe.crx.roadblock.rpc.push
 
-import moe.crx.roadblock.game.io.ObjectIO.readObject
-import moe.crx.roadblock.game.io.ObjectIO.writeObject
-import moe.crx.roadblock.game.io.OptionalIO.readOptional
-import moe.crx.roadblock.game.io.OptionalIO.writeOptional
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.game.RaceToken
-import moe.crx.roadblock.objects.game.StatusUpdatesQueueWithRootReactions
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.objects.account.RaceToken
+import moe.crx.roadblock.objects.account.StatusUpdatesQueueWithRootReactions
 import moe.crx.roadblock.objects.multiplayer.GameServerConnectionInfo
+import moe.crx.roadblock.rpc.base.PushMessagePacket
 
-class MultiplayerChallengesMatchmakingFinished : PushMessagePacket() {
-
-    var raceToken: RaceToken = 0
-    var roomId: String = ""
-    var server: String = ""
-    var port: Short = 0
-    var gameServerConnectionInfo: GameServerConnectionInfo? = null
-    var updatesQueue: StatusUpdatesQueueWithRootReactions = StatusUpdatesQueueWithRootReactions()
-
-    override fun read(sink: InputSink) {
-        super.read(sink)
-        raceToken = sink.readInt()
-        roomId = sink.readString()
-        server = sink.readString()
-        port = sink.readShort()
-        gameServerConnectionInfo = sink.readOptional()
-        updatesQueue = sink.readObject()
-    }
-
-    override fun write(sink: OutputSink) {
-        super.write(sink)
-        sink.writeInt(raceToken)
-        sink.writeString(roomId)
-        sink.writeString(server)
-        sink.writeShort(port)
-        sink.writeOptional(gameServerConnectionInfo)
-        sink.writeObject(updatesQueue)
-    }
-}
+@Serializable
+data class MultiplayerChallengesMatchmakingFinished(
+    var raceToken: RaceToken,
+    var roomId: String,
+    var server: String,
+    var port: UShort,
+    var gameServerConnectionInfo: GameServerConnectionInfo?,
+    var updatesQueue: StatusUpdatesQueueWithRootReactions,
+) : PushMessagePacket()

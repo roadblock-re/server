@@ -1,35 +1,22 @@
 package moe.crx.roadblock.game.serialization
 
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RObject
+import kotlinx.serialization.Serializable
 
-class SerializationVersion(var major: Short, var minor: Short, var build: Short) : RObject,
+@Serializable
+data class SerializationVersion(var major: UShort, var minor: UShort, var build: UShort) :
     Comparable<SerializationVersion> {
 
     companion object {
         val versionRegex = Regex("(\\d+)\\.(\\d+)\\.(\\d+)(\\w*)")
     }
 
-    constructor() : this(0, 0, 0)
+    constructor() : this(0u, 0u, 0u)
 
     constructor(version: String) : this() {
         val match = versionRegex.find(version)
-        major = match?.groups[1]?.value?.toShortOrNull() ?: 0
-        minor = match?.groups[2]?.value?.toShortOrNull() ?: 0
-        build = match?.groups[3]?.value?.toShortOrNull() ?: 0
-    }
-
-    override fun read(sink: InputSink) {
-        major = sink.readShort()
-        minor = sink.readShort()
-        build = sink.readShort()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeShort(major)
-        sink.writeShort(minor)
-        sink.writeShort(build)
+        major = match?.groups[1]?.value?.toShortOrNull()?.toUShort() ?: 0u
+        minor = match?.groups[2]?.value?.toShortOrNull()?.toUShort() ?: 0u
+        build = match?.groups[3]?.value?.toShortOrNull()?.toUShort() ?: 0u
     }
 
     override fun compareTo(other: SerializationVersion): Int {
@@ -42,14 +29,16 @@ class SerializationVersion(var major: Short, var minor: Short, var build: Short)
 
     infix fun older(v: String) = this < SerializationVersion(v)
 
+    infix fun eq(v: String) = this == SerializationVersion(v)
+
     override fun equals(other: Any?): Boolean {
         return other is SerializationVersion && other.major == major && other.minor == minor && other.build == build
     }
 
     override fun hashCode(): Int {
         var result = major.toInt()
-        result = 31 * result + minor
-        result = 31 * result + build
+        result = 31 * result + minor.toInt()
+        result = 31 * result + build.toInt()
         return result
     }
 
@@ -57,3 +46,4 @@ class SerializationVersion(var major: Short, var minor: Short, var build: Short)
         return "$major.$minor.$build"
     }
 }
+

@@ -1,20 +1,11 @@
 package moe.crx.roadblock.objects.inventory
 
-import moe.crx.roadblock.game.io.ListIO.readList
-import moe.crx.roadblock.game.io.ListIO.writeList
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RObject
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.objects.account.CarId
+import moe.crx.roadblock.objects.account.MaintenanceSlots
 
-class MaintenanceBooking : RObject {
-
-    var cars: List<CarMaintenanceBooking> = listOf()
-
-    override fun read(sink: InputSink) {
-        cars = sink.readList()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeList(cars)
-    }
-}
+@Serializable
+data class MaintenanceBooking(
+    var carId: CarId,
+    var numberOfSlots: MaintenanceSlots,
+)

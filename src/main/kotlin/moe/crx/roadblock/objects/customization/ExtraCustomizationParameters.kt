@@ -1,27 +1,10 @@
 package moe.crx.roadblock.objects.customization
 
-import moe.crx.roadblock.game.io.OptionalIO.readOptional
-import moe.crx.roadblock.game.io.OptionalIO.writeOptional
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.game.TRGBColor
+import kotlinx.serialization.Serializable
 
-class ExtraCustomizationParameters : RObject {
-
-    var caliperColor: TRGBColor? = null
-    var neonColor: TRGBColor? = null
-    var rimsConfig: RimsConfig? = null
-
-    override fun read(sink: InputSink) {
-        caliperColor = sink.readOptional()
-        neonColor = sink.readOptional()
-        rimsConfig = sink.readOptional()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeOptional(caliperColor)
-        sink.writeOptional(neonColor)
-        sink.writeOptional(rimsConfig)
-    }
-}
+@Serializable
+data class ExtraCustomizationParameters(
+    var caliperColor: TRGBColor? = null,
+    var neonColor: TRGBColor? = null,
+    var rimsConfig: RimsConfig? = null,
+)

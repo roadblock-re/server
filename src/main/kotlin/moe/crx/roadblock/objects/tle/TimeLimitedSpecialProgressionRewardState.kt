@@ -4,4 +4,6 @@ enum class TimeLimitedSpecialProgressionRewardState {
     Locked,
     Claimable,
     Claimed,
+    UnknownState1,
+    UnknownState2,
 }

@@ -1,30 +1,12 @@
 package moe.crx.roadblock.objects.tle
 
-import moe.crx.roadblock.game.io.ListIO.readList
-import moe.crx.roadblock.game.io.ListIO.writeList
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RByte
-import moe.crx.roadblock.objects.base.RObject
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.objects.account.CarId
 
-class TLEventLastRace : RObject {
-
-    var timeInMicroseconds: Int = 0
-    var carId: Int = 0
-    var obtainedSoloRewardsIndices: List<RByte> = listOf()
-    var maintenanceEnabled: Boolean = false
-
-    override fun read(sink: InputSink) {
-        timeInMicroseconds = sink.readInt()
-        carId = sink.readInt()
-        obtainedSoloRewardsIndices = sink.readList()
-        maintenanceEnabled = sink.readBoolean()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeInt(timeInMicroseconds)
-        sink.writeInt(carId)
-        sink.writeList(obtainedSoloRewardsIndices)
-        sink.writeBoolean(maintenanceEnabled)
-    }
-}
+@Serializable
+data class TLEventLastRace(
+    var timeInMicroseconds: UInt = 0u,
+    var carId: CarId = 0u,
+    var obtainedSoloRewardsIndices: List<UByte> = listOf(),
+    var maintenanceEnabled: Boolean = false,
+)

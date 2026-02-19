@@ -1,47 +1,21 @@
 package moe.crx.roadblock.objects.seasonpass
 
-import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
-import moe.crx.roadblock.game.io.MapIO.readMap
-import moe.crx.roadblock.game.io.MapIO.writeMap
-import moe.crx.roadblock.game.io.ObjectIO.readObject
-import moe.crx.roadblock.game.io.ObjectIO.writeObject
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RByte
-import moe.crx.roadblock.objects.base.RObject
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.game.serialization.ByteEnum
+import moe.crx.roadblock.game.serialization.FromVersion
+import moe.crx.roadblock.objects.account.SeasonPassEpisodeId
+import moe.crx.roadblock.objects.account.SeasonPassId
+import moe.crx.roadblock.objects.account.SeasonPassTierId
 
-class SeasonPassState : RObject {
-
-    var endDate: Instant = now()
-    var seasonPassId: Int = 0
-    var episodes: Map<RByte, EpisodeData> = mapOf()
-    var tiers: Map<RByte, TierData> = mapOf()
-    var benefits: LegendPassBenefitsMultipliers = LegendPassBenefitsMultipliers()
-    var nextDayFromLastRace: Instant = now()
-    var episodesCompletionRewardsState: Byte = 0
-
-    override fun read(sink: InputSink) {
-        endDate = sink.readInstant()
-        seasonPassId = sink.readInt()
-        episodes = sink.readMap()
-        tiers = sink.readMap()
-        benefits = sink.readObject()
-        nextDayFromLastRace = sink.readInstant()
-        if (sink newer "24.6.0") {
-            episodesCompletionRewardsState = sink.readByte()
-        }
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeInstant(endDate)
-        sink.writeInt(seasonPassId)
-        sink.writeMap(episodes)
-        sink.writeMap(tiers)
-        sink.writeObject(benefits)
-        sink.writeInstant(nextDayFromLastRace)
-        if (sink newer "24.6.0") {
-            sink.writeByte(episodesCompletionRewardsState)
-        }
-    }
-}
+@Serializable
+data class SeasonPassState(
+    var endDate: Instant,
+    var seasonPassId: SeasonPassId,
+    var episodes: Map<SeasonPassEpisodeId, EpisodeData>,
+    var tiers: Map<SeasonPassTierId, TierData>,
+    var benefits: LegendPassBenefitsMultipliers,
+    var nextDayFromLastRace: Instant,
+    @FromVersion("24.6.0") @ByteEnum
+    var episodesCompletionRewardsState: SeasonPassEpisodesCompletionRewardState = SeasonPassEpisodesCompletionRewardState.Locked,
+)

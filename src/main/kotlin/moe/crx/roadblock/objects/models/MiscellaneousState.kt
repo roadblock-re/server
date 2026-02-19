@@ -1,150 +1,67 @@
 package moe.crx.roadblock.objects.models
 
 import kotlinx.datetime.Clock.System.now
+import kotlinx.datetime.DateTimeUnit.Companion.HOUR
 import kotlinx.datetime.Instant
-import moe.crx.roadblock.game.io.EnumIO.readEnum
-import moe.crx.roadblock.game.io.EnumIO.writeEnum
-import moe.crx.roadblock.game.io.ListIO.readList
-import moe.crx.roadblock.game.io.ListIO.writeList
-import moe.crx.roadblock.game.io.MapIO.readMap
-import moe.crx.roadblock.game.io.MapIO.writeMap
-import moe.crx.roadblock.game.io.ObjectIO.readObject
-import moe.crx.roadblock.game.io.ObjectIO.writeObject
-import moe.crx.roadblock.game.io.OptionalIO.readOptional
-import moe.crx.roadblock.game.io.OptionalIO.writeOptional
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.*
-import moe.crx.roadblock.objects.game.CrossplayPlatformFilter
-import moe.crx.roadblock.objects.game.GameSettings
-import moe.crx.roadblock.objects.game.Gender
+import kotlinx.datetime.plus
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.core.utils.midnight
+import moe.crx.roadblock.game.serialization.ByteEnum
+import moe.crx.roadblock.game.serialization.FromVersion
+import moe.crx.roadblock.game.serialization.UntilVersion
+import moe.crx.roadblock.objects.account.*
+import moe.crx.roadblock.objects.settings.GameSettings
 
-class MiscellaneousState : RObject {
-
-    var username: String = ""
-    var gameSettings: GameSettings = GameSettings()
-    var regionChangeCount: Int = 0
-    var userAge: Byte = 0
-    var userAgeTimeBase: Instant = now()
-    var userGender: Gender = Gender.Unknown
-    var alias: RString? = null
-    var deviceCountry: RString? = null
-    var claimedEnableSystemNotificationsReward: Boolean = false
-    var channelName: RString? = null
-    var privacyPolicy: RByte? = null
-    var platform: RInt? = null // PlatformType
-    var xboxLiveOnlyEnabled: RBoolean? = null
-    var uniqueUserNameChangeCount: RInt? = null
-    var hasPlayedOnAdsPlatform: Boolean = false
-    var hiddenEndRaceAdsOfferIds: List<RInt> = listOf()
-    var lastLoginTimestamp: Instant = now()
-    var lastAdWatchedTimestamp: Instant = now()
-    var underageDisclaimerShown: Boolean = false
-    var xboxCrossplayPlatformFilter: CrossplayPlatformFilter = CrossplayPlatformFilter.CrossPlay
-    var psCrossplayPlatformFilter: CrossplayPlatformFilter = CrossplayPlatformFilter.CrossPlay
-    var claimedDLCs: List<RString> = listOf()
-    var hasUserChangedName: Boolean = false
-    var isUserNameForced: Boolean = false
-    var offlinePurchasedAmounts: Map<RString, RInt> = mapOf()
-    var adsReplacementRemaining: Map<RInt, RInt> = mapOf()
-    var resetAdsReplacementTimepoint: Instant = now()
-
-    override fun read(sink: InputSink) {
-        username = sink.readString()
-        gameSettings = sink.readObject()
-        regionChangeCount = sink.readInt()
-        userAge = sink.readByte()
-        userAgeTimeBase = sink.readInstant()
-        userGender = sink.readEnum()
-        alias = sink.readOptional()
-        deviceCountry = sink.readOptional()
-        claimedEnableSystemNotificationsReward = sink.readBoolean()
-        channelName = sink.readOptional()
-        privacyPolicy = if (sink older "24.6.0") {
-            sink.readOptional()
-        } else {
-            RByte(sink.readByte())
-        }
-        if (sink older "24.0.0") {
-            underageDisclaimerShown = sink.readBoolean()
-        }
-        platform = if (sink older "24.0.0") {
-            sink.readOptional()
-        } else {
-            sink.readObject()
-        }
-        if (sink older "24.6.0") {
-            xboxLiveOnlyEnabled = sink.readOptional()
-        }
-        if (sink older "24.0.0") {
-            uniqueUserNameChangeCount = sink.readOptional()
-        }
-        if (sink newer "47.1.0") {
-            hasPlayedOnAdsPlatform = sink.readBoolean()
-        }
-        if (sink newer "24.0.0") {
-            hiddenEndRaceAdsOfferIds = sink.readList()
-            lastLoginTimestamp = sink.readInstant()
-            lastAdWatchedTimestamp = sink.readInstant()
-            underageDisclaimerShown = sink.readBoolean()
-            xboxCrossplayPlatformFilter = sink.readEnum()
-            psCrossplayPlatformFilter = sink.readEnum()
-            claimedDLCs = sink.readList()
-            hasUserChangedName = sink.readBoolean()
-            isUserNameForced = sink.readBoolean()
-            offlinePurchasedAmounts = sink.readMap()
-        }
-        if (sink newer "24.6.0") {
-            adsReplacementRemaining = sink.readMap()
-            resetAdsReplacementTimepoint = sink.readInstant()
-        }
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeString(username)
-        sink.writeObject(gameSettings)
-        sink.writeInt(regionChangeCount)
-        sink.writeByte(userAge)
-        sink.writeInstant(userAgeTimeBase)
-        sink.writeEnum(userGender)
-        sink.writeOptional(alias)
-        sink.writeOptional(deviceCountry)
-        sink.writeBoolean(claimedEnableSystemNotificationsReward)
-        sink.writeOptional(channelName)
-        if (sink older "24.6.0") {
-            sink.writeOptional(privacyPolicy)
-        } else {
-            sink.writeByte(privacyPolicy?.value ?: 0)
-        }
-        if (sink older "24.0.0") {
-            sink.writeBoolean(underageDisclaimerShown)
-        }
-        if (sink older "24.0.0") {
-            sink.writeOptional(platform)
-        } else {
-            sink.writeObject(platform ?: RInt())
-        }
-        if (sink older "24.6.0") {
-            sink.writeOptional(xboxLiveOnlyEnabled)
-        }
-        if (sink older "24.0.0") {
-            sink.writeOptional(uniqueUserNameChangeCount)
-        }
-        if (sink newer "24.0.0") {
-            sink.writeList(hiddenEndRaceAdsOfferIds)
-            sink.writeInstant(lastLoginTimestamp)
-            sink.writeInstant(lastAdWatchedTimestamp)
-            sink.writeBoolean(underageDisclaimerShown)
-            sink.writeEnum(xboxCrossplayPlatformFilter)
-            sink.writeEnum(psCrossplayPlatformFilter)
-            sink.writeList(claimedDLCs)
-            sink.writeBoolean(hasUserChangedName)
-            sink.writeBoolean(isUserNameForced)
-            sink.writeMap(offlinePurchasedAmounts)
-        }
-        if (sink newer "24.6.0") {
-            sink.writeMap(adsReplacementRemaining)
-            sink.writeInstant(resetAdsReplacementTimepoint)
-        }
-    }
-}
+@Serializable
+data class MiscellaneousState(
+    var username: String = "Driver",
+    var gameSettings: GameSettings = GameSettings(),
+    var regionChangeCount: UInt = 0u,
+    var userAge: Age = 99,
+    var userAgeBaseTimePoint: Instant = now(),
+    var userGender: Gender = Gender.Unknown,
+    var alias: String? = "roadblock",
+    var deviceCountry: String? = "US",
+    var claimedEnableSystemNotificationsReward: Boolean = false,
+    var channelName: String? = null,
+    @FromVersion("24.6.0") @ByteEnum
+    var isGDPRCompliant: GDPRCompliancy = GDPRCompliancy.UnknownValue0,
+    @UntilVersion("24.6.0")
+    var legacyIsGDPRCompliant: Boolean? = null,
+    @UntilVersion("24.0.0")
+    var consentNoticeShown: Boolean = false,
+    @UntilVersion("24.0.0")
+    var legacyPlatform: PlatformType? = null,
+    @FromVersion("24.0.0")
+    var platform: PlatformType = PlatformType.Unknown,
+    @UntilVersion("24.6.0")
+    var xboxLiveOnlyEnabled: Boolean? = null,
+    @UntilVersion("24.0.0")
+    var uniqueUserNameChangeCount: UInt? = null,
+    @FromVersion("47.1.0")
+    var hasPlayedOnAdsPlatform: Boolean = false,
+    @FromVersion("24.0.0")
+    var hiddenEndRaceAdsOfferIds: List<EndRaceAdsOfferId> = listOf(),
+    @FromVersion("24.0.0")
+    var lastLoginTimestamp: Instant = now(),
+    @FromVersion("24.0.0")
+    var lastAdWatchedTimestamp: Instant = now(),
+    @FromVersion("24.0.0")
+    var underageDisclaimerShown: Boolean = false,
+    @FromVersion("24.0.0")
+    var xboxCrossplayPlatformFilter: CrossplayPlatformFilter = CrossplayPlatformFilter.CrossPlay,
+    @FromVersion("24.0.0")
+    var psCrossplayPlatformFilter: CrossplayPlatformFilter = CrossplayPlatformFilter.CrossPlay,
+    @FromVersion("24.0.0")
+    var claimedDLCs: List<String> = listOf(),
+    @FromVersion("24.0.0")
+    var hasUserChangedName: Boolean = false,
+    @FromVersion("24.0.0")
+    var isUserNameForced: Boolean = false,
+    @FromVersion("24.0.0")
+    var offlinePurchasedAmounts: Map<LimitRulesID, UInt> = mapOf(),
+    @FromVersion("24.6.0")
+    var adsReplacementRemaining: Map<Int, Int> = mapOf(),
+    @FromVersion("24.6.0")
+    var resetAdsReplacementTimepoint: Instant = now().midnight().plus(24, HOUR),
+)

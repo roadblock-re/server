@@ -1,24 +1,12 @@
 package moe.crx.roadblock.objects.inventory
 
-import moe.crx.roadblock.game.io.ListIO.readList
-import moe.crx.roadblock.game.io.ListIO.writeList
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.game.Blueprints
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.game.serialization.EnumList
+import moe.crx.roadblock.game.serialization.enumListOf
+import moe.crx.roadblock.objects.account.UpgradeItems
 
-class StatUpgradeInfoState : RObject {
-
-    var uncommonItems: Blueprints = 0
-    var classInfo: List<StatClassUpgradeInfoState> = listOf()
-
-    override fun read(sink: InputSink) {
-        uncommonItems = sink.readInt()
-        classInfo = sink.readList()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeInt(uncommonItems)
-        sink.writeList(classInfo)
-    }
-}
+@Serializable
+data class StatUpgradeInfoState(
+    var uncommonItems: UpgradeItems = 0u,
+    var classInfo: EnumList<StatClassUpgradeInfoState, CarClass> = enumListOf { StatClassUpgradeInfoState() },
+)

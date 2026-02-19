@@ -1,34 +1,15 @@
 package moe.crx.roadblock.objects.models
 
-import moe.crx.roadblock.game.io.MapIO.readMap
-import moe.crx.roadblock.game.io.MapIO.writeMap
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RInt
-import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.career.CareerChapterState
-import moe.crx.roadblock.objects.career.CareerEventState
-import moe.crx.roadblock.objects.career.CareerSeasonState
-import moe.crx.roadblock.objects.game.Flags
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.objects.account.*
+import moe.crx.roadblock.objects.career.ChapterState
+import moe.crx.roadblock.objects.career.EventState
+import moe.crx.roadblock.objects.career.SeasonState
 
-class CareerState : RObject {
-
-    var careerFlags: Flags = 0
-    var seasons: Map<RInt, CareerSeasonState> = mapOf()
-    var events: Map<RInt, CareerEventState> = mapOf()
-    var chapters: Map<RInt, CareerChapterState> = mapOf()
-
-    override fun read(sink: InputSink) {
-        careerFlags = sink.readInt()
-        seasons = sink.readMap()
-        events = sink.readMap()
-        chapters = sink.readMap()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeInt(careerFlags)
-        sink.writeMap(seasons)
-        sink.writeMap(events)
-        sink.writeMap(chapters)
-    }
-}
+@Serializable
+data class CareerState(
+    var flags: Flags = 0u,
+    var seasons: Map<SeasonId, SeasonState> = mapOf(79u to SeasonState(ProgressState.InProgress)),
+    var events: Map<CareerEventId, EventState> = mapOf(1028u to EventState(ProgressState.InProgress)),
+    var chapters: Map<ChapterId, ChapterState> = mapOf(1u to ChapterState(ProgressState.InProgress)),
+)

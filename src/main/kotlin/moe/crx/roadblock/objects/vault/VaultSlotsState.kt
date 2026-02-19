@@ -1,28 +1,13 @@
 package moe.crx.roadblock.objects.vault
 
-import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.game.VaultEventId
-import moe.crx.roadblock.objects.game.VaultSlotId
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.objects.account.VaultEventId
+import moe.crx.roadblock.objects.account.VaultSlotId
 
-class VaultSlotsState : RObject {
-
-    var slotId: VaultSlotId = 0
-    var assignedEventId: VaultEventId = 0
-    var eventAssignedTimestamp: Instant = now()
-
-    override fun read(sink: InputSink) {
-        slotId = sink.readShort()
-        assignedEventId = sink.readInt()
-        eventAssignedTimestamp = sink.readInstant()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeShort(slotId)
-        sink.writeInt(assignedEventId)
-        sink.writeInstant(eventAssignedTimestamp)
-    }
-}
+@Serializable
+data class VaultSlotsState(
+    var slotId: VaultSlotId,
+    var assignedEventId: VaultEventId,
+    var eventAssignedTimestamp: Instant,
+)

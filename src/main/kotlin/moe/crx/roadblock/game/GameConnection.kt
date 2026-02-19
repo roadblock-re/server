@@ -1,27 +1,27 @@
 package moe.crx.roadblock.game
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock.System.now
+import kotlinx.datetime.DateTimeUnit.Companion.HOUR
 import kotlinx.datetime.Instant
-import moe.crx.roadblock.core.utils.bytes
-import moe.crx.roadblock.core.utils.fromHexString
-import moe.crx.roadblock.core.utils.readFully
-import moe.crx.roadblock.core.utils.sink
+import kotlinx.datetime.plus
+import kotlinx.serialization.*
+import kotlinx.serialization.json.Json
+import moe.crx.roadblock.core.Configuration
+import moe.crx.roadblock.core.utils.midnight
 import moe.crx.roadblock.core.utils.toHexString
-import moe.crx.roadblock.game.io.ObjectIO.readObject
-import moe.crx.roadblock.objects.game.*
-import moe.crx.roadblock.rpc.push.PushMessagePacket
-import moe.crx.roadblock.rpc.auth.ConnectGameRequest
-import moe.crx.roadblock.rpc.auth.LoginRequest
-import moe.crx.roadblock.rpc.auth.LoginResponse
-import moe.crx.roadblock.rpc.auth.LoginResponse.Companion.GAME_SIGNATURE
-import moe.crx.roadblock.rpc.base.ReconnectionResponse
-import moe.crx.roadblock.rpc.base.RequestPacket
-import moe.crx.roadblock.rpc.base.ResponsePacket
+import moe.crx.roadblock.game.serialization.Blob
+import moe.crx.roadblock.game.serialization.RoadblockFormat
 import moe.crx.roadblock.game.serialization.SerializationVersion
+import moe.crx.roadblock.game.serialization.enumListOf
+import moe.crx.roadblock.objects.account.ActionResponseHeader
+import moe.crx.roadblock.objects.account.CompressionType
+import moe.crx.roadblock.objects.account.ConfigData
+import moe.crx.roadblock.objects.account.ServerDBDataSerialization
+import moe.crx.roadblock.objects.playerstats.GameplayTutorialType
+import moe.crx.roadblock.objects.playerstats.MenuTutorialType
+import moe.crx.roadblock.objects.playerstats.TutorialState
+import moe.crx.roadblock.rpc.base.*
+import moe.crx.roadblock.rpc.social.SendTrackingEventsRequest
 import org.fusesource.jansi.Ansi.ansi
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -36,74 +36,40 @@ import java.util.concurrent.locks.ReentrantLock
 // - Multiplayer packets
 
 // TODO plugin system
-// TODO UpdatesConsumer for State and it's members (create updates to send, and then apply them to state)
+// TODO UpdatesConsumer for State and it's members (create updates to send, and then apply them to state) (use Kotlin getters/setters?)
+// TODO Original serial names from binaries
 
 class GameConnection(
     val workingDirectory: String,
+    var config: Configuration,
     val ignoreConnect: Boolean = false,
     val sendBlock: suspend (ByteArray, Boolean) -> Unit
 ) {
     companion object {
         val LOG: Logger = LoggerFactory.getLogger("roadblock.game")
+        val json = Json
     }
 
     enum class ConnectionState {
         NOT_INITIALIZED, NOT_AUTHORIZED, AUTHORIZED
     }
 
-    var ver = SerializationVersion(0, 0, 0)
+    var ver = SerializationVersion()
+    var format = RoadblockFormat(ver)
     var layer = GameLayer(workingDirectory, ver)
 
     var connectionState = ConnectionState.NOT_INITIALIZED
     var onlineInformationSent = false
-    val cliJob: Job
 
     var packetLock: ReentrantLock = ReentrantLock()
+
+    // TODO Fix this trash
     var lastRequestSequence = -2
     var requestSequence = 0
-    var requestType: Short = 0
+    var requestType: UShort = 0u
 
     val stateManager = StateManager(workingDirectory)
     var gameState = stateManager.default(ver)
-
-    init {
-        LOG.info("Game connection created")
-        cliJob = CoroutineScope(Dispatchers.Default).launch {
-            while (true) {
-                val line = readln()
-
-                if (line.isBlank()) {
-                    continue
-                }
-
-                val bytes = runCatching {
-                    line.split(",").first().run {
-                        if (startsWith("\"") && endsWith("\"")) {
-                            substring(1, length - 1)
-                        } else {
-                            this
-                        }
-                    }.let {
-                        File(it).readBytes()
-                    }
-                }.getOrNull() ?: runCatching {
-                    line.fromHexString()
-                }.getOrNull()
-
-                if (bytes == null) {
-                    continue
-                }
-
-                runCatching { bytes.sink(ver).readObject<ResponsePacket>().type }.getOrNull()?.let { id ->
-                    LOG.info("Sending response packet with ID {}", id)
-                }
-                runCatching { bytes.sink(ver).readObject<PushMessagePacket>().type }.getOrNull()?.let { id ->
-                    LOG.info("Sending push message packet with ID {}", id)
-                }
-                send(bytes)
-            }
-        }
-    }
 
     suspend fun send(bytes: ByteArray, preferDeflated: Boolean = false) {
         // TODO print received packets ANSI
@@ -111,20 +77,25 @@ class GameConnection(
         sendBlock(bytes, preferDeflated)
     }
 
-    suspend fun send(response: ResponsePacket, customTimestamp: Instant? = null) {
+    suspend inline fun <reified T> sendResponse(response: T, customTimestamp: Instant? = null) {
         check(requestType.toInt() != 0)
 
-        response.apply {
-            header.nextActionId = requestSequence + 2
-            header.lastCommitedActionId = lastRequestSequence
-            header.clientTime = customTimestamp ?: now()
+        (response as? ResponsePacket)?.apply {
+            header.nextActionId = (requestSequence + 2).toUInt()
+            header.lastCommittedActionId = lastRequestSequence.toUInt()
+            header.serverTime = customTimestamp ?: now()
             type = requestType
         }
 
         lastRequestSequence = requestSequence
-        requestType = 0
+        requestType = 0u
 
-        send(response.bytes(ver))
+        sendObject(response)
+    }
+
+    suspend inline fun <reified T> sendObject(value: T) {
+        val bytes = format.encodeToByteArray(value)
+        send(bytes, bytes.size > 1024)
     }
 
     suspend fun receive(bytes: ByteArray) {
@@ -140,10 +111,14 @@ class GameConnection(
 
             gameState = stateManager.read(ver)
 
-            send(ReconnectionResponse().apply {
-                lastActionId = lastRequestSequence
-                lastCommitedActionId = lastRequestSequence
-            }.bytes(ver))
+            sendObject(
+                ReconnectionResponse(
+                    magic = 2u,
+                    error = null,
+                    lastActionId = lastRequestSequence.toUInt(),
+                    lastCommittedActionId = lastRequestSequence.toUInt(),
+                )
+            )
             return
         }
 
@@ -164,7 +139,7 @@ class GameConnection(
 
         // TODO Move to WebSocket handler
         if (connectionState == ConnectionState.NOT_INITIALIZED) {
-            val handshake = bytes.sink(ver).readFully<ConnectGameRequest>()
+            val handshake = json.decodeFromString<ConnectGameRequest>(bytes.toString(Charsets.UTF_8))
             LOG.info("Game connected with fedId {} and roomId {}", handshake.fedId, handshake.roomId)
             connectionState = ConnectionState.NOT_AUTHORIZED
             return
@@ -172,10 +147,13 @@ class GameConnection(
 
         // TODO preserve game state, so it won't require auth on reconnect
         if (bytes.first().toInt() == 0) {
-            val loginRequest = bytes.sink(ver).readFully<LoginRequest>()
+            val loginHeader = format.decodeFromByteArray<GameLoginRequestHeader>(bytes)
 
-            ver = GameLayer.selectVersion(loginRequest.gameVersion)
+            ver = GameLayer.selectVersion(loginHeader.gameVersion)
+            format = RoadblockFormat(ver)
             layer = GameLayer(workingDirectory, ver)
+
+            val loginRequest = format.decodeFromByteArray<GameLoginRequest>(bytes)
 
             LOG.info(
                 "[I] Game authorized, negotiated version {}.{}.{}, {} packet types",
@@ -188,35 +166,48 @@ class GameConnection(
 
             gameState = stateManager.read(ver)
 
-            LoginResponse().apply {
-                userSessionId = "506746a9-0f5e-4827-9dfc-eb9ccbad8b81"
-                revision = "b1610"
-                actionResponseParams = ActionResponseHeader() // TODO
-                lastServerActionId = 0
-                serverSyslogId = "a9b-aaaaaaaa-bbbbbbbb"
-                buildId = "b1610"
-                didMaintenanceFreeRefill = false
-                remindNewGarageLevel = false
-                isClientReloadNeeded = false
-                isVipPlayer = false
-                signatureValue = GAME_SIGNATURE
-                serializationVersion = ver
-                configData = ConfigData().apply {
-                    compressionType = CompressionType.LZ4
-                    data = layer.getConfig().readBytes()
-                }
-                serverDBs = ServerDBSerialization().apply {
-                    gameDb = ConfigData().apply {
-                        compressionType = CompressionType.LZ4
-                        data = layer.getGameDb().readBytes()
+            val loginResponse = GameLoginResponse(
+                lastServerActionId = 0u,
+                actionResponseParams = ActionResponseHeader(),
+                configData = ConfigData(
+                    compression = CompressionType.LZ4,
+                    data = Blob(layer.getConfig().readBytes()),
+                ),
+                serverDBs = ServerDBDataSerialization(
+                    gameDb = ConfigData(
+                        compression = CompressionType.LZ4,
+                        data = Blob(layer.getGameDb().readBytes()),
+                    )
+                ),
+                serializationVersion = ver,
+                state = gameState,
+            )
+
+            loginResponse.apply {
+                state.apply {
+                    playerStats.apply {
+                        menuTutorials =
+                            enumListOf(MenuTutorialType.lastEntryFor(ver)) { TutorialState.Pending } // Game breaks if list has wrong size
+                        gameplayTutorials =
+                            enumListOf(GameplayTutorialType.lastEntryFor(ver)) { TutorialState.Pending } // Game breaks if list has wrong size
                     }
                 }
-                state = gameState
-            }.let {
-                send(it.bytes(ver), true)
             }
 
-            return
+            loginResponse.apply {
+                state.apply {
+                    clubSystem.clubData = null
+                    miscellaneous.resetAdsReplacementTimepoint = now().midnight().plus(24, HOUR)
+                    blackMarket.nextAutoRefreshTime = now().midnight().plus(24, HOUR)
+                    blackMarket.nextDailyResetTime = now().midnight().plus(24, HOUR)
+                    dailyTasks.state.resetTime = now().midnight().plus(24, HOUR)
+                    vipSystem.vipBlackMarketState.nextAutoRefreshTime = now().midnight().plus(24, HOUR)
+                    vipSystem.vipBlackMarketState.nextDailyResetTime = now().midnight().plus(24, HOUR)
+                    gauntletSystem.market.nextAutoRefreshTime = now().midnight().plus(24, HOUR)
+                }
+            }
+
+            return sendObject(loginResponse)
         }
 
         if (!onlineInformationSent && connectionState == ConnectionState.AUTHORIZED) {
@@ -227,9 +218,9 @@ class GameConnection(
 
         packetLock.lock()
 
-        val header = bytes.sink(ver).readObject<RequestPacket>()
+        val header = format.decodeFromByteArray<RequestPacket>(bytes)
 
-        requestSequence = header.header.actionId
+        requestSequence = header.header.actionId.toInt()
         requestType = header.type
 
         if (requestSequence != lastRequestSequence + 2) {
@@ -240,7 +231,7 @@ class GameConnection(
             )
         }
 
-        val handlerEntry = layer.handlers[header.type]
+        val handlerEntry = layer.handlers[header.type.toInt()]
         val handler = handlerEntry?.handle
 
         if (handlerEntry == null || handler == null) {
@@ -259,7 +250,18 @@ class GameConnection(
         }
 
         val request = runCatching {
-            bytes.sink(ver).readFully(handlerEntry.requestClass)
+            @Suppress("UNCHECKED_CAST")
+            @OptIn(InternalSerializationApi::class)
+            val serializer = handlerEntry.requestClass.serializer() as KSerializer<RequestPacket>
+            val deserialized = format.decodeFromByteArray(serializer, bytes)
+
+            if (config.checkReceivedRequestSize && handlerEntry.requestClass != SendTrackingEventsRequest::class) {
+                val serializedBytes = format.encodeToByteArray(serializer, deserialized)
+                val byteDelta = bytes.size - serializedBytes.size
+                check(byteDelta == 0) { "Packet isn't read until the end, $byteDelta bytes still available" }
+            }
+
+            deserialized
         }.onFailure { throwable ->
             LOG.error("[I] Error reading packet {} (ID {})", handlerEntry.requestName, header.type)
             throwable.printStackTrace()
@@ -293,7 +295,7 @@ class GameConnection(
         packetLock.unlock()
     }
 
-    fun reportHandlingError(name: String, type: Short, bytes: ByteArray, throwable: Throwable) {
+    fun reportHandlingError(name: String, type: UShort, bytes: ByteArray, throwable: Throwable) {
         File(File(workingDirectory, "reports"), "${System.currentTimeMillis()}.report").run {
             parentFile.mkdirs()
 
@@ -313,7 +315,6 @@ class GameConnection(
 
     fun close() {
         LOG.info("Game connection closed")
-        cliJob.cancel()
     }
 
     fun saveState() {

@@ -1,22 +1,10 @@
 package moe.crx.roadblock.objects.models
 
-import moe.crx.roadblock.game.io.MapIO.readMap
-import moe.crx.roadblock.game.io.MapIO.writeMap
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.base.RString
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.objects.account.CalendarEventId
 import moe.crx.roadblock.objects.goldenchest.GoldenChestEventState
 
-class GoldenChestSystemState : RObject {
-
-    var eventDataById: Map<RString, GoldenChestEventState> = mapOf()
-
-    override fun read(sink: InputSink) {
-        eventDataById = sink.readMap()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeMap(eventDataById)
-    }
-}
+@Serializable
+data class GoldenChestSystemState(
+    var eventDataById: Map<CalendarEventId, GoldenChestEventState> = mapOf(),
+)

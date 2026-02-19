@@ -24,6 +24,23 @@ fun List<Annotation>?.isByteEnum(): Boolean {
 
 @OptIn(ExperimentalSerializationApi::class)
 @SerialInfo
+@Target(AnnotationTarget.PROPERTY, AnnotationTarget.CLASS)
+annotation class StringEnum
+
+// TODO: Restrict StringEnum when Map's both key and value types are enum.
+
+fun List<Annotation>?.isStringEnum(): Boolean {
+    if (this == null) return false
+
+    for (annotation in this) {
+        if (annotation is StringEnum) return true
+    }
+
+    return false
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@SerialInfo
 @Target(AnnotationTarget.PROPERTY)
 annotation class FromVersion(val version: String)
 

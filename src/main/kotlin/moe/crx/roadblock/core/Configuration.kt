@@ -21,6 +21,7 @@ data class Configuration(
     val tcpPort: Int = 4447,
     val downloadResources: Boolean = false,
     val forceWebsocket: Boolean = false,
+    val checkReceivedRequestSize: Boolean = false,
     val eveDomain: String = "eve.gameloft.com",
 )
 

@@ -1,106 +1,41 @@
 package moe.crx.roadblock.objects.inventory
 
-import moe.crx.roadblock.game.io.ListIO.readList
-import moe.crx.roadblock.game.io.ListIO.writeList
-import moe.crx.roadblock.game.io.ObjectIO.readObject
-import moe.crx.roadblock.game.io.ObjectIO.writeObject
-import moe.crx.roadblock.game.io.OptionalIO.readOptional
-import moe.crx.roadblock.game.io.OptionalIO.writeOptional
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.*
-import moe.crx.roadblock.objects.game.Blueprints
-import moe.crx.roadblock.objects.game.CarUpgradeLevel
-import moe.crx.roadblock.objects.game.CarUpgradeTier
-import moe.crx.roadblock.objects.game.UpgradeItems
+import kotlinx.datetime.Instant
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.game.serialization.EnumList
+import moe.crx.roadblock.game.serialization.FromVersion
+import moe.crx.roadblock.game.serialization.UntilVersion
+import moe.crx.roadblock.game.serialization.enumListOf
+import moe.crx.roadblock.objects.account.*
 
-class CarState : RObject {
-
-    var blueprints: Blueprints = 0
-    var unlockedTiers: CarUpgradeTier = 0
-    var unlockedLevels: CarUpgradeLevel = 0
-    var carTuning: CarTuningState = CarTuningState()
-    var epicItems: UpgradeItems = 0
-    var freeUpgrades: List<RInt> = listOf()
-    var maintenance: CarMaintenanceStats = CarMaintenanceStats()
-    var usageStats: CarUsageStats = CarUsageStats()
-    var ownedEvoTuningParts: EvoTuningParts = EvoTuningParts()
-    var hasReceivedEvoTickets: Boolean = false
-    var customization: CarCustomizationState = CarCustomizationState()
-    var tierBlueprints: Blueprints = 0
-    var ownedDecalVisuals: List<RInt> = listOf()
-    var isOwned: Boolean = false
-    var isCarKeyOwned: Boolean = false
-    var ownedCustomParts: List<RShort> = listOf()
-    var currentEvoTier: RByte? = null
-    var evoTierBlueprints: Blueprints = 0
-    var overclockExpirationDate: RInstant? = null
-    var unlockedAssemblyBlueprints: Int = 0
-    var overclockState: CarOverclockState = CarOverclockState()
-
-    override fun read(sink: InputSink) {
-        blueprints = sink.readInt()
-        unlockedTiers = sink.readByte()
-        unlockedLevels = sink.readByte()
-        carTuning = sink.readObject()
-        epicItems = sink.readInt()
-        freeUpgrades = sink.readList()
-        maintenance = sink.readObject()
-        usageStats = sink.readObject()
-        if (sink newer "45.0.0") {
-            ownedEvoTuningParts = sink.readObject()
-        }
-        if (sink newer "47.1.0") {
-            hasReceivedEvoTickets = sink.readBoolean()
-        }
-        customization = sink.readObject()
-        tierBlueprints = sink.readInt()
-        ownedDecalVisuals = sink.readList()
-        isOwned = sink.readBoolean()
-        isCarKeyOwned = sink.readBoolean()
-        ownedCustomParts = sink.readList()
-        if (sink older "24.0.0") {
-            currentEvoTier = sink.readOptional()
-            evoTierBlueprints = sink.readInt()
-        }
-        if (sink newer "24.0.0" && sink older "47.1.0") {
-            overclockExpirationDate = sink.readOptional()
-        }
-        if (sink newer "24.6.0") {
-            unlockedAssemblyBlueprints = sink.readInt()
-        }
-        if (sink newer "47.1.0") {
-            overclockState = sink.readObject()
-        }
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeInt(blueprints)
-        sink.writeByte(unlockedTiers)
-        sink.writeByte(unlockedLevels)
-        sink.writeObject(carTuning)
-        sink.writeInt(epicItems)
-        sink.writeList(freeUpgrades)
-        sink.writeObject(maintenance)
-        sink.writeObject(usageStats)
-        if (sink newer "45.0.0") {
-            sink.writeObject(ownedEvoTuningParts)
-        }
-        sink.writeObject(customization)
-        sink.writeInt(tierBlueprints)
-        sink.writeList(ownedDecalVisuals)
-        sink.writeBoolean(isOwned)
-        sink.writeBoolean(isCarKeyOwned)
-        sink.writeList(ownedCustomParts)
-        if (sink older "24.0.0") {
-            sink.writeOptional(currentEvoTier)
-            sink.writeInt(evoTierBlueprints)
-        }
-        if (sink newer "24.0.0") {
-            sink.writeOptional(overclockExpirationDate)
-        }
-        if (sink newer "24.6.0") {
-            sink.writeInt(unlockedAssemblyBlueprints)
-        }
-    }
-}
+@Serializable
+data class CarState(
+    var blueprints: Blueprints = 0u,
+    var unlockedTiers: CarUpgradeTier = 1u,
+    var unlockedLevels: CarUpgradeLevel = 4u,
+    var carTuningState: CarTuningState = CarTuningState(),
+    var epicUpgradeItems: UpgradeItems = 0u,
+    var freeUpgradesForStat: EnumList<FreeUpgrades, CarStatType> = enumListOf { 0u },
+    var maintenance: CarMaintenanceState,
+    var usageStats: CarUsageStats = CarUsageStats(),
+    @FromVersion("45.0.0")
+    var ownedEvoTuningParts: EvoTuningParts = EvoTuningParts(),
+    @FromVersion("47.1.0")
+    var hasReceivedEvoTickets: Boolean = false,
+    var customization: CarCustomizationState = CarCustomizationState(),
+    var tierBlueprints: Blueprints = 0u,
+    var ownedDecalVisuals: List<CarDecalVisualId> = listOf(),
+    var isOwned: Boolean = false,
+    var isCarKeyOwned: Boolean = false,
+    var ownedCustomParts: List<CarCustomPartId> = listOf(),
+    @UntilVersion("24.0.0")
+    var currentEvoTier: CarEvoTier? = null,
+    @UntilVersion("24.0.0")
+    var evoTierBlueprints: Blueprints = 0u,
+    @FromVersion("24.0.0") @UntilVersion("47.1.0")
+    var overclockExpirationDate: Instant? = null,
+    @FromVersion("24.6.0")
+    var unlockedAssemblyBlueprints: Int = 0,
+    @FromVersion("47.1.0")
+    var overclockState: CarOverclockState = CarOverclockState(),
+)

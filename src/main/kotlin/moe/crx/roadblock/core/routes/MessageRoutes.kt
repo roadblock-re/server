@@ -8,7 +8,13 @@ fun Route.messageMe() = get("/messages/secured/me") {
     call.respondText(
         contentType = ContentType.Application.Json,
         text = """
-            []
+            [{
+                "type": "gift",
+                "body": "{\"gifts\":[],\"message\":\"Welcome to Roadblock!\"}",
+                "gift_type": "dynamic_gift",
+                "id": "gift_id_idk_bruh"
+            }]
             """.trimIndent(),
-    )
+
+        )
 }

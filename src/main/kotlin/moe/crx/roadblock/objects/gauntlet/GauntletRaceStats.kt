@@ -1,32 +1,14 @@
 package moe.crx.roadblock.objects.gauntlet
 
-import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.game.CarId
-import moe.crx.roadblock.objects.game.CarRank
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.objects.account.CarId
+import moe.crx.roadblock.objects.account.CarRank
 
-class GauntletRaceStats : RObject {
-
-    var time: Instant = now()
-    var carId: CarId = 0
-    var carRank: CarRank = 0
-    var isOverclocked: Boolean = false
-
-    override fun read(sink: InputSink) {
-        time = sink.readInstant()
-        carId = sink.readInt()
-        carRank = sink.readShort()
-        isOverclocked = sink.readBoolean()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeInstant(time)
-        sink.writeInt(carId)
-        sink.writeShort(carRank)
-        sink.writeBoolean(isOverclocked)
-    }
-
-}
+@Serializable
+data class GauntletRaceStats(
+    var time: Instant,
+    var carId: CarId,
+    var carRank: CarRank,
+    var isOverclocked: Boolean,
+)

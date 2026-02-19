@@ -1,38 +1,15 @@
 package moe.crx.roadblock.objects.club
 
-import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
-import moe.crx.roadblock.game.io.ListIO.readList
-import moe.crx.roadblock.game.io.ListIO.writeList
-import moe.crx.roadblock.game.io.ObjectIO.readObject
-import moe.crx.roadblock.game.io.ObjectIO.writeObject
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.base.RString
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.objects.account.ClubInvitationId
+import moe.crx.roadblock.objects.account.Credentials
 
-class ClubInvitation : RObject {
-
-    var ids: List<RString> = listOf() // TODO List of what exactly?
-    var club: ClubData = ClubData()
-    var timestamp: Instant = now()
-    var senderCredentials: List<RString> = listOf() // TODO List of what exactly?
-    var senderRank: Int = 0
-
-    override fun read(sink: InputSink) {
-        ids = sink.readList()
-        club = sink.readObject()
-        timestamp = sink.readInstant()
-        senderCredentials = sink.readList()
-        senderRank = sink.readInt()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeList(ids)
-        sink.writeObject(club)
-        sink.writeInstant(timestamp)
-        sink.writeList(senderCredentials)
-        sink.writeInt(senderRank)
-    }
-
-}
+@Serializable
+data class ClubInvitation(
+    var ids: List<ClubInvitationId>,
+    var club: ClubData,
+    var timestamp: Instant,
+    var senderCredentials: List<Credentials>,
+    var senderRank: ClubMemberRank,
+)

@@ -1,26 +1,10 @@
 package moe.crx.roadblock.objects.relayoffers
 
-import moe.crx.roadblock.game.io.MapIO.readMap
-import moe.crx.roadblock.game.io.MapIO.writeMap
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RByte
-import moe.crx.roadblock.objects.base.RInt
-import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.game.RelayOfferTierId
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.objects.account.RelayOfferTierId
 
-class RelayOfferEventState : RObject {
-
-    var currentPurchasableTier: RelayOfferTierId = 0
-    var amountOfPurchasesPerTier: Map<RInt, RByte> = mapOf() // RelayOfferTierId
-
-    override fun read(sink: InputSink) {
-        currentPurchasableTier = sink.readInt()
-        amountOfPurchasesPerTier = sink.readMap()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeInt(currentPurchasableTier)
-        sink.writeMap(amountOfPurchasesPerTier)
-    }
-}
+@Serializable
+data class RelayOfferEventState(
+    var currentPurchasableTier: RelayOfferTierId,
+    var amountOfPurchasesPerTier: Map<RelayOfferTierId, UByte>,
+)

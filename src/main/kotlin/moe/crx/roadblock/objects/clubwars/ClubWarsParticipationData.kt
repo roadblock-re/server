@@ -1,18 +1,8 @@
 package moe.crx.roadblock.objects.clubwars
 
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RObject
+import kotlinx.serialization.Serializable
 
-class ClubWarsParticipationData : RObject {
-
-    var hasClaimedRewards: Boolean = false
-
-    override fun read(sink: InputSink) {
-        hasClaimedRewards = sink.readBoolean()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeBoolean(hasClaimedRewards)
-    }
-}
+@Serializable
+data class ClubWarsParticipationData(
+    var hasClaimedRewards: Boolean
+)

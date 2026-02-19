@@ -1,27 +1,11 @@
 package moe.crx.roadblock.objects.dailytasks
 
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RObject
+import kotlinx.serialization.Serializable
 
-class DailyTask : RObject {
-
-    var isLocked: Boolean = false
-    var isClaimed: Boolean = false
-    var count: Int = 0
-    var isEnabled: Boolean = false
-
-    override fun read(sink: InputSink) {
-        isLocked = sink.readBoolean()
-        isClaimed = sink.readBoolean()
-        count = sink.readInt()
-        isEnabled = sink.readBoolean()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeBoolean(isLocked)
-        sink.writeBoolean(isClaimed)
-        sink.writeInt(count)
-        sink.writeBoolean(isEnabled)
-    }
-}
+@Serializable
+data class DailyTask(
+    var isLocked: Boolean = true,
+    var isClaimed: Boolean = false,
+    var count: UInt = 0u,
+    var isEnabled: Boolean = true,
+)

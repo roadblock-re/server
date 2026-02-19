@@ -1,21 +1,8 @@
 package moe.crx.roadblock.objects.vault
 
-import moe.crx.roadblock.game.io.ListIO.readList
-import moe.crx.roadblock.game.io.ListIO.writeList
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RInt
-import moe.crx.roadblock.objects.base.RObject
+import kotlinx.serialization.Serializable
 
-class VaultSoloRewardsState : RObject {
-
-    var obtainedRewardCounts: List<RInt> = listOf()
-
-    override fun read(sink: InputSink) {
-        obtainedRewardCounts = sink.readList()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeList(obtainedRewardCounts)
-    }
-}
+@Serializable
+data class VaultSoloRewardsState(
+    var obtainedRewardCounts: List<UInt>,
+)

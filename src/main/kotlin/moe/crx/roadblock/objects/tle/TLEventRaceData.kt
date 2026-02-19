@@ -1,51 +1,22 @@
 package moe.crx.roadblock.objects.tle
 
-import moe.crx.roadblock.game.io.OptionalIO.readOptional
-import moe.crx.roadblock.game.io.OptionalIO.writeOptional
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RInt
-import moe.crx.roadblock.objects.base.RObject
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.game.serialization.FromVersion
+import moe.crx.roadblock.objects.account.CarId
+import moe.crx.roadblock.objects.account.CarRank
+import moe.crx.roadblock.objects.account.EvoTuningVisualArchetype
 
-class TLEventRaceData : RObject {
-
-    var timeInMicroseconds: Int = 0
-    var carId: Int = 0
-    var carRank: Short = 0
-    var isCarOverclocked: Boolean = false
-    var collectedItemCount: Int = 0
-    var driveMeters: Int = 0
-    var optEvoTuningVisualArchetype: RInt? = null
-
-    override fun read(sink: InputSink) {
-        timeInMicroseconds = sink.readInt()
-        carId = sink.readInt()
-        carRank = sink.readShort()
-        if (sink newer "24.0.0") {
-            isCarOverclocked = sink.readBoolean()
-        }
-        if (sink newer "24.6.0") {
-            collectedItemCount = sink.readInt()
-            driveMeters = sink.readInt()
-        }
-        if (sink newer "47.1.0") {
-            optEvoTuningVisualArchetype = sink.readOptional()
-        }
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeInt(timeInMicroseconds)
-        sink.writeInt(carId)
-        sink.writeShort(carRank)
-        if (sink newer "24.0.0") {
-            sink.writeBoolean(isCarOverclocked)
-        }
-        if (sink newer "24.6.0") {
-            sink.writeInt(collectedItemCount)
-            sink.writeInt(driveMeters)
-        }
-        if (sink newer "47.1.0") {
-            sink.writeOptional(optEvoTuningVisualArchetype)
-        }
-    }
-}
+@Serializable
+data class TLEventRaceData(
+    var timeInMicroseconds: UInt,
+    var carId: CarId,
+    var carRank: CarRank,
+    @FromVersion("24.0.0")
+    var isCarOverclocked: Boolean = false,
+    @FromVersion("24.6.0")
+    var collectedItemCount: UInt = 0u,
+    @FromVersion("24.6.0")
+    var driveMeters: UInt = 0u,
+    @FromVersion("47.1.0")
+    var evoTuningVisualArchetype: EvoTuningVisualArchetype? = null,
+)

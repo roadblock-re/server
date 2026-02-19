@@ -1,24 +1,10 @@
 package moe.crx.roadblock.objects.gacha
 
-import moe.crx.roadblock.game.io.ObjectIO.readObject
-import moe.crx.roadblock.game.io.ObjectIO.writeObject
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.blackmarket.BlackMarketItemVariant
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.objects.blackmarket.BlackMarketItem
 
-class GachaRewardPack : RObject {
-
-    var item: BlackMarketItemVariant = BlackMarketItemVariant()
-    var amount: Int = 0
-
-    override fun read(sink: InputSink) {
-        item = sink.readObject()
-        amount = sink.readInt()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeObject(item)
-        sink.writeInt(amount)
-    }
-}
+@Serializable
+data class GachaRewardPack(
+    var item: BlackMarketItem,
+    var amount: UInt,
+)

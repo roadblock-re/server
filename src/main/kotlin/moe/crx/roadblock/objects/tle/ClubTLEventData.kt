@@ -1,29 +1,10 @@
 package moe.crx.roadblock.objects.tle
 
-import moe.crx.roadblock.game.io.ListIO.readList
-import moe.crx.roadblock.game.io.ListIO.writeList
-import moe.crx.roadblock.game.io.ObjectIO.readObject
-import moe.crx.roadblock.game.io.ObjectIO.writeObject
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RByte
-import moe.crx.roadblock.objects.base.RObject
+import kotlinx.serialization.Serializable
 
-class ClubTLEventData : RObject {
-
-    var completedRewards: List<RByte> = listOf()
-    var claimedRewards: List<RByte> = listOf()
-    var claimData: ClubTLEventClaimData = ClubTLEventClaimData()
-
-    override fun read(sink: InputSink) {
-        completedRewards = sink.readList()
-        claimedRewards = sink.readList()
-        claimData = sink.readObject()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeList(completedRewards)
-        sink.writeList(claimedRewards)
-        sink.writeObject(claimData)
-    }
-}
+@Serializable
+data class ClubTLEventData(
+    var completedRewards: List<UByte>,
+    var claimedRewards: List<UByte>,
+    var claimData: ClubTLEventClaimData,
+)

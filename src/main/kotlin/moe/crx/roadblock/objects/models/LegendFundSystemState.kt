@@ -1,32 +1,15 @@
 package moe.crx.roadblock.objects.models
 
-import moe.crx.roadblock.game.io.ListIO.readList
-import moe.crx.roadblock.game.io.ListIO.writeList
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.base.RShort
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.game.serialization.FromVersion
+import moe.crx.roadblock.game.serialization.UntilVersion
+import moe.crx.roadblock.objects.account.GarageLevel
 
-class LegendFundSystemState : RObject {
-
-    var ownedTierCount: Short = 0
-    var claimedMilestones: List<RShort> = listOf()
-
-    override fun read(sink: InputSink) {
-        ownedTierCount = if (sink newer "24.0.0") {
-            sink.readShort()
-        } else {
-            sink.readByte().toShort()
-        }
-        claimedMilestones = sink.readList()
-    }
-
-    override fun write(sink: OutputSink) {
-        if (sink newer "24.0.0") {
-            sink.writeShort(ownedTierCount)
-        } else {
-            sink.writeByte(ownedTierCount.toByte())
-        }
-        sink.writeList(claimedMilestones)
-    }
-}
+@Serializable
+data class LegendFundSystemState(
+    @FromVersion("24.0.0")
+    var ownedTierCount: UShort = 0u,
+    @UntilVersion("24.0.0")
+    var legacyOwnedTierCount: UByte = 0u,
+    var claimedMilestones: List<GarageLevel> = listOf(),
+)

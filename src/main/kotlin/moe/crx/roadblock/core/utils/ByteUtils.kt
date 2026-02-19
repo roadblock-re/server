@@ -1,67 +1,13 @@
 package moe.crx.roadblock.core.utils
 
-import moe.crx.roadblock.game.io.ObjectIO.readObject
-import moe.crx.roadblock.game.io.ObjectIO.writeObject
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.InputStreamSink
-import moe.crx.roadblock.game.sinks.OutputAnsiSink
-import moe.crx.roadblock.game.sinks.OutputStreamSink
-import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.game.serialization.SerializationVersion
-import org.fusesource.jansi.Ansi
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
 import java.security.MessageDigest
 import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 import kotlin.enums.enumEntries
-import kotlin.reflect.KClass
 
 inline fun <reified T : Enum<T>> Number.toEnum(): T {
     return enumEntries<T>()[toInt()]
-}
-
-fun ByteArray.sink(ver: SerializationVersion): InputStreamSink {
-    return InputStreamSink(ByteArrayInputStream(this), ver)
-}
-
-fun <T : RObject> InputSink.readFully(clazz: KClass<T>): T {
-    readObject(clazz).let {
-        check(available() == 0) {
-            "Packet isn't read until the end, ${available()} bytes still available"
-        }
-        return it
-    }
-}
-
-inline fun <reified T : RObject> InputSink.readFully(): T {
-    return readFully(T::class)
-}
-
-fun byteOutputSink(ver: SerializationVersion): OutputStreamSink {
-    return OutputStreamSink(ByteArrayOutputStream(), ver)
-}
-
-fun OutputStreamSink.bytes(): ByteArray {
-    check(output is ByteArrayOutputStream)
-    return output.toByteArray()
-}
-
-fun RObject.bytes(ver: SerializationVersion): ByteArray {
-    return byteOutputSink(ver).apply {
-        writeObject(this@bytes)
-    }.bytes()
-}
-
-fun RObject.ansi(ver: SerializationVersion): Ansi {
-    return OutputAnsiSink(ver).also { sink ->
-        runCatching {
-            this.write(sink)
-        }.onFailure {
-            sink.writeString("...")
-        }
-    }.result()
 }
 
 fun ByteArray.sha256() = MessageDigest.getInstance("SHA-256").digest(this).toHexString()

@@ -1,22 +1,10 @@
 package moe.crx.roadblock.objects.models
 
-import moe.crx.roadblock.game.io.MapIO.readMap
-import moe.crx.roadblock.game.io.MapIO.writeMap
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RObject
-import moe.crx.roadblock.objects.base.RString
+import kotlinx.serialization.Serializable
 import moe.crx.roadblock.objects.championship.ChampionshipSpecialEventData
+import moe.crx.roadblock.objects.account.CalendarEventId
 
-class ChampionshipSystemState : RObject {
-
-    var events: Map<RString, ChampionshipSpecialEventData> = mapOf()
-
-    override fun read(sink: InputSink) {
-        events = sink.readMap()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeMap(events)
-    }
-}
+@Serializable
+data class ChampionshipSystemState(
+    var eventDataById: Map<CalendarEventId, ChampionshipSpecialEventData> = mapOf(),
+)

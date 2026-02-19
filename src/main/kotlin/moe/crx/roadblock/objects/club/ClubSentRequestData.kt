@@ -1,24 +1,12 @@
 package moe.crx.roadblock.objects.club
 
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RObject
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.objects.account.ClubId
+import moe.crx.roadblock.objects.account.ClubRequestId
 
-class ClubSentRequestData : RObject {
-
-    var requestId: String = ""
-    var clubId: String = ""
-    var clubName: String = ""
-
-    override fun read(sink: InputSink) {
-        requestId = sink.readString()
-        clubId = sink.readString()
-        clubName = sink.readString()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeString(requestId)
-        sink.writeString(clubId)
-        sink.writeString(clubName)
-    }
-}
+@Serializable
+data class ClubSentRequestData(
+    var id: ClubRequestId,
+    var clubId: ClubId,
+    var clubName: String,
+)

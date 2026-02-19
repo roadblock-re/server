@@ -1,34 +1,13 @@
 package moe.crx.roadblock.objects.inventory
 
-import moe.crx.roadblock.game.io.ListIO.readList
-import moe.crx.roadblock.game.io.ListIO.writeList
-import moe.crx.roadblock.game.sinks.InputSink
-import moe.crx.roadblock.game.sinks.OutputSink
-import moe.crx.roadblock.objects.base.RInt
-import moe.crx.roadblock.objects.base.RObject
+import kotlinx.serialization.Serializable
+import moe.crx.roadblock.objects.account.CarEvoTuningPartId
 
-class EvoTuningParts : RObject {
-
-    var ownedEngineIds: List<RInt> = listOf()
-    var ownedDriveTrainIds: List<RInt> = listOf()
-    var ownedNOSIds: List<RInt> = listOf()
-    var ownedIntakeIds: List<RInt> = listOf()
-    var ownedSKitIds: List<RInt> = listOf()
-
-    override fun read(sink: InputSink) {
-        ownedEngineIds = sink.readList()
-        ownedDriveTrainIds = sink.readList()
-        ownedNOSIds = sink.readList()
-        ownedIntakeIds = sink.readList()
-        ownedSKitIds = sink.readList()
-    }
-
-    override fun write(sink: OutputSink) {
-        sink.writeList(ownedEngineIds)
-        sink.writeList(ownedDriveTrainIds)
-        sink.writeList(ownedNOSIds)
-        sink.writeList(ownedIntakeIds)
-        sink.writeList(ownedSKitIds)
-    }
-
-}
+@Serializable
+data class EvoTuningParts(
+    var ownedEngineIds: List<CarEvoTuningPartId> = listOf(),
+    var ownedDriveTrainIds: List<CarEvoTuningPartId> = listOf(),
+    var ownedNOSIds: List<CarEvoTuningPartId> = listOf(),
+    var ownedIntakeIds: List<CarEvoTuningPartId> = listOf(),
+    var ownedSKitIds: List<CarEvoTuningPartId> = listOf(),
+)
