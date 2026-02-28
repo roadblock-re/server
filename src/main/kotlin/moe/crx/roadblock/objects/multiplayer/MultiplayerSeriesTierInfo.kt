@@ -2,8 +2,8 @@ package moe.crx.roadblock.objects.multiplayer
 
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.FromVersion
-import moe.crx.roadblock.objects.account.MultiplayerSeriesSubTierId
-import moe.crx.roadblock.objects.account.MultiplayerSeriesTierId
+import moe.crx.roadblock.objects.MultiplayerSeriesSubTierId
+import moe.crx.roadblock.objects.MultiplayerSeriesTierId
 
 @Serializable
 data class MultiplayerSeriesTierInfo(

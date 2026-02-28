@@ -2,8 +2,8 @@ package moe.crx.roadblock.objects.championship
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.ChampionshipRoundId
-import moe.crx.roadblock.objects.account.EventTrackDefId
+import moe.crx.roadblock.objects.ChampionshipRoundId
+import moe.crx.roadblock.objects.EventTrackDefId
 
 @Serializable
 data class ChampionshipSpecialEventData(

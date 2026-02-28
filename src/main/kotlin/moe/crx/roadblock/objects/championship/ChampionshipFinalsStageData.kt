@@ -1,8 +1,8 @@
 package moe.crx.roadblock.objects.championship
 
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.ChampionshipGroupId
-import moe.crx.roadblock.objects.account.ChampionshipRewardsTierId
+import moe.crx.roadblock.objects.ChampionshipGroupId
+import moe.crx.roadblock.objects.ChampionshipRewardsTierId
 
 @Serializable
 data class ChampionshipFinalsStageData(

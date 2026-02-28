@@ -3,9 +3,9 @@ package moe.crx.roadblock.objects.seasonpass
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.ByteEnum
 import moe.crx.roadblock.game.serialization.FromVersion
-import moe.crx.roadblock.objects.account.CalendarEventId
-import moe.crx.roadblock.objects.account.SeasonPassExperience
-import moe.crx.roadblock.objects.account.SeasonPassId
+import moe.crx.roadblock.objects.CalendarEventId
+import moe.crx.roadblock.objects.SeasonPassExperience
+import moe.crx.roadblock.objects.SeasonPassId
 
 @Serializable
 data class SeasonPassPersistentState(

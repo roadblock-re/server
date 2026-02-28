@@ -2,9 +2,9 @@ package moe.crx.roadblock.objects.multiplayer
 
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.FromVersion
-import moe.crx.roadblock.objects.account.MultiplayerSeriesScore
-import moe.crx.roadblock.objects.account.MultiplayerSeriesScoreMilestoneId
-import moe.crx.roadblock.objects.account.PlayerElo
+import moe.crx.roadblock.objects.MultiplayerSeriesScore
+import moe.crx.roadblock.objects.MultiplayerSeriesScoreMilestoneId
+import moe.crx.roadblock.objects.PlayerElo
 
 @Serializable
 data class MultiplayerSeriesEventState(

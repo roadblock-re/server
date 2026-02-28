@@ -3,8 +3,8 @@ package moe.crx.roadblock.objects.inventory
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.UntilVersion
-import moe.crx.roadblock.objects.account.ConsecutiveDays
-import moe.crx.roadblock.objects.account.RaceCount
+import moe.crx.roadblock.objects.ConsecutiveDays
+import moe.crx.roadblock.objects.RaceCount
 
 @Serializable
 data class CarUsageStats(

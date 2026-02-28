@@ -2,8 +2,8 @@ package moe.crx.roadblock.objects.party
 
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.FromVersion
-import moe.crx.roadblock.objects.account.CarId
-import moe.crx.roadblock.objects.account.EventTrackDefId
+import moe.crx.roadblock.objects.CarId
+import moe.crx.roadblock.objects.EventTrackDefId
 import moe.crx.roadblock.objects.inventory.CarClass
 
 @Serializable

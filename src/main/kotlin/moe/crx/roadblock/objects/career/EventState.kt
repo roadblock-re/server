@@ -1,8 +1,7 @@
 package moe.crx.roadblock.objects.career
 
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.CareerFlagId
-import moe.crx.roadblock.objects.account.ProgressState
+import moe.crx.roadblock.objects.CareerFlagId
 
 @Serializable
 data class EventState(

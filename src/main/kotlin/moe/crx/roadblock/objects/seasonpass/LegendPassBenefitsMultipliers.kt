@@ -4,8 +4,8 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.EnumList
 import moe.crx.roadblock.game.serialization.FromVersion
-import moe.crx.roadblock.objects.account.MaintenanceSlots
-import moe.crx.roadblock.objects.account.SeasonPassBenefitBoost
+import moe.crx.roadblock.objects.MaintenanceSlots
+import moe.crx.roadblock.objects.SeasonPassBenefitBoost
 
 @Serializable
 data class LegendPassBenefitsMultipliers(

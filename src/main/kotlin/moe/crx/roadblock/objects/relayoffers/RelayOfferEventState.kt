@@ -1,7 +1,7 @@
 package moe.crx.roadblock.objects.relayoffers
 
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.RelayOfferTierId
+import moe.crx.roadblock.objects.RelayOfferTierId
 
 @Serializable
 data class RelayOfferEventState(

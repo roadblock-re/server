@@ -2,7 +2,7 @@ package moe.crx.roadblock.objects.championship
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.LeaderboardPosition
+import moe.crx.roadblock.objects.LeaderboardPosition
 
 @Serializable
 data class ChampionshipLeaderboardData(

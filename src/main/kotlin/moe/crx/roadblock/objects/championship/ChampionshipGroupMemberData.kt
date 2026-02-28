@@ -2,8 +2,7 @@ package moe.crx.roadblock.objects.championship
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.Credentials
-import moe.crx.roadblock.objects.account.LeaderboardClubData
+import moe.crx.roadblock.objects.social.Credentials
 import moe.crx.roadblock.objects.settings.RegionCode
 
 @Serializable

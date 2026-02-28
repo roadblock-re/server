@@ -3,7 +3,7 @@ package moe.crx.roadblock.objects.inventory
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.EnumList
 import moe.crx.roadblock.game.serialization.enumListOf
-import moe.crx.roadblock.objects.account.UpgradeItems
+import moe.crx.roadblock.objects.UpgradeItems
 
 @Serializable
 data class StatUpgradeInfoState(

@@ -1,7 +1,7 @@
 package moe.crx.roadblock.objects.models
 
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.VaultEventId
+import moe.crx.roadblock.objects.VaultEventId
 import moe.crx.roadblock.objects.vault.EventRewardsIndexesState
 
 @Serializable

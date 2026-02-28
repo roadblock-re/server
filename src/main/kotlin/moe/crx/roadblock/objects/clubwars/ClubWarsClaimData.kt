@@ -1,8 +1,8 @@
 package moe.crx.roadblock.objects.clubwars
 
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.ClubWarsRewardIndex
-import moe.crx.roadblock.objects.account.LeaderboardPosition
+import moe.crx.roadblock.objects.ClubWarsRewardIndex
+import moe.crx.roadblock.objects.LeaderboardPosition
 
 @Serializable
 data class ClubWarsClaimData(

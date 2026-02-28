@@ -3,9 +3,9 @@ package moe.crx.roadblock.objects.piggybank
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.FromVersion
-import moe.crx.roadblock.objects.account.Money
-import moe.crx.roadblock.objects.account.PiggyBankEventId
-import moe.crx.roadblock.objects.account.PiggyBankTierId
+import moe.crx.roadblock.objects.Money
+import moe.crx.roadblock.objects.PiggyBankEventId
+import moe.crx.roadblock.objects.PiggyBankTierId
 
 @Serializable
 data class PiggyBankState(

@@ -9,20 +9,20 @@ import io.ktor.server.response.*
 fun Application.configureStatusPages() {
     install(StatusPages) {
         exception<Throwable> { call, cause ->
-            _root_ide_package_.moe.crx.roadblock.core.plugins.renderPage(null, call, cause)
+            renderPage(null, call, cause)
         }
         status(HttpStatusCode.NotFound) { code ->
-            _root_ide_package_.moe.crx.roadblock.core.plugins.renderPage(code, call, Exception("Page not found."))
+            renderPage(code, call, Exception("Page not found."))
         }
         status(HttpStatusCode.InternalServerError) { code ->
-            _root_ide_package_.moe.crx.roadblock.core.plugins.renderPage(
+            renderPage(
                 code,
                 call,
                 Exception("Internal server error.")
             )
         }
         status(HttpStatusCode.Unauthorized) { code ->
-            _root_ide_package_.moe.crx.roadblock.core.plugins.renderPage(code, call, Exception("Unauthorized."))
+            renderPage(code, call, Exception("Unauthorized."))
         }
         status(HttpStatusCode.TooManyRequests) { call, status ->
             val retryAfter = call.response.headers["Retry-After"]

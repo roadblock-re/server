@@ -5,7 +5,11 @@ import moe.crx.roadblock.game.serialization.EnumList
 import moe.crx.roadblock.game.serialization.FromVersion
 import moe.crx.roadblock.game.serialization.UntilVersion
 import moe.crx.roadblock.game.serialization.enumListOf
-import moe.crx.roadblock.objects.account.*
+import moe.crx.roadblock.objects.CollectorStage
+import moe.crx.roadblock.objects.GarageLevel
+import moe.crx.roadblock.objects.GarageValue
+import moe.crx.roadblock.objects.ReputationLevel
+import moe.crx.roadblock.objects.ReputationPoints
 import moe.crx.roadblock.objects.playerstats.*
 
 @Serializable

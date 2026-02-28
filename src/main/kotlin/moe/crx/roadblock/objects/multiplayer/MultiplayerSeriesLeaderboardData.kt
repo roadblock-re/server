@@ -2,8 +2,8 @@ package moe.crx.roadblock.objects.multiplayer
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.LeaderboardPosition
-import moe.crx.roadblock.objects.account.PlayerElo
+import moe.crx.roadblock.objects.LeaderboardPosition
+import moe.crx.roadblock.objects.PlayerElo
 
 @Serializable
 data class MultiplayerSeriesLeaderboardData(

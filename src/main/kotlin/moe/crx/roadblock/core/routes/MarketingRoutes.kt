@@ -30,7 +30,7 @@ fun Route.marketingRedirUpdate() = get("/redir/") {
         data = decryptDesEcbZeroPadding(data, "qPKBGA==")
     }
 
-    _root_ide_package_.moe.crx.roadblock.core.routes.logger.info("Redir called with: {}", data)
+    logger.info("Redir called with: {}", data)
 
     call.respondRedirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
 }

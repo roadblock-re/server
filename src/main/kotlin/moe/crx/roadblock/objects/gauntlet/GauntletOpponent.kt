@@ -1,9 +1,9 @@
 package moe.crx.roadblock.objects.gauntlet
 
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.Credentials
-import moe.crx.roadblock.objects.account.EventTrackDefId
-import moe.crx.roadblock.objects.account.GauntletScore
+import moe.crx.roadblock.objects.social.Credentials
+import moe.crx.roadblock.objects.EventTrackDefId
+import moe.crx.roadblock.objects.GauntletScore
 
 @Serializable
 data class GauntletOpponent(

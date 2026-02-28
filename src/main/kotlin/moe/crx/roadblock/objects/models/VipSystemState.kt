@@ -3,7 +3,7 @@ package moe.crx.roadblock.objects.models
 import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.VipExperience
+import moe.crx.roadblock.objects.VipExperience
 
 @Serializable
 data class VipSystemState(

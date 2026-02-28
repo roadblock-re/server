@@ -19,18 +19,18 @@ data class ClubConnectResponse(
 )
 
 fun Route.clubConnect() = get("/clubconnect") {
-    val platform = call.queryParameters["platform"]
-    val language = call.queryParameters["lang"]
-    val gamespace = call.queryParameters["gamespace"]
-    val fedId = call.queryParameters["fed_id"]
-    val clientId = call.queryParameters["client_id"]
-    val localTime = call.queryParameters["local_time"]
-    val webviewSesId = call.queryParameters["webview_ses_id"]
-    val firstLaunch = call.queryParameters["first_launch"]
-    val gdid = call.queryParameters["gdid"]
-    val hdidfv = call.queryParameters["hdidfv"]
-    val consent = call.queryParameters["consent"]
-    val sdkVersion = call.queryParameters["sdk_version"]
+    call.queryParameters["platform"]
+    call.queryParameters["lang"]
+    call.queryParameters["gamespace"]
+    call.queryParameters["fed_id"]
+    call.queryParameters["client_id"]
+    call.queryParameters["local_time"]
+    call.queryParameters["webview_ses_id"]
+    call.queryParameters["first_launch"]
+    call.queryParameters["gdid"]
+    call.queryParameters["hdidfv"]
+    call.queryParameters["consent"]
+    call.queryParameters["sdk_version"]
 
     // action = "authen"
     // rfToken idk

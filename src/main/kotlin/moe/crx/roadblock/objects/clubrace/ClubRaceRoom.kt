@@ -1,0 +1,9 @@
+package moe.crx.roadblock.objects.clubrace
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class ClubRaceRoom(
+    var clientData: ClubRaceClientRoomData,
+    var encryptedServerData: String,
+)

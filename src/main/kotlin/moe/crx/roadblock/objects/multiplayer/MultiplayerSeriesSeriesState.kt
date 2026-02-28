@@ -3,8 +3,8 @@ package moe.crx.roadblock.objects.multiplayer
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.FromVersion
-import moe.crx.roadblock.objects.account.CalendarEventId
-import moe.crx.roadblock.objects.account.PlayerElo
+import moe.crx.roadblock.objects.CalendarEventId
+import moe.crx.roadblock.objects.PlayerElo
 
 @Serializable
 data class MultiplayerSeriesSeriesState(

@@ -2,10 +2,10 @@ package moe.crx.roadblock.objects.mpchallenges
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.CarId
-import moe.crx.roadblock.objects.account.MultiplayerChallengesSeriesId
-import moe.crx.roadblock.objects.account.MultiplayerRaceConfigId
-import moe.crx.roadblock.objects.account.RaceToken
+import moe.crx.roadblock.objects.CarId
+import moe.crx.roadblock.objects.MultiplayerChallengesSeriesId
+import moe.crx.roadblock.objects.MultiplayerRaceConfigId
+import moe.crx.roadblock.objects.RaceToken
 import moe.crx.roadblock.objects.multiplayer.RaceStats
 import moe.crx.roadblock.objects.settings.ControlSchemeType
 

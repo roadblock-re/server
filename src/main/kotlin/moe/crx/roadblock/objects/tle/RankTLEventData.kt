@@ -1,7 +1,7 @@
 package moe.crx.roadblock.objects.tle
 
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.LeaderboardPosition
+import moe.crx.roadblock.objects.LeaderboardPosition
 
 @Serializable
 data class RankTLEventData(

@@ -2,9 +2,9 @@ package moe.crx.roadblock.objects.uber
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.CarId
-import moe.crx.roadblock.objects.account.UberExperience
-import moe.crx.roadblock.objects.account.UberHazardLevel
+import moe.crx.roadblock.objects.CarId
+import moe.crx.roadblock.objects.UberExperience
+import moe.crx.roadblock.objects.UberHazardLevel
 
 @Serializable
 data class UberSpecialEventData(

@@ -3,7 +3,7 @@ package moe.crx.roadblock.rpc.base
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.FromVersion
 import moe.crx.roadblock.game.serialization.UntilVersion
-import moe.crx.roadblock.objects.account.ServerError
+import moe.crx.roadblock.objects.ServerError
 
 @Serializable
 open class PushMessagePacket(

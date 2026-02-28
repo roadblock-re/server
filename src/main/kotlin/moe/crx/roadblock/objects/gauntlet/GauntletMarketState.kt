@@ -6,9 +6,9 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.plus
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.core.utils.midnight
-import moe.crx.roadblock.objects.account.GauntletDivision
-import moe.crx.roadblock.objects.account.GauntletLeague
-import moe.crx.roadblock.objects.account.GauntletMarketProductId
+import moe.crx.roadblock.objects.GauntletDivision
+import moe.crx.roadblock.objects.GauntletLeague
+import moe.crx.roadblock.objects.GauntletMarketProductId
 
 @Serializable
 data class GauntletMarketState(

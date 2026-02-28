@@ -1,9 +1,13 @@
 package moe.crx.roadblock.objects.models
 
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.*
+import moe.crx.roadblock.objects.CareerEventId
+import moe.crx.roadblock.objects.ChapterId
+import moe.crx.roadblock.objects.Flags
+import moe.crx.roadblock.objects.SeasonId
 import moe.crx.roadblock.objects.career.ChapterState
 import moe.crx.roadblock.objects.career.EventState
+import moe.crx.roadblock.objects.career.ProgressState
 import moe.crx.roadblock.objects.career.SeasonState
 
 @Serializable

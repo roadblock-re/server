@@ -3,7 +3,7 @@ package moe.crx.roadblock.objects.club
 import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.ClubDonationItemId
+import moe.crx.roadblock.objects.ClubDonationItemId
 
 @Serializable
 data class ClubDonationData(

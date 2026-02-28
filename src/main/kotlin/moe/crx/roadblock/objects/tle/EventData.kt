@@ -3,7 +3,7 @@ package moe.crx.roadblock.objects.tle
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.SerializationVersion
 import moe.crx.roadblock.game.serialization.Variant
-import moe.crx.roadblock.objects.account.CalendarEventId
+import moe.crx.roadblock.objects.CalendarEventId
 
 @Serializable
 sealed class EventData {
@@ -13,10 +13,10 @@ sealed class EventData {
             add(EventDataOsiris::class)
         }
     }
-
-    @Serializable
-    data class EventDataReference(val eventId: CalendarEventId) : EventData()
-
-    @Serializable
-    data class EventDataOsiris(val eventData: OsirisEventData) : EventData()
 }
+
+@Serializable
+data class EventDataReference(val eventId: CalendarEventId) : EventData()
+
+@Serializable
+data class EventDataOsiris(val eventData: OsirisEventData) : EventData()

@@ -1,7 +1,6 @@
 package moe.crx.roadblock.objects.social
 
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.Credentials
 
 @Serializable
 data class OneWayConnectionParams(

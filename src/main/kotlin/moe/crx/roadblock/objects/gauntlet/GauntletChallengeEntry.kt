@@ -2,7 +2,12 @@ package moe.crx.roadblock.objects.gauntlet
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.*
+import moe.crx.roadblock.objects.EventTrackDefId
+import moe.crx.roadblock.objects.GauntletChallengePoints
+import moe.crx.roadblock.objects.GauntletQualificationId
+import moe.crx.roadblock.objects.GauntletScore
+import moe.crx.roadblock.objects.PlayerElo
+import moe.crx.roadblock.objects.social.Credentials
 
 @Serializable
 data class GauntletChallengeEntry(

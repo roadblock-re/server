@@ -1,7 +1,7 @@
 package moe.crx.roadblock.objects.customization
 
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.CarCustomPartId
+import moe.crx.roadblock.objects.CarCustomPartId
 
 @Serializable
 data class CustomParts(

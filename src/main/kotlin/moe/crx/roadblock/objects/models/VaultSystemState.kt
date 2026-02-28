@@ -3,8 +3,8 @@ package moe.crx.roadblock.objects.models
 import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.VaultEventId
-import moe.crx.roadblock.objects.account.VaultTicket
+import moe.crx.roadblock.objects.VaultEventId
+import moe.crx.roadblock.objects.VaultTicket
 import moe.crx.roadblock.objects.vault.VaultSlotsState
 
 @Serializable

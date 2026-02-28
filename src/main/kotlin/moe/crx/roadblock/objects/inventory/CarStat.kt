@@ -1,8 +1,8 @@
 package moe.crx.roadblock.objects.inventory
 
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.CarUpgradeItemSlotId
-import moe.crx.roadblock.objects.account.CarUpgradeLevel
+import moe.crx.roadblock.objects.CarUpgradeItemSlotId
+import moe.crx.roadblock.objects.CarUpgradeLevel
 
 @Serializable
 data class CarStat(

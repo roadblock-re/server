@@ -2,7 +2,7 @@ package moe.crx.roadblock.objects.models
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.CalendarEventId
+import moe.crx.roadblock.objects.CalendarEventId
 import moe.crx.roadblock.objects.inventory.CurrencyType
 
 @Serializable

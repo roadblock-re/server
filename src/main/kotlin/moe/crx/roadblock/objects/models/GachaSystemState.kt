@@ -7,7 +7,7 @@ import kotlinx.datetime.plus
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.core.utils.midnight
 import moe.crx.roadblock.game.serialization.FromVersion
-import moe.crx.roadblock.objects.account.CalendarEventId
+import moe.crx.roadblock.objects.CalendarEventId
 import moe.crx.roadblock.objects.gacha.EventBoxData
 import moe.crx.roadblock.objects.gacha.GachaId
 import moe.crx.roadblock.objects.gacha.GachaPoolDataEntry

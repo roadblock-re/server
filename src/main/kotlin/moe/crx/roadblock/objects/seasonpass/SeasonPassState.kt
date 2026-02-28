@@ -4,9 +4,9 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.ByteEnum
 import moe.crx.roadblock.game.serialization.FromVersion
-import moe.crx.roadblock.objects.account.SeasonPassEpisodeId
-import moe.crx.roadblock.objects.account.SeasonPassId
-import moe.crx.roadblock.objects.account.SeasonPassTierId
+import moe.crx.roadblock.objects.SeasonPassEpisodeId
+import moe.crx.roadblock.objects.SeasonPassId
+import moe.crx.roadblock.objects.SeasonPassTierId
 
 @Serializable
 data class SeasonPassState(

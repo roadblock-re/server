@@ -2,8 +2,8 @@ package moe.crx.roadblock.objects.club
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.Credentials
-import moe.crx.roadblock.objects.account.PlatformType
+import moe.crx.roadblock.objects.social.Credentials
+import moe.crx.roadblock.objects.social.PlatformType
 
 @Serializable
 data class ClubLastEditorData(

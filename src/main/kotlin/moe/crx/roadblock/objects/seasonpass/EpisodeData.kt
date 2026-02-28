@@ -2,7 +2,7 @@ package moe.crx.roadblock.objects.seasonpass
 
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.ByteEnum
-import moe.crx.roadblock.objects.account.SeasonPassMissionId
+import moe.crx.roadblock.objects.SeasonPassMissionId
 
 @Serializable
 data class EpisodeData(

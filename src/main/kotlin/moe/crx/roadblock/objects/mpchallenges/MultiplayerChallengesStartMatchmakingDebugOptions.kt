@@ -1,8 +1,8 @@
 package moe.crx.roadblock.objects.mpchallenges
 
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.GameplayServerType
-import moe.crx.roadblock.objects.account.MultiplayerRaceConfigId
+import moe.crx.roadblock.objects.multiplayer.GameplayServerType
+import moe.crx.roadblock.objects.MultiplayerRaceConfigId
 
 @Serializable
 data class MultiplayerChallengesStartMatchmakingDebugOptions(

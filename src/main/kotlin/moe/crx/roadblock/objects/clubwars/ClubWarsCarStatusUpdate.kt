@@ -1,10 +1,10 @@
 package moe.crx.roadblock.objects.clubwars
 
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.CarId
-import moe.crx.roadblock.objects.account.CarRank
-import moe.crx.roadblock.objects.account.CarUpgradeTier
-import moe.crx.roadblock.objects.account.GarageValue
+import moe.crx.roadblock.objects.CarId
+import moe.crx.roadblock.objects.CarRank
+import moe.crx.roadblock.objects.CarUpgradeTier
+import moe.crx.roadblock.objects.GarageValue
 
 @Serializable
 data class ClubWarsCarStatusUpdate(

@@ -1,8 +1,8 @@
 package moe.crx.roadblock.objects.club
 
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.ClubId
-import moe.crx.roadblock.objects.account.ClubRequestId
+import moe.crx.roadblock.objects.ClubId
+import moe.crx.roadblock.objects.ClubRequestId
 
 @Serializable
 data class ClubSentRequestData(

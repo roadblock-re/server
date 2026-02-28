@@ -13,15 +13,14 @@ import moe.crx.roadblock.game.serialization.Blob
 import moe.crx.roadblock.game.serialization.RoadblockFormat
 import moe.crx.roadblock.game.serialization.SerializationVersion
 import moe.crx.roadblock.game.serialization.enumListOf
-import moe.crx.roadblock.objects.account.ActionResponseHeader
-import moe.crx.roadblock.objects.account.CompressionType
-import moe.crx.roadblock.objects.account.ConfigData
-import moe.crx.roadblock.objects.account.ServerDBDataSerialization
+import moe.crx.roadblock.objects.ActionResponseHeader
+import moe.crx.roadblock.objects.CompressionType
+import moe.crx.roadblock.objects.ConfigData
+import moe.crx.roadblock.objects.ServerDBDataSerialization
 import moe.crx.roadblock.objects.playerstats.GameplayTutorialType
 import moe.crx.roadblock.objects.playerstats.MenuTutorialType
 import moe.crx.roadblock.objects.playerstats.TutorialState
 import moe.crx.roadblock.rpc.base.*
-import moe.crx.roadblock.rpc.social.SendTrackingEventsRequest
 import org.fusesource.jansi.Ansi.ansi
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -153,7 +152,7 @@ class GameConnection(
             format = RoadblockFormat(ver)
             layer = GameLayer(workingDirectory, ver)
 
-            val loginRequest = format.decodeFromByteArray<GameLoginRequest>(bytes)
+            format.decodeFromByteArray<GameLoginRequest>(bytes)
 
             LOG.info(
                 "[I] Game authorized, negotiated version {}.{}.{}, {} packet types",
@@ -255,7 +254,7 @@ class GameConnection(
             val serializer = handlerEntry.requestClass.serializer() as KSerializer<RequestPacket>
             val deserialized = format.decodeFromByteArray(serializer, bytes)
 
-            if (config.checkReceivedRequestSize && handlerEntry.requestClass != SendTrackingEventsRequest::class) {
+            if (config.checkReceivedRequestSize && handlerEntry.requestClass != moe.crx.roadblock.rpc.SendTrackingEventsRequest::class) {
                 val serializedBytes = format.encodeToByteArray(serializer, deserialized)
                 val byteDelta = bytes.size - serializedBytes.size
                 check(byteDelta == 0) { "Packet isn't read until the end, $byteDelta bytes still available" }

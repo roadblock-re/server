@@ -3,8 +3,8 @@ package moe.crx.roadblock.objects.inventory
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.FromVersion
 import moe.crx.roadblock.game.serialization.UntilVersion
-import moe.crx.roadblock.objects.account.CalendarEventId
-import moe.crx.roadblock.objects.account.Money
+import moe.crx.roadblock.objects.CalendarEventId
+import moe.crx.roadblock.objects.Money
 
 @Serializable
 data class WalletState(

@@ -2,8 +2,8 @@ package moe.crx.roadblock.objects.championship
 
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.FromVersion
-import moe.crx.roadblock.objects.account.CarRank
-import moe.crx.roadblock.objects.account.EvoTuningVisualArchetype
+import moe.crx.roadblock.objects.CarRank
+import moe.crx.roadblock.objects.EvoTuningVisualArchetype
 
 @Serializable
 data class ChampionshipRaceData(

@@ -24,21 +24,21 @@ fun Route.authAuthorize() = post("/authorize") {
         return@post
     }
 
-    val deviceCountry = form["device_country"]
-    val deviceFirmware = form["device_firmware"]
-    val deviceLanguage = form["device_language"]
-    val deviceModel = form["device_model"]
-    val deviceResolution = form["device_resolution"]
+    form["device_country"]
+    form["device_firmware"]
+    form["device_language"]
+    form["device_model"]
+    form["device_resolution"]
 
     call.respondText(
         contentType = ContentType.Application.Json,
         text = """
             {
-                "access_token": "506746a9-0f5e-4827-9dfc-eb9ccbad8b81,auth chat config https_lobby leaderboard_ro lobby message social_ro storage_ro,a9win:5797:84293:3.9.0j:windows:steam,1716976800.000000,${_root_ide_package_.moe.crx.roadblock.core.routes.currentPlatformUserId},1234567890123456789,asa~gold|ffffffffffffffffffffffffffffffff",
+                "access_token": "506746a9-0f5e-4827-9dfc-eb9ccbad8b81,auth chat config https_lobby leaderboard_ro lobby message social_ro storage_ro,a9win:5797:84293:3.9.0j:windows:steam,1716976800.000000,${currentPlatformUserId},1234567890123456789,asa~gold|ffffffffffffffffffffffffffffffff",
                 "token_type": "gameloft_online",
                 "fed_id": "506746a9-0f5e-4827-9dfc-eb9ccbad8b81",
                 "scope": "auth chat config https_lobby leaderboard_ro lobby message social_ro storage_ro",
-                "refresh_token": "refresh|506746a9-0f5e-4827-9dfc-eb9ccbad8b81,auth chat config https_lobby leaderboard_ro lobby message social_ro storage_ro,a9win:5797:84293:3.9.0j:windows:steam,1716976800.000000,${_root_ide_package_.moe.crx.roadblock.core.routes.currentPlatformUserId},1234567890123456789,asa~gold|ffffffffffffffffffffffffffffffff"
+                "refresh_token": "refresh|506746a9-0f5e-4827-9dfc-eb9ccbad8b81,auth chat config https_lobby leaderboard_ro lobby message social_ro storage_ro,a9win:5797:84293:3.9.0j:windows:steam,1716976800.000000,${currentPlatformUserId},1234567890123456789,asa~gold|ffffffffffffffffffffffffffffffff"
             }
             """.trimIndent(),
     )
@@ -60,7 +60,7 @@ fun Route.authUsersAuthorize() = post("/users/{userId}/authorize") {
 
     checkNotNull(userId)
 
-    _root_ide_package_.moe.crx.roadblock.core.routes.currentPlatformUserId = userId
+    currentPlatformUserId = userId
 
     val form = call.receiveParameters()
     val clientId = form["client_id"]
@@ -83,11 +83,11 @@ fun Route.authUsersAuthorize() = post("/users/{userId}/authorize") {
         contentType = ContentType.Application.Json,
         text = """
             {
-                "access_token": "506746a9-0f5e-4827-9dfc-eb9ccbad8b81,auth chat config https_lobby leaderboard_ro lobby message social_ro storage_ro,a9win:5797:84293:3.9.0j:windows:steam,1716976800.000000,${_root_ide_package_.moe.crx.roadblock.core.routes.currentPlatformUserId},1234567890123456789,asa~gold|ffffffffffffffffffffffffffffffff",
+                "access_token": "506746a9-0f5e-4827-9dfc-eb9ccbad8b81,auth chat config https_lobby leaderboard_ro lobby message social_ro storage_ro,a9win:5797:84293:3.9.0j:windows:steam,1716976800.000000,${currentPlatformUserId},1234567890123456789,asa~gold|ffffffffffffffffffffffffffffffff",
                 "token_type": "gameloft_online",
                 "fed_id": "506746a9-0f5e-4827-9dfc-eb9ccbad8b81",
                 "scope": "auth chat config https_lobby leaderboard_ro lobby message social_ro storage_ro",
-                "refresh_token": "refresh|506746a9-0f5e-4827-9dfc-eb9ccbad8b81,auth chat config https_lobby leaderboard_ro lobby message social_ro storage_ro,a9win:5797:84293:3.9.0j:windows:steam,1716976800.000000,${_root_ide_package_.moe.crx.roadblock.core.routes.currentPlatformUserId},1234567890123456789,asa~gold|ffffffffffffffffffffffffffffffff"
+                "refresh_token": "refresh|506746a9-0f5e-4827-9dfc-eb9ccbad8b81,auth chat config https_lobby leaderboard_ro lobby message social_ro storage_ro,a9win:5797:84293:3.9.0j:windows:steam,1716976800.000000,${currentPlatformUserId},1234567890123456789,asa~gold|ffffffffffffffffffffffffffffffff"
             }
             """.trimIndent(),
     )
@@ -125,11 +125,11 @@ fun Route.authUsersAuthorizeSpecific() = post("/users/{clientId}/{clientId2}/aut
         contentType = ContentType.Application.Json,
         text = """
             {
-                "access_token": "506746a9-0f5e-4827-9dfc-eb9ccbad8b81,auth chat config https_lobby leaderboard_ro lobby message social_ro storage_ro,a9win:5797:84293:3.9.0j:windows:steam,1716976800.000000,${_root_ide_package_.moe.crx.roadblock.core.routes.currentPlatformUserId},1234567890123456789,asa~gold|ffffffffffffffffffffffffffffffff",
+                "access_token": "506746a9-0f5e-4827-9dfc-eb9ccbad8b81,auth chat config https_lobby leaderboard_ro lobby message social_ro storage_ro,a9win:5797:84293:3.9.0j:windows:steam,1716976800.000000,${currentPlatformUserId},1234567890123456789,asa~gold|ffffffffffffffffffffffffffffffff",
                 "token_type": "gameloft_online",
                 "fed_id": "506746a9-0f5e-4827-9dfc-eb9ccbad8b81",
                 "scope": "auth chat config https_lobby leaderboard_ro lobby message social_ro storage_ro",
-                "refresh_token": "refresh|506746a9-0f5e-4827-9dfc-eb9ccbad8b81,auth chat config https_lobby leaderboard_ro lobby message social_ro storage_ro,a9win:5797:84293:3.9.0j:windows:steam,1716976800.000000,${_root_ide_package_.moe.crx.roadblock.core.routes.currentPlatformUserId},1234567890123456789,asa~gold|ffffffffffffffffffffffffffffffff"
+                "refresh_token": "refresh|506746a9-0f5e-4827-9dfc-eb9ccbad8b81,auth chat config https_lobby leaderboard_ro lobby message social_ro storage_ro,a9win:5797:84293:3.9.0j:windows:steam,1716976800.000000,${currentPlatformUserId},1234567890123456789,asa~gold|ffffffffffffffffffffffffffffffff"
             }
             """.trimIndent(),
     )
@@ -159,7 +159,7 @@ fun Route.authUsersMe() = get("/users/me") {
             {
                 "account": "506746a9-0f5e-4827-9dfc-eb9ccbad8b81",
                 "credentials": [
-                    "${_root_ide_package_.moe.crx.roadblock.core.routes.currentPlatformUserId}"
+                    "${currentPlatformUserId}"
                 ],
                 "client_ids": [],
                 "alias": [

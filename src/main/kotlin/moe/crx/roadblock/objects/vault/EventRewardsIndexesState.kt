@@ -1,7 +1,7 @@
 package moe.crx.roadblock.objects.vault
 
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.VaultStageId
+import moe.crx.roadblock.objects.VaultStageId
 
 @Serializable
 data class EventRewardsIndexesState(

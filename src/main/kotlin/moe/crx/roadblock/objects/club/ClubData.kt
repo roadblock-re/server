@@ -3,7 +3,11 @@ package moe.crx.roadblock.objects.club
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.FromVersion
 import moe.crx.roadblock.game.serialization.UntilVersion
-import moe.crx.roadblock.objects.account.*
+import moe.crx.roadblock.objects.CalendarEventId
+import moe.crx.roadblock.objects.ClubId
+import moe.crx.roadblock.objects.ClubRegionId
+import moe.crx.roadblock.objects.ClubTag
+import moe.crx.roadblock.objects.social.Credentials
 
 @Serializable
 data class ClubData(

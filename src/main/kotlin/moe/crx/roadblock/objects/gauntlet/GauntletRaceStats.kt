@@ -2,8 +2,8 @@ package moe.crx.roadblock.objects.gauntlet
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.CarId
-import moe.crx.roadblock.objects.account.CarRank
+import moe.crx.roadblock.objects.CarId
+import moe.crx.roadblock.objects.CarRank
 
 @Serializable
 data class GauntletRaceStats(

@@ -6,7 +6,8 @@ import moe.crx.roadblock.game.serialization.EnumList
 import moe.crx.roadblock.game.serialization.FromVersion
 import moe.crx.roadblock.game.serialization.UntilVersion
 import moe.crx.roadblock.game.serialization.enumListOf
-import moe.crx.roadblock.objects.account.*
+import moe.crx.roadblock.objects.*
+import moe.crx.roadblock.objects.customization.CarCustomizationState
 
 @Serializable
 data class CarState(

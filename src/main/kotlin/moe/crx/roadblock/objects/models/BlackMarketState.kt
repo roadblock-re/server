@@ -6,20 +6,18 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.plus
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.core.utils.midnight
-import moe.crx.roadblock.objects.account.BlackMarketDailyRefreshes
-import moe.crx.roadblock.objects.blackmarket.BlackMarketItem
-import moe.crx.roadblock.objects.blackmarket.BlackMarketSlot
-import moe.crx.roadblock.objects.blackmarket.BlackMarketSlotType
-import moe.crx.roadblock.objects.inventory.CarClass
-import moe.crx.roadblock.objects.inventory.CarStatType
-import moe.crx.roadblock.objects.inventory.CurrencyType
+import moe.crx.roadblock.objects.BlackMarketDailyRefreshes
+import moe.crx.roadblock.objects.blackmarket.*
+import moe.crx.roadblock.objects.blackmarket.Blueprint
+import moe.crx.roadblock.objects.blackmarket.CarUpgradeItem
+import moe.crx.roadblock.objects.inventory.*
 
 @Serializable
 data class BlackMarketState(
     var locked: Boolean = true,
     var slots: List<BlackMarketSlot> = listOf(
         BlackMarketSlot(
-            item = BlackMarketItem.UpgradeItem.UncommonUpgradeItem(CarStatType.Handling),
+            item = CarUpgradeItem(UncommonUpgradeItem(CarStatType.Handling)),
             totalAmount = 5u,
             remainingAmount = 5u,
             currency = CurrencyType.Credits,
@@ -28,7 +26,7 @@ data class BlackMarketState(
             slotType = BlackMarketSlotType.UpgradeNow,
         ),
         BlackMarketSlot(
-            item = BlackMarketItem.Blueprint(49u),
+            item = Blueprint(49u),
             totalAmount = 5u,
             remainingAmount = 5u,
             currency = CurrencyType.Tokens,
@@ -37,7 +35,7 @@ data class BlackMarketState(
             slotType = BlackMarketSlotType.NearFuture,
         ),
         BlackMarketSlot(
-            item = BlackMarketItem.UpgradeItem.RareUpgradeItem(CarStatType.Handling, CarClass.C),
+            item = CarUpgradeItem(RareUpgradeItem(CarStatType.Handling, CarClass.C)),
             totalAmount = 5u,
             remainingAmount = 5u,
             currency = CurrencyType.Credits,
@@ -46,7 +44,7 @@ data class BlackMarketState(
             slotType = BlackMarketSlotType.UpgradeNow,
         ),
         BlackMarketSlot(
-            item = BlackMarketItem.Blueprint(103u),
+            item = Blueprint(103u),
             totalAmount = 5u,
             remainingAmount = 5u,
             currency = CurrencyType.Tokens,
@@ -55,7 +53,7 @@ data class BlackMarketState(
             slotType = BlackMarketSlotType.Random,
         ),
         BlackMarketSlot(
-            item = BlackMarketItem.Blueprint(26u),
+            item = Blueprint(26u),
             totalAmount = 5u,
             remainingAmount = 5u,
             currency = CurrencyType.Credits,
@@ -64,7 +62,7 @@ data class BlackMarketState(
             slotType = BlackMarketSlotType.NearFuture,
         ),
         BlackMarketSlot(
-            item = BlackMarketItem.UpgradeItem.RareUpgradeItem(CarStatType.Nitro, CarClass.C),
+            item = CarUpgradeItem(RareUpgradeItem(CarStatType.Nitro, CarClass.C)),
             totalAmount = 5u,
             remainingAmount = 5u,
             currency = CurrencyType.Tokens,
@@ -73,7 +71,7 @@ data class BlackMarketState(
             slotType = BlackMarketSlotType.Random,
         ),
         BlackMarketSlot(
-            item = BlackMarketItem.Blueprint(102u),
+            item = Blueprint(102u),
             totalAmount = 1u,
             remainingAmount = 1u,
             currency = CurrencyType.Dust,
@@ -82,7 +80,7 @@ data class BlackMarketState(
             slotType = BlackMarketSlotType.Dust,
         ),
         BlackMarketSlot(
-            item = BlackMarketItem.UpgradeItem.EpicUpgradeItem(102u),
+            item = CarUpgradeItem(EpicUpgradeItem(102u)),
             totalAmount = 1u,
             remainingAmount = 1u,
             currency = CurrencyType.Dust,

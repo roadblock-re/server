@@ -1,7 +1,7 @@
 package moe.crx.roadblock.objects.tle
 
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.TimeLimitedEventProgressionLevel
+import moe.crx.roadblock.objects.TimeLimitedEventProgressionLevel
 
 @Serializable
 data class TimeLimitedSpecialData(

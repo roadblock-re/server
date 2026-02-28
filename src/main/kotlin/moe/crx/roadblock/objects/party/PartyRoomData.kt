@@ -1,8 +1,8 @@
 package moe.crx.roadblock.objects.party
 
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.PartyRoomAccessCode
-import moe.crx.roadblock.objects.account.RoomId
+import moe.crx.roadblock.objects.PartyRoomAccessCode
+import moe.crx.roadblock.objects.RoomId
 
 @Serializable
 data class PartyRoomData(

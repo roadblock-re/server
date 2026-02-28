@@ -2,7 +2,7 @@ package moe.crx.roadblock.objects.settings
 
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.FromVersion
-import moe.crx.roadblock.objects.account.GamepadId
+import moe.crx.roadblock.objects.GamepadId
 
 @Serializable
 data class ControlSettings(

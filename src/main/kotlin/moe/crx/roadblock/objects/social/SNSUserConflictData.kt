@@ -2,10 +2,10 @@ package moe.crx.roadblock.objects.social
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.Flags
-import moe.crx.roadblock.objects.account.GarageLevel
-import moe.crx.roadblock.objects.account.Money
-import moe.crx.roadblock.objects.account.ReputationLevel
+import moe.crx.roadblock.objects.Flags
+import moe.crx.roadblock.objects.GarageLevel
+import moe.crx.roadblock.objects.Money
+import moe.crx.roadblock.objects.ReputationLevel
 
 @Serializable
 data class SNSUserConflictData(

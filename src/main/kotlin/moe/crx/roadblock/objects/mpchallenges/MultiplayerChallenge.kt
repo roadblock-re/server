@@ -2,8 +2,8 @@ package moe.crx.roadblock.objects.mpchallenges
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.MultiplayerChallengesSponsorId
-import moe.crx.roadblock.objects.account.MultiplayerChallengesStageId
+import moe.crx.roadblock.objects.MultiplayerChallengesSponsorId
+import moe.crx.roadblock.objects.MultiplayerChallengesStageId
 
 @Serializable
 data class MultiplayerChallenge(

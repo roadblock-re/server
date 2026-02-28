@@ -2,8 +2,8 @@ package moe.crx.roadblock.objects.club
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.account.ClubWarsPoints
-import moe.crx.roadblock.objects.account.ClubWarsRoundIndex
+import moe.crx.roadblock.objects.ClubWarsPoints
+import moe.crx.roadblock.objects.ClubWarsRoundIndex
 
 @Serializable
 data class ClubWarsEventClubState(

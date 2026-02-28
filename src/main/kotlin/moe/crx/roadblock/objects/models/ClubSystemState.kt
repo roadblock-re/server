@@ -4,8 +4,8 @@ import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.FromVersion
 import moe.crx.roadblock.game.serialization.UntilVersion
 import moe.crx.roadblock.objects.club.*
-import moe.crx.roadblock.objects.account.CalendarEventId
-import moe.crx.roadblock.objects.account.LeaveClubReason
+import moe.crx.roadblock.objects.CalendarEventId
+import moe.crx.roadblock.objects.club.LeaveClubReason
 
 @Serializable
 data class ClubSystemState(

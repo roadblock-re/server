@@ -3,9 +3,9 @@ package moe.crx.roadblock.objects.models
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.FromVersion
-import moe.crx.roadblock.objects.account.MultiplayerSeriesId
-import moe.crx.roadblock.objects.account.RaceToken
-import moe.crx.roadblock.objects.account.TriumphRewardId
+import moe.crx.roadblock.objects.MultiplayerSeriesId
+import moe.crx.roadblock.objects.RaceToken
+import moe.crx.roadblock.objects.TriumphRewardId
 import moe.crx.roadblock.objects.multiplayer.MultiplayerSeriesSeriesState
 
 @Serializable

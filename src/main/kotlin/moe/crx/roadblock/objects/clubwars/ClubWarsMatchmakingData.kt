@@ -2,8 +2,8 @@ package moe.crx.roadblock.objects.clubwars
 
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.ByteEnum
-import moe.crx.roadblock.objects.account.ClubId
-import moe.crx.roadblock.objects.account.ClubWarsPoints
+import moe.crx.roadblock.objects.ClubId
+import moe.crx.roadblock.objects.ClubWarsPoints
 
 @Serializable
 data class ClubWarsMatchmakingData(
