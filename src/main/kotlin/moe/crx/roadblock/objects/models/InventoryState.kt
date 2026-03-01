@@ -44,7 +44,7 @@ data class InventoryState(
             balance = 0,
         ),
     ),
-    var iapWallets: Map<CurrencyType, WalletState> = wallets.associate { it.currency to WalletState(currency = it.currency) },
+    var iapWallets: Map<CurrencyType, WalletState> = mapOf(), // TODO This should be reversed better
     var wildcardBlueprints: EnumList<Map<CarUpgradeTier, Blueprints>, CarClass> = enumListOf { mapOf() },
     @FromVersion("24.6.0")
     var wildcardUpgradeItems: EnumList<UpgradeItems, CarClass> = enumListOf { 0u },
