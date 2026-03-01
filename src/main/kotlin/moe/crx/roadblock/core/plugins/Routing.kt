@@ -74,6 +74,7 @@ fun Application.configureApiRouting(workingDirectory: String, config: Configurat
                     messageMe()
                     transactionsGifts()
                     transactionsGiftBundles()
+                    lobbyRegions()
                     //groupChatRoomsSubscribe() //FIXME
                 }
             }
