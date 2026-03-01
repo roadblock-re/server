@@ -19,7 +19,7 @@ fun Route.octConnectionStatus() = post("/connectionstatus") {
 
     // TODO fix ChatRoomError
     if (connectionStatus != null && !connectionStatus.contains("ChatRoomError") && !connectionStatus.contains("iris.fetch")) {
-        //logger.info("Got oct status: {}", connectionStatus) // TODO config option
+        logger.info("Got oct status: {}", connectionStatus) // TODO config option
     }
 
     call.respondText(
