@@ -148,7 +148,7 @@ class GameConnection(
         if (bytes.first().toInt() == 0) {
             val loginHeader = format.decodeFromByteArray<GameLoginRequestHeader>(bytes)
 
-            ver = GameLayer.selectVersion(loginHeader.gameVersion)
+            ver = SerializationVersion(loginHeader.gameVersion)
             format = RoadblockFormat(ver)
             layer = GameLayer(workingDirectory, ver)
 
@@ -178,7 +178,7 @@ class GameConnection(
                         data = Blob(layer.getGameDb().readBytes()),
                     )
                 ),
-                serializationVersion = ver,
+                serializationVersion = GameLayer.reportVersion(loginHeader.gameVersion),
                 state = gameState,
             )
 

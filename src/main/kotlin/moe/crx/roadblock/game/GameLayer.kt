@@ -9,13 +9,17 @@ import kotlin.reflect.KClass
 class GameLayer(private val workingDirectory: String, private val ver: SerializationVersion) {
 
     companion object {
-        fun selectVersion(gameVersion: String): SerializationVersion {
+        fun reportVersion(gameVersion: String): SerializationVersion {
             val ver = SerializationVersion(gameVersion)
 
-            // TODO Add game version to serialization version mapping?
-            //if (ver == SerializationVersion(45, 0, 10)) {
-            //    return SerializationVersion(45, 0, 6)
-            //}
+            // TODO Investigate this phenomena
+            if (ver eq "24.0.1") {
+                return SerializationVersion("24.0.14")
+            }
+
+            if (ver eq "3.9.0") {
+                return SerializationVersion("3.9.2")
+            }
 
             return ver
         }

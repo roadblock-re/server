@@ -6,11 +6,7 @@ import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.EnumList
 import moe.crx.roadblock.game.serialization.FromVersion
 import moe.crx.roadblock.game.serialization.enumListOf
-import moe.crx.roadblock.objects.Blueprints
-import moe.crx.roadblock.objects.CarId
-import moe.crx.roadblock.objects.CarUpgradeTier
-import moe.crx.roadblock.objects.OverclockChips
-import moe.crx.roadblock.objects.UpgradeItems
+import moe.crx.roadblock.objects.*
 import moe.crx.roadblock.objects.inventory.*
 
 @Serializable
@@ -31,8 +27,24 @@ data class InventoryState(
             currency = CurrencyType.Tokens,
             balance = 50,
         ),
+        WalletState(
+            currency = CurrencyType.Dust,
+            balance = 0,
+        ),
+        WalletState(
+            currency = CurrencyType.UberTokens,
+            balance = 0,
+        ),
+        WalletState(
+            currency = CurrencyType.ClubWarsCoins,
+            balance = 0,
+        ),
+        WalletState(
+            currency = CurrencyType.ClubWarsTokens,
+            balance = 0,
+        ),
     ),
-    var iapWallets: Map<CurrencyType, WalletState> = mapOf(),
+    var iapWallets: Map<CurrencyType, WalletState> = wallets.associate { it.currency to WalletState(currency = it.currency) },
     var wildcardBlueprints: EnumList<Map<CarUpgradeTier, Blueprints>, CarClass> = enumListOf { mapOf() },
     @FromVersion("24.6.0")
     var wildcardUpgradeItems: EnumList<UpgradeItems, CarClass> = enumListOf { 0u },

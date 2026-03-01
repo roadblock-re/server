@@ -90,7 +90,8 @@ data class BlackMarketState(
         ),
     ),
     var consecutiveRefreshes: Map<BlackMarketItem, BlackMarketDailyRefreshes> = mapOf(),
-    var cooldownRefreshes: Map<BlackMarketItem, BlackMarketDailyRefreshes> = mapOf(),
+    var cooldownRefreshes: Map<BlackMarketItem, BlackMarketDailyRefreshes> =
+        slots.mapNotNull { it.item }.associateWith { 1u.toUByte() },
     var dailyRefreshes: BlackMarketDailyRefreshes = 0u,
     var nextDailyResetTime: Instant = now().midnight().plus(24, HOUR),
     var nextAutoRefreshTime: Instant = now().midnight().plus(24, HOUR),
