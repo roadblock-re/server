@@ -27,6 +27,7 @@ class RoadblockDecoder(
 ) : AbstractDecoder() {
 
     private fun readBytesOrThrow(count: Int, buffer: ByteArray = scratchBuffer) {
+        if (count == 0) return
         check(count <= buffer.size) { "Bytes count can't be bigger than buffer size." }
         var totalRead = 0
         while (totalRead < count) {

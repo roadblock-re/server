@@ -31,7 +31,7 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
         val handle: (suspend (GameConnection, RequestPacket) -> Unit)?,
     )
 
-    var handlers: MutableList<PacketHandler?> = mutableListOf()
+    var handlers: MutableList<PacketHandler> = mutableListOf()
 
     init {
         register(::handleLogin)

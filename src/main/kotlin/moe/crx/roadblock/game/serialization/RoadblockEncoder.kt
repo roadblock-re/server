@@ -94,7 +94,7 @@ class RoadblockEncoder(
 
     fun encodeByteArray(value: ByteArray) {
         encodeInt(value.size)
-        output.write(value)
+        if (value.isNotEmpty()) output.write(value)
     }
 
     fun encodeInstant(value: Instant) = encodeLong(value.epochSeconds)
