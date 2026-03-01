@@ -1,11 +1,23 @@
 package moe.crx.roadblock.updates
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import moe.crx.roadblock.game.serialization.SerializationVersion
 import moe.crx.roadblock.game.serialization.Variant
 
+// TODO Update for 47.1.0
+
 @Serializable
 sealed class StatusUpdateGroup {
+
+    @Transient
+    var children: List<StatusUpdateGroup> = listOf()
+
+    fun children(vararg values: StatusUpdateGroup): StatusUpdateGroup {
+        children = values.toList()
+        return this
+    }
+
     companion object : Variant<StatusUpdateGroup> {
         override fun variants(version: SerializationVersion) = buildList {
             add(BlackMarketStatusUpdateGroup::class)
