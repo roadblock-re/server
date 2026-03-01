@@ -20,7 +20,7 @@ data class TutorialFinishRaceRequest(
     var raceTimeMicroseconds: UInt,
     var startReason: TutorialStartReason,
     var controlType: ControlSchemeType,
-    @FromVersion("24.0.0")
+    @FromVersion("47.1.0")
     var isAutoAccelerationEnabled: Boolean = false, // TODO I'm not sure about it.
     @FromVersion("24.0.0")
     var trackDefId: EventTrackDefId = 0u,
