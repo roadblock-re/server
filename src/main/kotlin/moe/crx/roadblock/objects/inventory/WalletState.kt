@@ -11,12 +11,9 @@ data class WalletState(
     // TODO Verify that all versions has this balance/currency order.
     @FromVersion("45.0.0")
     var currency: CurrencyType = CurrencyType.Credits,
-    @FromVersion("45.0.0")
     var balance: Money = 0,
-    @UntilVersion("45.0.0")
-    var legacyBalance: Money = balance,
-    @UntilVersion("45.0.0")
+    @FromVersion("3.9.0") @UntilVersion("45.0.0")
     var legacyCurrency: CurrencyType = currency,
-    @UntilVersion("24.6.0")
+    @FromVersion("3.9.0") @UntilVersion("24.6.0")
     var eventId: CalendarEventId? = null,
 )
