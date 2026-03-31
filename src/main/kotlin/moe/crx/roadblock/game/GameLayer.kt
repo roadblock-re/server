@@ -222,7 +222,9 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
             register(::handleProcessOrphanTransactions)
         }
         register(::handleClaimAdClientSideRewards)
-        register(::handleCurrencyPackValidatePurchase)
+        if (ver newer "3.8.0") {
+            register(::handleCurrencyPackValidatePurchase)
+        }
         if (ver newer "3.9.0") {
             register(::handlePromotionValidatePurchase)
         }
@@ -265,8 +267,16 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
         register(::handleClaimDynamicReward)
         register(::handleResetUserState)
         register(::handleClaimEnableNotificationsReward)
-        register(::handleClaimDailyTasks)
+        if (ver newer "3.8.0") {
+            register(::handleClaimDailyTasks)
+        }
+        if (ver older "3.8.0") {
+            register("::handleClaimDailyTask")
+        }
         register(::handleDailyTasksReset)
+        if (ver older "3.8.0") {
+            register("::handleClaimDailyTaskRaceReady")
+        }
         register(::handleBuyRelayOfferTier)
         register(::handleValidateIAPRelayOfferPurchase)
         if (ver newer "24.0.0" && ver older "24.6.0") {
@@ -414,13 +424,17 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
         register(::handlePiggyBankClaimFreeTier)
         register(::handlePiggyBankExpireTier)
         register(::handlePiggyBankAddMoneyToBankCheat)
-        register(::handleLegendFundValidateProductPurchase)
+        if (ver newer "3.8.0") {
+            register(::handleLegendFundValidateProductPurchase)
+        }
         if (ver newer "24.6.0") {
             register(::handleLegendFundCancelProductPurchase)
         }
-        register(::handleLegendFundClaimMilestones)
-        register(::handleLegendFundResetCheat)
-        register(::handleLegendFundObtainCheat)
+        if (ver newer "3.8.0") {
+            register(::handleLegendFundClaimMilestones)
+            register(::handleLegendFundResetCheat)
+            register(::handleLegendFundObtainCheat)
+        }
         if (ver newer "24.0.0") {
             register(::handleIncreaseVaultTicketCheat)
             register(::handleConsumeVaultTicketCheat)
