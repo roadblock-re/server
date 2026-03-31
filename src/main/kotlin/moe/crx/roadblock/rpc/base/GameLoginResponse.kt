@@ -28,6 +28,7 @@ data class GameLoginResponse(
     var didMaintenanceFreeRefill: Boolean = false,
     var remindNewGarageLevel: Boolean = false,
     var isClientReloadNeeded: Boolean = false,
+    @FromVersion("3.7.0")
     var isVipPlayer: Boolean = false,
     @FromVersion("24.0.0")
     var isForcedUserName: Boolean = false,
