@@ -74,7 +74,7 @@ fun Application.configureApiRouting(workingDirectory: String, config: Configurat
                     messageMe()
                     transactionsGifts()
                     transactionsGiftBundles()
-                    lobbyRegions()
+                    lobbyRegions(config)
                     //groupChatRoomsSubscribe() //FIXME
                 }
             }
@@ -95,7 +95,7 @@ fun Application.configureApiRouting(workingDirectory: String, config: Configurat
             }
             // Pandora locate -> https_lobby
             route("/https_lobby") {
-                lobbyRegions()
+                lobbyRegions(config)
             }
             // Pandora locate -> matchmaker
             route("/matchmaker") {

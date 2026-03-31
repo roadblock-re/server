@@ -3,8 +3,9 @@ package moe.crx.roadblock.core.routes
 import io.ktor.http.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import moe.crx.roadblock.core.Configuration
 
-fun Route.lobbyRegions() = get("/lobby/regions") {
+fun Route.lobbyRegions(config: Configuration) = get("/lobby/regions") {
     call.respondText(
         contentType = ContentType.Application.Json,
         text = """
@@ -14,7 +15,7 @@ fun Route.lobbyRegions() = get("/lobby/regions") {
                         "controllers": [
                             {
                                 "port": 46307,
-                                "public_host": "eve.gameloft.com"
+                                "public_host": "${config.eveDomain}"
                             }
                         ],
                         "region": "europe"
@@ -23,7 +24,7 @@ fun Route.lobbyRegions() = get("/lobby/regions") {
                         "controllers": [
                             {
                                 "port": 34689,
-                                "public_host": "eve.gameloft.com"
+                                "public_host": "${config.eveDomain}"
                             }
                         ],
                         "region": "default"
@@ -32,7 +33,7 @@ fun Route.lobbyRegions() = get("/lobby/regions") {
                         "controllers": [
                             {
                                 "port": 45359,
-                                "public_host": "eve.gameloft.com"
+                                "public_host": "${config.eveDomain}"
                             }
                         ],
                         "region": "north_asia"
