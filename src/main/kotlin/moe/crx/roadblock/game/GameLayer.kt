@@ -65,7 +65,9 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
         if (ver newer "45.0.0") {
             register(::handleAcquireAndInstallUpgradeItem)
         }
-        register(::handleConvertWildcardBlueprints)
+        if (ver newer "3.7.0") {
+            register(::handleConvertWildcardBlueprints)
+        }
         if (ver newer "47.1.0") {
             register(::handleApplyWildcardStarUpItem)
         }
@@ -84,7 +86,9 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
         register(::handleGainAllCarsCheat)
         register(::handleGainCurrencyCheat)
         register(::handleGainCarBlueprintsCheat)
-        register(::handleGainWildcardBlueprintsCheat)
+        if (ver newer "3.7.0") {
+            register(::handleGainWildcardBlueprintsCheat)
+        }
         if (ver older "24.0.0") {
             register(::handleGainCarEvoBlueprintsCheat)
         }
@@ -282,7 +286,9 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
         if (ver newer "24.0.0" && ver older "24.6.0") {
             register(::handleQuickRaceFinishRace)
         }
-        register(::handleSplitScreenStartRace)
+        if (ver newer "3.7.0") {
+            register(::handleSplitScreenStartRace)
+        }
         if (ver newer "24.0.0") {
             register(::handleSplitScreenEndRace)
         }
@@ -321,7 +327,9 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
         register(::handleSeasonPassClaimEpisodePartialCompletionRewards)
         register(::handleSeasonPassClaimEpisodesCompletionRewards)
         register(::handleSeasonPassValidateProductPurchase)
-        register(::handleSeasonPassPerformCheat) // SeasonPassSetPlayedOnboardingCheat
+        if (ver newer "3.7.0") {
+            register(::handleSeasonPassPerformCheat) // SeasonPassSetPlayedOnboardingCheat
+        }
         if (ver older "24.0.0") {
             register(::handleMultiplayerChallengesBuyEntry)
             register(::handleMultiplayerChallengesRevealMoreSponsors)
@@ -420,10 +428,12 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
             register(::handleBonusPassBundleValidateProductPurchase)
         }
         register(::handleBonusPassFinishPass)
-        register(::handlePiggyBankValidateProductPurchase)
-        register(::handlePiggyBankClaimFreeTier)
-        register(::handlePiggyBankExpireTier)
-        register(::handlePiggyBankAddMoneyToBankCheat)
+        if (ver newer "3.7.0") {
+            register(::handlePiggyBankValidateProductPurchase)
+            register(::handlePiggyBankClaimFreeTier)
+            register(::handlePiggyBankExpireTier)
+            register(::handlePiggyBankAddMoneyToBankCheat)
+        }
         if (ver newer "3.8.0") {
             register(::handleLegendFundValidateProductPurchase)
         }
