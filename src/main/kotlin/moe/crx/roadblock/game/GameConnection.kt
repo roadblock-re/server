@@ -230,7 +230,7 @@ class GameConnection(
             )
         }
 
-        val handlerEntry = layer.handlers[header.type.toInt()]
+        val handlerEntry = layer.handlers.getOrNull(header.type.toInt())
         val handler = handlerEntry?.handle
 
         if (handlerEntry == null || handler == null) {
