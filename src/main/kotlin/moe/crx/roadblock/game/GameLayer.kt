@@ -223,7 +223,9 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
         }
         register(::handleClaimAdClientSideRewards)
         register(::handleCurrencyPackValidatePurchase)
-        register(::handlePromotionValidatePurchase)
+        if (ver newer "3.9.0") {
+            register(::handlePromotionValidatePurchase)
+        }
         register(::handleTLETicketsCheat)
         register(::handleTLEventCancelRace)
         register(::handleTLEventClaimClubReward)
@@ -244,7 +246,9 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
         register(::handleTLEventClaimPreviousSpecialEvent)
         register(::handleTimeLimitedSpecialEventClaimProgressionReward)
         register(::handleTLEventAutoclaimRewards)
-        register(::handleTLEventResetNitroGhost)
+        if (ver newer "3.9.0") {
+            register(::handleTLEventResetNitroGhost)
+        }
         if (ver newer "47.1.0") {
             register(::handleTLEventEquipEvoEngineFreeTry)
             register(::handleTLEventEquipEvoDriveTrainFreeTry)
