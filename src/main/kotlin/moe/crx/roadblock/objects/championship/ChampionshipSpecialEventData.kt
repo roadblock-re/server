@@ -2,6 +2,7 @@ package moe.crx.roadblock.objects.championship
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
+import moe.crx.roadblock.game.serialization.FromVersion
 import moe.crx.roadblock.objects.ChampionshipRoundId
 import moe.crx.roadblock.objects.EventTrackDefId
 
@@ -18,6 +19,8 @@ data class ChampionshipSpecialEventData(
     var forceBan: Boolean,
     var pushNotificationCount: UInt,
     var usedDebugSuffix: Set<String>,
-    var nitroGhostResetCount: UInt,
-    var bestNitroGhostTimePerTrackDef: Map<EventTrackDefId, UInt>,
+    @FromVersion("3.9.0")
+    var nitroGhostResetCount: UInt = 0u,
+    @FromVersion("3.9.0")
+    var bestNitroGhostTimePerTrackDef: Map<EventTrackDefId, UInt> = mapOf(),
 )

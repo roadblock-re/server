@@ -15,8 +15,10 @@ data class TLEventData(
     var timestamp: Instant,
     var forceQuarantine: Boolean,
     var isAutoClaimed: Boolean,
-    var nitroGhostResetCount: UInt,
-    var bestNitroGhostTimeInSeconds: UInt,
+    @FromVersion("3.9.0")
+    var nitroGhostResetCount: UInt = 0u,
+    @FromVersion("3.9.0")
+    var bestNitroGhostTimeInSeconds: UInt = 0u,
     @FromVersion("24.6.0")
     var lastRace: TLEventLastRace = TLEventLastRace(),
     @FromVersion("24.6.0")

@@ -7,8 +7,8 @@ import moe.crx.roadblock.objects.MaintenanceSlots
 
 @Serializable
 data class CarMaintenanceState(
-    var maintenanceSlots: MaintenanceSlots,
+    var slots: MaintenanceSlots,
     var isRefilling: Boolean = false,
     var refillEndTime: Instant = now(),
-    var maintenanceSlotsBeforeRefilling: MaintenanceSlots = maintenanceSlots,
+    var slotsBeforeRefilling: MaintenanceSlots = slots,
 )

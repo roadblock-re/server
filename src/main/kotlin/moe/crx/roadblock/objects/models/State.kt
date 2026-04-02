@@ -27,10 +27,11 @@ data class State(
     var multiplayerChallenges: MultiplayerChallengesState = MultiplayerChallengesState(),
     var inbox: InboxState = InboxState(),
     @UntilVersion("45.0.0")
-    var clubWarsSystem: ClubWarsSystemState = ClubWarsSystemState(),
+    var clubWars: ClubWarsSystemState = ClubWarsSystemState(),
     var privateLobby: PrivateLobbyState = PrivateLobbyState(),
     var bonusPassSystem: BonusPassSystemState = BonusPassSystemState(),
     var piggyBankSystem: PiggyBankSystemState = PiggyBankSystemState(),
+    @FromVersion("3.8.0")
     var legendFundSystem: LegendFundSystemState = LegendFundSystemState(),
     @FromVersion("24.0.0")
     var vaultSystem: VaultSystemState = VaultSystemState(),

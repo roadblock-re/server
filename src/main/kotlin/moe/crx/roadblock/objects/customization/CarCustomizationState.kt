@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.FromVersion
 import moe.crx.roadblock.objects.inventory.EvoTuningPartsConfiguration
 
+// TODO lockedCustomization, lockedNeonTubes, lockedTires, lockedTintedGlass should be false?
 @Serializable
 data class CarCustomizationState(
     var visualConfiguration: CarVisualConfiguration = CarVisualConfiguration(),
@@ -23,7 +24,7 @@ data class CarCustomizationState(
     var lockedDecals: Boolean = true,
     var lockedTires: Boolean = true,
     var lockedBodyParts: Boolean = true,
-    var lockedBodyPartsRoof: Boolean = true,
+    var lockedBodyPartsScoop: Boolean = true,
     var lockedBodyPartsWing: Boolean = true,
     var lockedBodyPartsSkirts: Boolean = true,
     var lockedBodyPartsSpoilerFront: Boolean = true,
