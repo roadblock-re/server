@@ -4,5 +4,5 @@ enum class SeasonPassBoostType {
     Reputation,
     TradePoints,
     SeasonPassExperience,
-    Credits,
+    Credits, // TODO Not present in 3.6
 }
