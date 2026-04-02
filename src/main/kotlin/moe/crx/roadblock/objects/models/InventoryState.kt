@@ -73,7 +73,12 @@ data class InventoryState(
     ),
     @UntilVersion("3.9.0")
     var legacyWallets: Map<CurrencyType, WalletState> = wallets.associateBy { it.currency },
-    var iapWallets: Map<CurrencyType, WalletState> = mapOf(),
+    var iapWallets: Map<CurrencyType, WalletState> = wallets.associate {
+        it.currency to WalletState(
+            currency = it.currency,
+            balance = 0,
+        )
+    },
     @FromVersion("3.7.0")
     var wildcardBlueprints: EnumList<Map<CarUpgradeTier, Blueprints>, CarClass> = enumListOf { mapOf() },
     @FromVersion("24.6.0")
