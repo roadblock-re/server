@@ -1,5 +1,6 @@
 package moe.crx.roadblock.objects.seasonpass
 
+import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.ByteEnum
@@ -15,7 +16,8 @@ data class SeasonPassState(
     var episodes: Map<SeasonPassEpisodeId, EpisodeData>,
     var tiers: Map<SeasonPassTierId, TierData>,
     var benefits: LegendPassBenefitsMultipliers,
-    var nextDayFromLastRace: Instant,
+    @FromVersion("3.7.0")
+    var nextDayFromLastRace: Instant = now(),
     @FromVersion("24.6.0") @ByteEnum
     var episodesCompletionRewardsState: SeasonPassEpisodesCompletionRewardState = SeasonPassEpisodesCompletionRewardState.Locked,
 )

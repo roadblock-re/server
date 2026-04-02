@@ -8,7 +8,6 @@ import moe.crx.roadblock.objects.Money
 
 @Serializable
 data class WalletState(
-    // TODO Verify that all versions has this balance/currency order.
     @FromVersion("45.0.0")
     var currency: CurrencyType = CurrencyType.Credits,
     var balance: Money = 0,

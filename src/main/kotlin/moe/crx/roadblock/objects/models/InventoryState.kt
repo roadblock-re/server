@@ -20,8 +20,6 @@ import moe.crx.roadblock.objects.inventory.*
 // wallets: List<WalletState>
 // iapWallets: List<WalletState>
 
-// 3.8 ?
-
 // 3.9
 // WalletState: balance, currency, eventId
 // wallets: List<WalletState>

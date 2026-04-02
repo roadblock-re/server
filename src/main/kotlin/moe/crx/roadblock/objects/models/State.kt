@@ -30,6 +30,7 @@ data class State(
     var clubWars: ClubWarsSystemState = ClubWarsSystemState(),
     var privateLobby: PrivateLobbyState = PrivateLobbyState(),
     var bonusPassSystem: BonusPassSystemState = BonusPassSystemState(),
+    @FromVersion("3.7.0")
     var piggyBankSystem: PiggyBankSystemState = PiggyBankSystemState(),
     @FromVersion("3.8.0")
     var legendFundSystem: LegendFundSystemState = LegendFundSystemState(),
