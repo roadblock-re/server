@@ -90,7 +90,7 @@ enum class MenuTutorialType {
                 WildcardUpgradeItem
             } else if (ver newer "24.0.0") {
                 MultiplayerSeriesTakedownMode
-            } else if (ver newer "3.6.0") {
+            } else if (ver newer "3.7.0") {
                 OnboardingSeasonPassUpsell
             } else {
                 ControlSchemeSelector
