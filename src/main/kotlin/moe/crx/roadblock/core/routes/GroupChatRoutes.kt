@@ -4,9 +4,9 @@ import io.ktor.http.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import moe.crx.roadblock.core.utils.realRemoteHost
+import moe.crx.roadblock.core.Configuration
 
-fun Route.groupChatRoomsSubscribe() = post("/chat/rooms/{channel}/subscribe") {
+fun Route.groupChatRoomsSubscribe(config: Configuration) = post("/chat/rooms/{channel}/subscribe") {
     val channel = call.parameters["channel"]
 
     checkNotNull(channel)
@@ -23,11 +23,11 @@ fun Route.groupChatRoomsSubscribe() = post("/chat/rooms/{channel}/subscribe") {
         text = """
             {
                 "status": "ok",
-                "https_listen_url": "https://%1:443/groupchat/chat/rooms/a9_chat_room_febeb3b1-c9fe-4374-a2e0-f21ff1c32203?game=a9win&memberid=506746a9-0f5e-4827-9dfc-eb9ccbad8b81&language=en",
-                "cmd_url": "https://%1:443/groupchat/chat/rooms/a9_chat_room_febeb3b1-c9fe-4374-a2e0-f21ff1c32203",
-                "listen_url": "http://%1:80/groupchat/chat/rooms/a9_chat_room_febeb3b1-c9fe-4374-a2e0-f21ff1c32203?game=a9win&memberid=506746a9-0f5e-4827-9dfc-eb9ccbad8b81&language=en"
+                "https_listen_url": "https://${config.eveDomain}:443/groupchat/chat/rooms/a9_chat_room_febeb3b1-c9fe-4374-a2e0-f21ff1c32203?game=a9win&memberid=506746a9-0f5e-4827-9dfc-eb9ccbad8b81&language=en",
+                "cmd_url": "https://${config.eveDomain}:443/groupchat/chat/rooms/a9_chat_room_febeb3b1-c9fe-4374-a2e0-f21ff1c32203",
+                "listen_url": "http://${config.eveDomain}:80/groupchat/chat/rooms/a9_chat_room_febeb3b1-c9fe-4374-a2e0-f21ff1c32203?game=a9win&memberid=506746a9-0f5e-4827-9dfc-eb9ccbad8b81&language=en"
             }
-            """.trimIndent().replace("%1", call.realRemoteHost()),
+            """.trimIndent(),
     )
 }
 

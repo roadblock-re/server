@@ -17,13 +17,13 @@ fun Application.configureApiRouting(workingDirectory: String, config: Configurat
             clubConnect()
 
             route("/config") {
-                configDatacenterUrls()
+                configDatacenterUrls(config)
                 configDatacenters()
             }
             // ALU uses version prefixes
             route("/v1") {
                 route("/config") {
-                    configDatacenterUrls()
+                    configDatacenterUrls(config)
                     configDatacenters()
                 }
             }
@@ -37,7 +37,7 @@ fun Application.configureApiRouting(workingDirectory: String, config: Configurat
             }
             // Eve config -> pandora
             route("/pandora") {
-                pandoraLocate()
+                pandoraLocate(config)
             }
             // Eve config -> etsv2
             route("/etsv2") {
@@ -116,7 +116,7 @@ fun Application.configureApiRouting(workingDirectory: String, config: Configurat
             }
             // Pandora locate -> groupchat
             route("/groupchat") {
-                groupChatRoomsSubscribe()
+                groupChatRoomsSubscribe(config)
                 groupChatListenChatGet()
                 groupChatListenChatPost()
             }

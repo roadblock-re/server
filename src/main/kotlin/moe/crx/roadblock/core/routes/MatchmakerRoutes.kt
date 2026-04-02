@@ -4,7 +4,6 @@ import io.ktor.http.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import moe.crx.roadblock.core.Configuration
-import moe.crx.roadblock.core.utils.realRemoteHost
 
 fun Route.matchmakerQuickLaunch(config: Configuration) = post("/rooms/{clientId}/quick_launch") {
     val clientId = call.parameters["clientId"]
@@ -25,7 +24,7 @@ fun Route.matchmakerQuickLaunch(config: Configuration) = post("/rooms/{clientId}
             {
                 "success": true,
                 "gs_connection_info": {
-                    "host": "%1",
+                    "host": "${config.eveDomain}",
                     "scheme": "wss",
                     "port": 4443
                 },
@@ -34,10 +33,10 @@ fun Route.matchmakerQuickLaunch(config: Configuration) = post("/rooms/{clientId}
                 "controller_https_port": 4446,
                 "action": "launch game",
                 "controller_tcp_port": 4447,
-                "controller_host": "%1",
+                "controller_host": "${config.eveDomain}",
                 "controller_port": 4448
             }
-            """.trimIndent().replace("%1", call.realRemoteHost())
+            """.trimIndent()
         } else {
             """
             {
@@ -47,10 +46,10 @@ fun Route.matchmakerQuickLaunch(config: Configuration) = post("/rooms/{clientId}
                 "controller_https_port": 4446,
                 "action": "launch game",
                 "controller_tcp_port": 4447,
-                "controller_host": "%1",
+                "controller_host": "${config.eveDomain}",
                 "controller_port": 4448
             }
-            """.trimIndent().replace("%1", call.realRemoteHost())
+            """.trimIndent()
         },
     )
 }
