@@ -12,13 +12,21 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
         fun reportVersion(gameVersion: String): SerializationVersion {
             val ver = SerializationVersion(gameVersion)
 
-            // TODO Investigate this phenomena
+            // TODO Investigate this phenomena and add more versions
             if (ver eq "24.0.1") {
                 return SerializationVersion("24.0.14")
             }
 
             if (ver eq "3.9.0") {
                 return SerializationVersion("3.9.2")
+            }
+
+            if (ver eq "3.6.3") {
+                return SerializationVersion("3.6.2000")
+            }
+
+            if (ver eq "3.7.5") {
+                return SerializationVersion("3.7.1002")
             }
 
             return ver
