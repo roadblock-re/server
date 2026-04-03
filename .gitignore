@@ -55,3 +55,4 @@ uploads
 /stubs/
 *.report
 config.json
+gamestate.saved.json
