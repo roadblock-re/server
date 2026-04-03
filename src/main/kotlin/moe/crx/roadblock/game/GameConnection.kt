@@ -182,28 +182,30 @@ class GameConnection(
                 state = gameState,
             )
 
-            loginResponse.apply {
-                state.apply {
-                    playerStats.apply {
-                        menuTutorials =
-                            enumListOf(MenuTutorialType.lastEntryFor(ver)) { TutorialState.Pending } // Game breaks if list has wrong size
-                        gameplayTutorials =
-                            enumListOf(GameplayTutorialType.lastEntryFor(ver)) { TutorialState.Pending } // Game breaks if list has wrong size
-                    }
-                }
+            gameState.apply {
+                clubSystem.clubData = null
+                miscellaneous.resetAdsReplacementTimepoint = now().midnight().plus(24, HOUR)
+                blackMarket.nextAutoRefreshTime = now().midnight().plus(24, HOUR)
+                blackMarket.nextDailyResetTime = now().midnight().plus(24, HOUR)
+                dailyTasks.state.resetTime = now().midnight().plus(24, HOUR)
+                vipSystem.vipBlackMarketState.nextAutoRefreshTime = now().midnight().plus(24, HOUR)
+                vipSystem.vipBlackMarketState.nextDailyResetTime = now().midnight().plus(24, HOUR)
+                gauntletSystem.market.nextAutoRefreshTime = now().midnight().plus(24, HOUR)
+                clubWars.market.nextAutoRefreshTime = now().midnight().plus(24, HOUR)
             }
 
             loginResponse.apply {
-                state.apply {
-                    clubSystem.clubData = null
-                    miscellaneous.resetAdsReplacementTimepoint = now().midnight().plus(24, HOUR)
-                    blackMarket.nextAutoRefreshTime = now().midnight().plus(24, HOUR)
-                    blackMarket.nextDailyResetTime = now().midnight().plus(24, HOUR)
-                    dailyTasks.state.resetTime = now().midnight().plus(24, HOUR)
-                    vipSystem.vipBlackMarketState.nextAutoRefreshTime = now().midnight().plus(24, HOUR)
-                    vipSystem.vipBlackMarketState.nextDailyResetTime = now().midnight().plus(24, HOUR)
-                    gauntletSystem.market.nextAutoRefreshTime = now().midnight().plus(24, HOUR)
-                    clubWars.market.nextAutoRefreshTime = now().midnight().plus(24, HOUR)
+                state = gameState.copy().apply {
+                    playerStats = gameState.playerStats.copy().apply {
+                        menuTutorials =
+                            enumListOf(MenuTutorialType.lastEntryFor(ver)) {
+                                gameState.playerStats.menuTutorials[it] ?: TutorialState.Pending
+                            }
+                        gameplayTutorials =
+                            enumListOf(GameplayTutorialType.lastEntryFor(ver)) {
+                                gameState.playerStats.gameplayTutorials[it] ?: TutorialState.Pending
+                            }
+                    }
                 }
             }
 
