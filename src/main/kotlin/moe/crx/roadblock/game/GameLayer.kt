@@ -246,7 +246,7 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
         register(::handleTLEventClaimRankRewards)
         register(::handleTLEventCompleteCheat)
         register(::handleTLEventFinishRace)
-        if (ver newer "45.0.0") {
+        if (ver newer "24.6.0") {
             register(::handleTLEventAutoplayFinishRace)
         }
         register(::handleTLEventRefillTickets)
