@@ -26,9 +26,14 @@ sealed class StatusUpdateGroup {
             add(ChampionshipSystemStatusUpdateGroup::class)
             add(ClubRaceStatusUpdateGroup::class)
             add(ClubSystemStatusUpdateGroup::class)
-            add(ClubWarsStatusUpdateGroup::class)
+            if (version older "45.0.0") {
+                add(ClubWarsStatusUpdateGroup::class)
+            }
             add(DailyTasksStatusUpdateGroup::class)
             add(GachaSystemStatusUpdateGroup::class)
+            if (version newer "24.5.0") {
+                add(GauntletSystemStatusUpdateGroup::class)
+            }
             if (version newer "24.0.0") {
                 add(GoldenChestSystemStatusUpdateGroup::class)
             }

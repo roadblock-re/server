@@ -1,11 +1,15 @@
 package moe.crx.roadblock.updates
 
+import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
+import moe.crx.roadblock.game.serialization.FromVersion
 import moe.crx.roadblock.game.serialization.SerializationVersion
+import moe.crx.roadblock.game.serialization.UntilVersion
 import moe.crx.roadblock.game.serialization.Variant
 import moe.crx.roadblock.objects.Age
 import moe.crx.roadblock.objects.EndRaceAdsOfferId
+import moe.crx.roadblock.objects.miscellaneous.GDPRCompliancy
 import moe.crx.roadblock.objects.miscellaneous.Gender
 import moe.crx.roadblock.objects.settings.GameSettings
 
@@ -13,6 +17,9 @@ import moe.crx.roadblock.objects.settings.GameSettings
 sealed class MiscellaneousStatusUpdateGroup : StatusUpdateGroup() {
     companion object : Variant<MiscellaneousStatusUpdateGroup> {
         override fun variants(version: SerializationVersion) = buildList {
+            if (version newer "24.0.0") {
+                add(MiscellaneousAliasChanged::class)
+            }
             add(MiscellaneousUserNameChanged::class)
             add(MiscellaneousUnderageDisclaimerShownChanged::class)
             add(MiscellaneousUserAgeAndGenderChanged::class)
@@ -26,6 +33,12 @@ sealed class MiscellaneousStatusUpdateGroup : StatusUpdateGroup() {
         }
     }
 }
+
+@Serializable
+data class MiscellaneousAliasChanged(
+    var oldAlias: String,
+    var newAlias: String,
+) : MiscellaneousStatusUpdateGroup()
 
 @Serializable
 data class MiscellaneousClaimedSystemNotificationRewardChanged(
@@ -72,14 +85,24 @@ data class MiscellaneousUserDeviceCountryChanged(
 
 @Serializable
 data class MiscellaneousUserGPDRComplianceChanged(
-    var oldGdprCompliance: Boolean?,
-    var newGdprCompliance: Boolean?,
+    @UntilVersion("24.6.0")
+    var oldIsGDPRCompliant: Boolean? = null,
+    @UntilVersion("24.6.0")
+    var newIsGDPRCompliant: Boolean? = null,
+    @FromVersion("24.6.0")
+    var oldPrivacyPolicy: GDPRCompliancy = GDPRCompliancy.UnknownValue0,
+    @FromVersion("24.6.0")
+    var newPrivacyPolicy: GDPRCompliancy = GDPRCompliancy.UnknownValue0,
+    @FromVersion("24.0.0")
+    var changedTime: Instant = now(),
 ) : MiscellaneousStatusUpdateGroup()
 
 @Serializable
 data class MiscellaneousUserNameChanged(
     var oldUsername: String,
     var newUsername: String,
+    @FromVersion("24.0.0")
+    var isForcedChange: Boolean,
 ) : MiscellaneousStatusUpdateGroup()
 
 @Serializable

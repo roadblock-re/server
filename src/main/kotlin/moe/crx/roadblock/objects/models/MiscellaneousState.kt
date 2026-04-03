@@ -30,10 +30,10 @@ data class MiscellaneousState(
     var deviceCountry: String? = "US",
     var claimedEnableSystemNotificationsReward: Boolean = false,
     var channelName: String? = null,
-    @FromVersion("24.6.0") @ByteEnum
-    var isGDPRCompliant: GDPRCompliancy = GDPRCompliancy.UnknownValue0,
     @UntilVersion("24.6.0")
-    var legacyIsGDPRCompliant: Boolean? = null,
+    var isGDPRCompliant: Boolean? = null,
+    @FromVersion("24.6.0") @ByteEnum
+    var privacyPolicy: GDPRCompliancy = GDPRCompliancy.UnknownValue0,
     @UntilVersion("24.0.0")
     var consentNoticeShown: Boolean = false,
     @UntilVersion("24.0.0")
