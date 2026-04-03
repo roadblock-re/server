@@ -203,6 +203,7 @@ class GameConnection(
                     vipSystem.vipBlackMarketState.nextAutoRefreshTime = now().midnight().plus(24, HOUR)
                     vipSystem.vipBlackMarketState.nextDailyResetTime = now().midnight().plus(24, HOUR)
                     gauntletSystem.market.nextAutoRefreshTime = now().midnight().plus(24, HOUR)
+                    clubWars.market.nextAutoRefreshTime = now().midnight().plus(24, HOUR)
                 }
             }
 
