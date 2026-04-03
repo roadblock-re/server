@@ -5,7 +5,7 @@ import moe.crx.roadblock.game.GameConnection
 import moe.crx.roadblock.objects.AsphaltProductID
 import moe.crx.roadblock.objects.CalendarEventId
 import moe.crx.roadblock.objects.transactions.IAPPriceData
-import moe.crx.roadblock.objects.transactions.OfflineProductItem
+import moe.crx.roadblock.objects.transactions.ItemToPurchase
 import moe.crx.roadblock.rpc.base.RequestPacket
 import moe.crx.roadblock.rpc.base.UpdatesQueueWithRootReactionsResponse
 
@@ -13,7 +13,7 @@ import moe.crx.roadblock.rpc.base.UpdatesQueueWithRootReactionsResponse
 data class PurchaseOfflineProductRequest(
     var productId: AsphaltProductID,
     var priceInfo: IAPPriceData,
-    var items: List<OfflineProductItem>,
+    var items: List<ItemToPurchase>,
     var eventId: CalendarEventId?,
 ) : RequestPacket()
 
