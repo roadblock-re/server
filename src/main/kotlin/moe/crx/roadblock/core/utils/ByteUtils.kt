@@ -35,29 +35,24 @@ fun decryptDesEcbZeroPadding(encryptedBase64: String, keyString: String): String
     return String(unpadded, Charsets.UTF_8)
 }
 
-fun ByteArray.toLittleEndianInt(): Int {
-    val bytes = take(4).map { it.toInt() and 0xFF }
-    val ch1 = bytes[0]
-    val ch2 = bytes[1] shl 8
-    val ch3 = bytes[2] shl 16
-    val ch4 = bytes[3] shl 24
+fun ByteArray.fromBigEndian(): Int {
+    val ch1 = (this[0].toInt() and 0xFF) shl 24
+    val ch2 = (this[1].toInt() and 0xFF) shl 16
+    val ch3 = (this[2].toInt() and 0xFF) shl 8
+    val ch4 = (this[3].toInt() and 0xFF)
     return ch1 or ch2 or ch3 or ch4
 }
 
-fun Int.toLittleEndianBytes(): ByteArray {
-    val ch1 = this and 0xFF
-    val ch2 = this ushr 8 and 0xFF
-    val ch3 = this ushr 16 and 0xFF
-    val ch4 = this ushr 24 and 0xFF
-    return byteArrayOf(ch1.toByte(), ch2.toByte(), ch3.toByte(), ch4.toByte())
+fun ByteArray.fromLittleEndian(): Int {
+    return reversedArray().fromBigEndian()
 }
 
-fun ByteArray.toBigEndianInt(): Int {
-    return reversed().toByteArray().toLittleEndianInt()
-}
-
-fun Int.toBigEndianBytes(): ByteArray {
-    return toLittleEndianBytes().reversed().toByteArray()
+fun Int.toBigEndian(): ByteArray {
+    val ch1 = ((this ushr 24) and 0xFF).toByte()
+    val ch2 = ((this ushr 16) and 0xFF).toByte()
+    val ch3 = ((this ushr 8) and 0xFF).toByte()
+    val ch4 = ((this) and 0xFF).toByte()
+    return byteArrayOf(ch1, ch2, ch3, ch4)
 }
 
 fun evpBytesToKey(

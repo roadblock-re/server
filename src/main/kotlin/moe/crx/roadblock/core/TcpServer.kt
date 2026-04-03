@@ -56,13 +56,13 @@ fun tcpServer(workingDirectory: String, config: Configuration, wait: Boolean): J
                     val decrypt = evpBytesToKey((roomId + slot).toByteArray(), clientSalt).let { (key, iv) ->
                         ChaCha7539Engine().apply {
                             init(false, ParametersWithIV(KeyParameter(key), iv.takeLast(12).toByteArray()))
-                            skip((iv.take(4).toByteArray().toLittleEndianInt().toLong() and 0xFFFFFFFFL) * 64.toLong())
+                            skip((iv.take(4).toByteArray().fromLittleEndian().toLong() and 0xFFFFFFFFL) * 64.toLong())
                         }
                     }
                     val encrypt = evpBytesToKey((roomId + slot).toByteArray(), serverSalt).let { (key, iv) ->
                         ChaCha7539Engine().apply {
                             init(true, ParametersWithIV(KeyParameter(key), iv.takeLast(12).toByteArray()))
-                            skip((iv.take(4).toByteArray().toLittleEndianInt().toLong() and 0xFFFFFFFFL) * 64.toLong())
+                            skip((iv.take(4).toByteArray().fromLittleEndian().toLong() and 0xFFFFFFFFL) * 64.toLong())
                         }
                     }
 
@@ -75,19 +75,19 @@ fun tcpServer(workingDirectory: String, config: Configuration, wait: Boolean): J
 
                         encrypt.processBytes(bytes.copyOf(), 0, bytes.size, bytes, 0)
 
-                        output.write(header.toBigEndianBytes())
+                        output.write(header.toBigEndian())
                         output.write(bytes)
                         output.flush()
                     }
 
                     val gameConnection =
                         GameConnection(workingDirectory, config, ignoreConnect = true) { payloadBytes, preferDeflated ->
-                            var (bytes, type) = if (preferDeflated) {
-                                var compressed = highCompressor.compress(payloadBytes)
-                                val hash = xxHash32.hash(compressed, 0, compressed.size, payloadBytes.size)
+                            val (bytes, type) = if (preferDeflated) {
+                                var compressedBytes = highCompressor.compress(payloadBytes)
+                                var reversedLength = payloadBytes.size.toBigEndian().fromLittleEndian()
+                                val hash = xxHash32.hash(compressedBytes, 0, compressedBytes.size, reversedLength)
 
-                                val finalBytes =
-                                    hash.toBigEndianBytes() + payloadBytes.size.toLittleEndianBytes() + compressed
+                                val finalBytes = hash.toBigEndian() + payloadBytes.size.toBigEndian() + compressedBytes
                                 finalBytes to 1
                             } else {
                                 payloadBytes to 0
@@ -103,7 +103,7 @@ fun tcpServer(workingDirectory: String, config: Configuration, wait: Boolean): J
                             headerBytes += input.readNBytes(4 - headerBytes.size)
                         }
 
-                        val header = headerBytes.toBigEndianInt()
+                        val header = headerBytes.fromBigEndian()
                         val length = header and 0xFFFFFFF
                         val type = header ushr 0x1C
                         var bytes = ByteArray(0)
@@ -129,12 +129,13 @@ fun tcpServer(workingDirectory: String, config: Configuration, wait: Boolean): J
                         }
 
                         if (type == 1) {
-                            val hash = bytes.take(4).toByteArray().toBigEndianInt()
-                            val decompressedLength = bytes.drop(4).take(4).toByteArray().toBigEndianInt()
+                            val hash = bytes.take(4).toByteArray().fromBigEndian()
+                            val decompressedLength = bytes.drop(4).take(4).toByteArray().fromBigEndian()
+                            val reversedLength = bytes.drop(4).take(4).toByteArray().fromLittleEndian()
                             val compressedBytes = bytes.drop(8).toByteArray()
 
                             val calculatedHash =
-                                xxHash32.hash(compressedBytes, 0, compressedBytes.size, decompressedLength)
+                                xxHash32.hash(compressedBytes, 0, compressedBytes.size, reversedLength)
                             check(hash == calculatedHash)
 
                             bytes = safeDecompressor.decompress(compressedBytes, decompressedLength)
