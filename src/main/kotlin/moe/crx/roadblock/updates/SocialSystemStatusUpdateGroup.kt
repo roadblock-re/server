@@ -6,10 +6,16 @@ import moe.crx.roadblock.game.serialization.Variant
 import kotlin.reflect.KClass
 
 @Serializable
-class SocialSystemStatusUpdateGroup : StatusUpdateGroup() {
+sealed class SocialSystemStatusUpdateGroup : StatusUpdateGroup() {
     companion object : Variant<SocialSystemStatusUpdateGroup> {
-        override fun variants(version: SerializationVersion): List<KClass<out SocialSystemStatusUpdateGroup>> {
-            TODO()
-        }
+        override fun variants(version: SerializationVersion): List<KClass<out SocialSystemStatusUpdateGroup>> =
+            buildList {
+                add(SocialSystemAllowReceivingFriendRequestsChanged::class)
+            }
     }
 }
+
+@Serializable
+data class SocialSystemAllowReceivingFriendRequestsChanged(
+    var newVault: Boolean,
+) : SocialSystemStatusUpdateGroup()

@@ -69,17 +69,17 @@ sealed class StatusUpdateGroup {
             }
             add(TLEventsSystemStatusUpdateGroup::class) // TODO
             if (version newer "45.0.0") { // TODO find exact version
-                // TODO Here is one group with one update with one variable "placement": ushort
+                add(StrangePlacementUpdateGroup::class) // TODO name
             }
             add(UberSystemStatusUpdateGroup::class) // TODO
             if (version newer "24.0.0") {
                 add(UpsellPopupSystemStatusUpdateGroup::class) // TODO
             }
             if (version newer "45.0.0") { // TODO find exact version
-                //TODO No idea. 3 updates. eventIds; eventId; eventId, eventExpirationDate; eventId, productId.
+                add(StrangeEventUpdateGroup::class) // TODO name
             }
             if (version newer "45.0.0") { // TODO find exact version
-                //TODO VipSystemStatusUpdateGroup Why it doesn't match sorting by alphabet?
+                add(VipSystemStatusUpdateGroup::class) // TODO
             }
             if (version newer "24.0.0") {
                 add(VaultSystemStatusUpdateGroup::class) // TODO
