@@ -53,7 +53,7 @@ data class State(
     @FromVersion("24.6.0")
     var vipSystem: VipSystemState = VipSystemState(),
     @FromVersion("24.6.0")
-    var activationSystem: ActivationSystemState = ActivationSystemState(),
+    var activationSystem: ActivationSystemState = ActivationSystemState(), // Spotlight events
     @FromVersion("24.6.0")
     var tournamentSystem: TournamentSystemState = TournamentSystemState(),
     @FromVersion("45.0.0")

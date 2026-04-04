@@ -288,11 +288,9 @@ class GameConnection(
             reportHandlingError(request.javaClass.simpleName, request.type, bytes, throwable)
 
             //sendConcurrentAccess() // TODO config option
-
-            packetLock.unlock()
-
-            return
         }
+
+        saveState()
 
         packetLock.unlock()
     }
