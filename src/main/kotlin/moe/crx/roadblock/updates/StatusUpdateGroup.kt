@@ -20,6 +20,7 @@ sealed class StatusUpdateGroup {
 
     companion object : Variant<StatusUpdateGroup> {
         override fun variants(version: SerializationVersion) = buildList {
+            add(ActivationSystemStatusUpdateGroup::class)
             add(BlackMarketStatusUpdateGroup::class)
             add(BonusPassSystemStatusUpdateGroup::class)
             add(CareerStatusUpdateGroup::class)

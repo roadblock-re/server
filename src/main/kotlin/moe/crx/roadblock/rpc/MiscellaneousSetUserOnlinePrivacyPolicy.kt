@@ -42,8 +42,6 @@ suspend fun handleMiscellaneousSetUserOnlinePrivacyPolicy(
         session.gameState.miscellaneous.privacyPolicy = request.privacyPolicy
     }
 
-    session.saveState()
-
     session.sendResponse(
         MiscellaneousSetUserOnlinePrivacyPolicyResponse().flatten(reaction)
     )
