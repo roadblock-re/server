@@ -3,11 +3,7 @@ package moe.crx.roadblock.updates
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.SerializationVersion
 import moe.crx.roadblock.game.serialization.Variant
-import moe.crx.roadblock.objects.CareerEventId
-import moe.crx.roadblock.objects.CareerFlagId
-import moe.crx.roadblock.objects.ChapterId
-import moe.crx.roadblock.objects.Flags
-import moe.crx.roadblock.objects.SeasonId
+import moe.crx.roadblock.objects.*
 import moe.crx.roadblock.objects.career.ProgressState
 import moe.crx.roadblock.objects.career.SatelliteRewardState
 
@@ -31,8 +27,8 @@ sealed class CareerStatusUpdateGroup : StatusUpdateGroup() {
 @Serializable
 data class CareerChapterFlagsChanged(
     var chapterId: ChapterId,
-    var oldFlags: Flags,
-    var newFlags: Flags,
+    var oldChapterFlags: Flags,
+    var newChapterFlags: Flags,
 ) : CareerStatusUpdateGroup()
 
 @Serializable
@@ -74,8 +70,8 @@ data class CareerRaceFinished(
 @Serializable
 data class CareerSeasonFlagsChanged(
     var seasonId: SeasonId,
-    var oldFlags: Flags,
-    var newFlags: Flags,
+    var oldSeasonFlags: Flags,
+    var newSeasonFlags: Flags,
 ) : CareerStatusUpdateGroup()
 
 @Serializable
