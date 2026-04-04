@@ -5,12 +5,7 @@ import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.ByteEnum
 import moe.crx.roadblock.game.serialization.SerializationVersion
 import moe.crx.roadblock.game.serialization.Variant
-import moe.crx.roadblock.objects.CalendarEventId
-import moe.crx.roadblock.objects.LeaderboardPosition
-import moe.crx.roadblock.objects.MultiplayerSeriesId
-import moe.crx.roadblock.objects.MultiplayerSeriesScore
-import moe.crx.roadblock.objects.MultiplayerSeriesScoreMilestoneId
-import moe.crx.roadblock.objects.PlayerElo
+import moe.crx.roadblock.objects.*
 import moe.crx.roadblock.objects.multiplayer.MultiplayerSeriesLeaderboardData
 import moe.crx.roadblock.objects.multiplayer.MultiplayerSeriesRaceResult
 import moe.crx.roadblock.objects.multiplayer.MultiplayerSeriesScoreMilestoneRewardState
@@ -84,7 +79,7 @@ data class MultiplayerSeriesEventClaimed(
 data class MultiplayerSeriesEventJoined(
     var seriesId: MultiplayerSeriesId,
     var eventId: CalendarEventId,
-    var eventElo: PlayerElo,
+    var enterElo: PlayerElo,
     var enterTier: MultiplayerSeriesTierInfo,
 ) : MultiplayerSeriesStatusUpdateGroup()
 
