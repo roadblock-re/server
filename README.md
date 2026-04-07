@@ -4,6 +4,12 @@ Server implementation for a known mobile racing game.
 
 ## Compatibility
 
+> 🟢 - great network compatibility
+>
+> 🟡 - game starts and goes past tutorial
+>
+> 🔴 - not working
+
 | Game version   | Status |
 |----------------|--------|
 | 47.1.0         | 🟢     |
