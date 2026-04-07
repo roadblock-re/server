@@ -37,7 +37,7 @@ sealed class MiscellaneousStatusUpdateGroup : StatusUpdateGroup() {
             add(MiscellaneousEndRaceOfferHidden::class)
             add(MiscellaneousStatusUpdateGroup10::class)
             add(MiscellaneousStatusUpdateGroup11::class)
-            add(MiscellaneousStatusUpdateGroup12::class)
+            add(MiscellaneousCurrentPlatformChanged::class)
             add(MiscellaneousStatusUpdateGroup13::class)
             add(MiscellaneousStatusUpdateGroup14::class)
             add(MiscellaneousStatusUpdateGroup15::class)
@@ -134,7 +134,7 @@ data class MiscellaneousStatusUpdateGroup11(
 ) : MiscellaneousStatusUpdateGroup()
 
 @Serializable
-data class MiscellaneousStatusUpdateGroup12(
+data class MiscellaneousCurrentPlatformChanged(
     var currentPlatform: PlatformType,
 ) : MiscellaneousStatusUpdateGroup()
 

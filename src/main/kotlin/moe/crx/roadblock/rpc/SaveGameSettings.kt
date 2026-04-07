@@ -5,6 +5,7 @@ import moe.crx.roadblock.game.GameConnection
 import moe.crx.roadblock.objects.settings.GameSettings
 import moe.crx.roadblock.rpc.base.RequestPacket
 import moe.crx.roadblock.rpc.base.UpdatesQueueWithRootReactionsResponse
+import moe.crx.roadblock.updates.MiscellaneousGameSettingsChanged
 
 @Serializable
 data class SaveGameSettingsRequest(
@@ -18,5 +19,12 @@ suspend fun handleSaveGameSettings(
     session: GameConnection,
     request: SaveGameSettingsRequest
 ) {
-    session.sendResponse(SaveGameSettingsResponse())
+    val reaction = MiscellaneousGameSettingsChanged(
+        oldSettings = session.gameState.miscellaneous.gameSettings,
+        newSettings = request.settings,
+    )
+
+    session.gameState.miscellaneous.gameSettings = request.settings
+
+    session.sendResponse(SaveGameSettingsResponse().flatten(reaction))
 }
