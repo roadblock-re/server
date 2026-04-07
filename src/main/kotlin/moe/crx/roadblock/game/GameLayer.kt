@@ -199,12 +199,7 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
         register(::handleMiscellaneousSetUserName)
         register(::handleMiscellaneousSetUserAgeAndGender)
         register(::handleMiscellaneousSetUserOnlinePrivacyPolicy)
-        if (ver older "24.0.0") {
-            register(::handleMiscellaneousSetConsentNoticeShown)
-        }
-        if (ver newer "24.0.0") {
-            register(::handleMiscellaneousSetUnderageDisclaimerShown)
-        }
+        register(::handleMiscellaneousSetUnderageDisclaimerShown) // MiscellaneousSetConsentNoticeShown
         register(::handleSaveGameSettings)
         register(::handleMiscellaneousSetPlatform)
         if (ver newer "24.0.0") {
