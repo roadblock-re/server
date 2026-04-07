@@ -71,7 +71,7 @@ fun Application.configureApiRouting(workingDirectory: String, config: Configurat
                     assetsGetAssetMetadata(workingDirectory, config)
                     matchmakerQuickLaunch(config)
                     authTokenEncrypt()
-                    messageMe()
+                    messageMe(config)
                     transactionsGifts()
                     transactionsGiftBundles()
                     lobbyRegions(config)
@@ -103,7 +103,7 @@ fun Application.configureApiRouting(workingDirectory: String, config: Configurat
             }
             // Pandora locate -> message
             route("/message") {
-                messageMe()
+                messageMe(config)
             }
             // Pandora locate -> social
             route("/social") {

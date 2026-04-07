@@ -10,6 +10,7 @@ val json = Json {
     ignoreUnknownKeys = true
     prettyPrint = true
     explicitNulls = true
+    allowStructuredMapKeys = true
 }
 
 @Serializable
@@ -23,6 +24,7 @@ data class Configuration(
     val forceWebsocket: Boolean = true,
     val checkReceivedRequestSize: Boolean = false,
     val eveDomain: String = "eve.gameloft.com",
+    val messageOfTheDay: String? = "Welcome to Roadblock!",
 )
 
 fun readConfig(workingDirectory: String): Configuration {

@@ -216,6 +216,7 @@ class GameConnection(
             onlineInformationSent = true
 
             // TODO Send push messages
+            // TODO Send event calendar (otherwise game will wait for it and freeze)
         }
 
         packetLock.lock()
