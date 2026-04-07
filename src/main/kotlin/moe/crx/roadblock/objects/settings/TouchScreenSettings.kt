@@ -17,5 +17,5 @@ data class TouchScreenSettings(
     var tiltingSensitivity: Float = 0.5f,
     var isHorizonTiltEnabled: Boolean = true,
     var preferredManualControlSchemeType: TouchScreenManualControlSchemeType = TouchScreenManualControlSchemeType.TiltToSteer,
-    var isAutoselectEnabled: Boolean = false,
+    var isAutoSelectEnabled: Boolean = false,
 )

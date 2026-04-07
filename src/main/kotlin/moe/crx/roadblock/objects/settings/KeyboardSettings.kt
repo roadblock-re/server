@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class KeyboardSettings(
-    var isAutoselectEnabled: Boolean = true,
-    var manualSensitivity: Float = 0.5f,
-    var isKeyboardAzerty: KeyboardLayout = KeyboardLayout.Qwerty,
+    var isAutoSelectEnabled: Boolean = true,
+    var steeringSensitivity: Float = 0.5f,
+    var layout: KeyboardLayout = KeyboardLayout.Qwerty,
 )
