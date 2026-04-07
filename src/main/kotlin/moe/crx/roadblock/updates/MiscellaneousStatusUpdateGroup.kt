@@ -9,9 +9,12 @@ import moe.crx.roadblock.game.serialization.UntilVersion
 import moe.crx.roadblock.game.serialization.Variant
 import moe.crx.roadblock.objects.Age
 import moe.crx.roadblock.objects.EndRaceAdsOfferId
+import moe.crx.roadblock.objects.LimitRulesID
 import moe.crx.roadblock.objects.miscellaneous.GDPRCompliancy
 import moe.crx.roadblock.objects.miscellaneous.Gender
 import moe.crx.roadblock.objects.settings.GameSettings
+import moe.crx.roadblock.objects.social.CrossplayPlatformFilter
+import moe.crx.roadblock.objects.social.PlatformType
 
 @Serializable
 sealed class MiscellaneousStatusUpdateGroup : StatusUpdateGroup() {
@@ -28,8 +31,17 @@ sealed class MiscellaneousStatusUpdateGroup : StatusUpdateGroup() {
             add(MiscellaneousRegionChangeCountChanged::class)
             add(MiscellaneousGameSettingsChanged::class)
             add(MiscellaneousClaimedSystemNotificationRewardChanged::class)
-            add(MiscellaneousXboxLiveOnlyEnableChanged::class)
+            if (version older "24.0.0") { // TODO find exact version
+                add(MiscellaneousXboxLiveOnlyEnableChanged::class)
+            }
             add(MiscellaneousEndRaceOfferHidden::class)
+            add(MiscellaneousStatusUpdateGroup10::class)
+            add(MiscellaneousStatusUpdateGroup11::class)
+            add(MiscellaneousStatusUpdateGroup12::class)
+            add(MiscellaneousStatusUpdateGroup13::class)
+            add(MiscellaneousStatusUpdateGroup14::class)
+            add(MiscellaneousStatusUpdateGroup15::class)
+            add(MiscellaneousStatusUpdateGroup16::class)
         }
     }
 }
@@ -41,24 +53,11 @@ data class MiscellaneousAliasChanged(
 ) : MiscellaneousStatusUpdateGroup()
 
 @Serializable
-data class MiscellaneousClaimedSystemNotificationRewardChanged(
-    var hasClaimed: Boolean
-) : MiscellaneousStatusUpdateGroup()
-
-@Serializable
-data class MiscellaneousEndRaceOfferHidden(
-    var newValue: EndRaceAdsOfferId,
-) : MiscellaneousStatusUpdateGroup()
-
-@Serializable
-data class MiscellaneousGameSettingsChanged(
-    var oldSettings: GameSettings,
-    var newSettings: GameSettings,
-) : MiscellaneousStatusUpdateGroup()
-
-@Serializable
-data class MiscellaneousRegionChangeCountChanged(
-    var newValue: UInt
+data class MiscellaneousUserNameChanged(
+    var oldUsername: String,
+    var newUsername: String,
+    @FromVersion("24.0.0")
+    var isForcedChange: Boolean,
 ) : MiscellaneousStatusUpdateGroup()
 
 @Serializable
@@ -78,12 +77,6 @@ data class MiscellaneousUserAgeAndGenderChanged(
 ) : MiscellaneousStatusUpdateGroup()
 
 @Serializable
-data class MiscellaneousUserDeviceCountryChanged(
-    var oldCountryStr: String,
-    var newCountryStr: String,
-) : MiscellaneousStatusUpdateGroup()
-
-@Serializable
 data class MiscellaneousUserGPDRComplianceChanged(
     @UntilVersion("24.6.0")
     var oldIsGDPRCompliant: Boolean? = null,
@@ -98,15 +91,70 @@ data class MiscellaneousUserGPDRComplianceChanged(
 ) : MiscellaneousStatusUpdateGroup()
 
 @Serializable
-data class MiscellaneousUserNameChanged(
-    var oldUsername: String,
-    var newUsername: String,
-    @FromVersion("24.0.0")
-    var isForcedChange: Boolean,
+data class MiscellaneousUserDeviceCountryChanged(
+    var oldCountryStr: String,
+    var newCountryStr: String,
+) : MiscellaneousStatusUpdateGroup()
+
+@Serializable
+data class MiscellaneousRegionChangeCountChanged(
+    var newValue: UInt
+) : MiscellaneousStatusUpdateGroup()
+
+@Serializable
+data class MiscellaneousGameSettingsChanged(
+    var oldSettings: GameSettings,
+    var newSettings: GameSettings,
+) : MiscellaneousStatusUpdateGroup()
+
+@Serializable
+data class MiscellaneousClaimedSystemNotificationRewardChanged(
+    var hasClaimed: Boolean
 ) : MiscellaneousStatusUpdateGroup()
 
 @Serializable
 data class MiscellaneousXboxLiveOnlyEnableChanged(
     var oldEnable: Boolean?,
     var newEnable: Boolean?,
+) : MiscellaneousStatusUpdateGroup()
+
+@Serializable
+data class MiscellaneousEndRaceOfferHidden(
+    var newValue: EndRaceAdsOfferId,
+) : MiscellaneousStatusUpdateGroup()
+
+@Serializable
+data class MiscellaneousStatusUpdateGroup10(
+    var timestamp: Instant,
+) : MiscellaneousStatusUpdateGroup()
+
+@Serializable
+data class MiscellaneousStatusUpdateGroup11(
+    var crossplayPlatformFilter: CrossplayPlatformFilter,
+) : MiscellaneousStatusUpdateGroup()
+
+@Serializable
+data class MiscellaneousStatusUpdateGroup12(
+    var currentPlatform: PlatformType,
+) : MiscellaneousStatusUpdateGroup()
+
+@Serializable
+data class MiscellaneousStatusUpdateGroup13(
+    var limitRulesID: LimitRulesID,
+    var amount: UInt,
+) : MiscellaneousStatusUpdateGroup()
+
+@Serializable
+data class MiscellaneousStatusUpdateGroup14(
+    var type: UInt,
+) : MiscellaneousStatusUpdateGroup()
+
+@Serializable
+data class MiscellaneousStatusUpdateGroup15(
+    var nextResetTime: Instant,
+) : MiscellaneousStatusUpdateGroup()
+
+@Serializable
+data class MiscellaneousStatusUpdateGroup16(
+    var hasPlayed: Boolean,
 ) : MiscellaneousStatusUpdateGroup()

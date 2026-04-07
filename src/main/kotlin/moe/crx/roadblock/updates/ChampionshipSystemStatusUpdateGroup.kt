@@ -3,16 +3,10 @@ package moe.crx.roadblock.updates
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.Blob
+import moe.crx.roadblock.game.serialization.FromVersion
 import moe.crx.roadblock.game.serialization.SerializationVersion
 import moe.crx.roadblock.game.serialization.Variant
-import moe.crx.roadblock.objects.CalendarEventId
-import moe.crx.roadblock.objects.CarRank
-import moe.crx.roadblock.objects.ChampionshipGroupId
-import moe.crx.roadblock.objects.ChampionshipPoints
-import moe.crx.roadblock.objects.ChampionshipRewardsTierId
-import moe.crx.roadblock.objects.ChampionshipRoundId
-import moe.crx.roadblock.objects.EventTrackDefId
-import moe.crx.roadblock.objects.LeaderboardPosition
+import moe.crx.roadblock.objects.*
 import moe.crx.roadblock.objects.championship.ChampionshipRaceMode
 import moe.crx.roadblock.objects.championship.ChampionshipRoundState
 import moe.crx.roadblock.objects.championship.ChampionshipStageType
@@ -40,58 +34,26 @@ sealed class ChampionshipSystemStatusUpdateGroup : StatusUpdateGroup() {
             add(ChampionshipSystemNitroGhostResetCountChanged::class)
             add(ChampionshipSystemBestNitroGhostTimeChanged::class)
             add(ChampionshipSystemResetBestNitroGhostTime::class)
+            if (version newer "24.0.0") { // TODO Find exact version
+                add(ChampionshipSystemStatusUpdateGroup12::class)
+            }
             add(ChampionshipSystemRemoveEvents::class)
         }
     }
 }
 
 @Serializable
-data class ChampionshipSystemBestNitroGhostTimeChanged(
+data class ChampionshipSystemRoundAttemptsChanged(
     var eventId: CalendarEventId,
-    var trackDefId: EventTrackDefId,
-    var ghostTimeMicroseconds: UInt,
+    var stageType: ChampionshipStageType,
+    var roundId: ChampionshipRoundId,
+    var attemptCount: UByte,
 ) : ChampionshipSystemStatusUpdateGroup()
 
 @Serializable
-data class ChampionshipSystemClaimFreePack(
-    var eventId: CalendarEventId,
-    var newFreePackClaimTimePoint: Instant,
-) : ChampionshipSystemStatusUpdateGroup()
-
-@Serializable
-data class ChampionshipSystemClaimRankReward(
-    var eventId: CalendarEventId,
-    var rewardsTierId: ChampionshipRewardsTierId,
-    var rewardIdx: UByte,
-) : ChampionshipSystemStatusUpdateGroup()
-
-@Serializable
-data class ChampionshipSystemClaimStateChanged(
-    var eventId: CalendarEventId,
-    var state: ChampionshipRoundState,
-    var rewardIdx: UByte,
-) : ChampionshipSystemStatusUpdateGroup()
-
-@Serializable
-data class ChampionshipSystemFinalsGroupChanged(
-    var eventId: CalendarEventId,
-    var groupId: ChampionshipGroupId,
-    var rewardsTierId: ChampionshipRewardsTierId,
-) : ChampionshipSystemStatusUpdateGroup()
-
-@Serializable
-data class ChampionshipSystemFinalsLeaderboardChanged(
-    var eventId: CalendarEventId,
-    var position: LeaderboardPosition,
-    var timestamp: Instant,
-) : ChampionshipSystemStatusUpdateGroup()
-
-@Serializable
-data class ChampionshipSystemFinalsRoundStateChanged(
+data class ChampionshipSystemIsRegisteredChanged(
     var eventId: CalendarEventId,
     var roundId: ChampionshipRoundId,
-    var state: ChampionshipRoundState,
-    var points: ChampionshipPoints,
 ) : ChampionshipSystemStatusUpdateGroup()
 
 @Serializable
@@ -102,21 +64,46 @@ data class ChampionshipSystemIsQualifiedChanged(
 ) : ChampionshipSystemStatusUpdateGroup()
 
 @Serializable
-data class ChampionshipSystemIsRegisteredChanged(
+data class ChampionshipSystemRaceFinished(
+    var eventId: CalendarEventId,
+    var hasFinished: Boolean,
+) : ChampionshipSystemStatusUpdateGroup()
+
+@Serializable
+data class ChampionshipSystemRaceBestTimeChanged(
+    var eventId: CalendarEventId,
+    var stageType: ChampionshipStageType,
+    var roundId: ChampionshipRoundId,
+    var raceMode: ChampionshipRaceMode,
+    var timeInMicroseconds: UInt,
+    var carRank: CarRank,
+    @FromVersion("24.0.0")
+    var isCarOverclocked: Boolean = false,
+    @FromVersion("47.1.0")
+    var evoTuningVisualArchetype: EvoTuningVisualArchetype? = null,
+) : ChampionshipSystemStatusUpdateGroup()
+
+@Serializable
+data class ChampionshipSystemRoundLeaderboardChanged(
+    var eventId: CalendarEventId,
+    var stageType: ChampionshipStageType,
+    var roundId: ChampionshipRoundId,
+    var position: LeaderboardPosition,
+    var timestamp: Instant,
+) : ChampionshipSystemStatusUpdateGroup()
+
+@Serializable
+data class ChampionshipSystemFinalsLeaderboardChanged(
+    var eventId: CalendarEventId,
+    var position: LeaderboardPosition,
+    var timestamp: Instant,
+) : ChampionshipSystemStatusUpdateGroup()
+
+@Serializable
+data class ChampionshipSystemQualifyingRoundGroupChanged(
     var eventId: CalendarEventId,
     var roundId: ChampionshipRoundId,
-) : ChampionshipSystemStatusUpdateGroup()
-
-@Serializable
-data class ChampionshipSystemNeedsSyncServices(
-    var eventId: CalendarEventId,
-    var needsSync: Boolean,
-) : ChampionshipSystemStatusUpdateGroup()
-
-@Serializable
-data class ChampionshipSystemNitroGhostResetCountChanged(
-    var eventId: CalendarEventId,
-    var resetCount: UInt,
+    var groupId: ChampionshipGroupId,
 ) : ChampionshipSystemStatusUpdateGroup()
 
 @Serializable
@@ -129,10 +116,10 @@ data class ChampionshipSystemPracticeRewardsObtained(
 ) : ChampionshipSystemStatusUpdateGroup()
 
 @Serializable
-data class ChampionshipSystemQualifyingRoundGroupChanged(
+data class ChampionshipSystemFinalsGroupChanged(
     var eventId: CalendarEventId,
-    var roundId: ChampionshipRoundId,
     var groupId: ChampionshipGroupId,
+    var rewardsTierId: ChampionshipRewardsTierId,
 ) : ChampionshipSystemStatusUpdateGroup()
 
 @Serializable
@@ -143,45 +130,67 @@ data class ChampionshipSystemQualifyingRoundStateChanged(
 ) : ChampionshipSystemStatusUpdateGroup()
 
 @Serializable
-data class ChampionshipSystemRaceBestTimeChanged(
+data class ChampionshipSystemFinalsRoundStateChanged(
     var eventId: CalendarEventId,
-    var stageType: ChampionshipStageType,
     var roundId: ChampionshipRoundId,
-    var raceMode: ChampionshipRaceMode,
-    var timeInMicroseconds: UInt,
-    var carRank: CarRank,
+    var state: ChampionshipRoundState,
+    var points: ChampionshipPoints,
 ) : ChampionshipSystemStatusUpdateGroup()
 
 @Serializable
-data class ChampionshipSystemRaceFinished(
+data class ChampionshipSystemClaimStateChanged(
     var eventId: CalendarEventId,
-    var hasFinished: Boolean,
+    var state: ChampionshipRoundState,
+    var rewardIdx: UByte,
 ) : ChampionshipSystemStatusUpdateGroup()
 
 @Serializable
-data class ChampionshipSystemRemoveEvents(
-    var eventIds: List<CalendarEventId>,
+data class ChampionshipSystemClaimRankReward(
+    var eventId: CalendarEventId,
+    var rewardsTierId: ChampionshipRewardsTierId,
+    var rewardIdx: UByte,
+) : ChampionshipSystemStatusUpdateGroup()
+
+@Serializable
+data class ChampionshipSystemClaimFreePack(
+    var eventId: CalendarEventId,
+    var newFreePackClaimTimePoint: Instant,
+) : ChampionshipSystemStatusUpdateGroup()
+
+@Serializable
+data class ChampionshipSystemNeedsSyncServices(
+    var eventId: CalendarEventId,
+    var needsSync: Boolean,
+) : ChampionshipSystemStatusUpdateGroup()
+
+@Serializable
+data class ChampionshipSystemBestNitroGhostTimeChanged(
+    var eventId: CalendarEventId,
+    var trackDefId: EventTrackDefId,
+    var ghostTimeMicroseconds: UInt,
+) : ChampionshipSystemStatusUpdateGroup()
+
+@Serializable
+data class ChampionshipSystemNitroGhostResetCountChanged(
+    var eventId: CalendarEventId,
+    var resetCount: UInt,
 ) : ChampionshipSystemStatusUpdateGroup()
 
 @Serializable
 data class ChampionshipSystemResetBestNitroGhostTime(
     var eventId: CalendarEventId,
     var trackDefId: EventTrackDefId,
+    @FromVersion("24.0.0") // TODO Find exact version
+    var ghostTimeMicroseconds: UInt,
 ) : ChampionshipSystemStatusUpdateGroup()
 
 @Serializable
-data class ChampionshipSystemRoundAttemptsChanged(
+data class ChampionshipSystemStatusUpdateGroup12(
     var eventId: CalendarEventId,
-    var stageType: ChampionshipStageType,
-    var roundId: ChampionshipRoundId,
-    var attemptCount: UByte,
+    var trackDefId: EventTrackDefId,
 ) : ChampionshipSystemStatusUpdateGroup()
 
 @Serializable
-data class ChampionshipSystemRoundLeaderboardChanged(
-    var eventId: CalendarEventId,
-    var stageType: ChampionshipStageType,
-    var roundId: ChampionshipRoundId,
-    var position: LeaderboardPosition,
-    var timestamp: Instant,
+data class ChampionshipSystemRemoveEvents(
+    var eventIds: List<CalendarEventId>,
 ) : ChampionshipSystemStatusUpdateGroup()

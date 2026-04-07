@@ -7,5 +7,5 @@ import kotlinx.serialization.Serializable
 data class QuarantineEvidence(
     var type: QuarantineEvidenceType,
     var source: QuarantineEvidenceSource,
-    var timestamp: Instant,
+    var timePoint: Instant,
 )

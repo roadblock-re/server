@@ -29,6 +29,40 @@ sealed class BonusPassSystemStatusUpdateGroup : StatusUpdateGroup() {
 }
 
 @Serializable
+data class BonusPassSystemBonusPassStarted(
+    var eventId: CalendarEventId,
+    var id: BonusPassId,
+    var startDate: Instant,
+    var duration: Instant,
+    var type: BonusPassType,
+) : BonusPassSystemStatusUpdateGroup()
+
+@Serializable
+class BonusPassSystemBonusPassFinished(
+    var eventId: CalendarEventId,
+    var id: BonusPassId,
+) : BonusPassSystemStatusUpdateGroup()
+
+@Serializable
+data class BonusPassSystemBonusPassDurationModified(
+    var eventId: CalendarEventId,
+    var previousDuration: Instant,
+    var newDuration: Instant,
+) : BonusPassSystemStatusUpdateGroup()
+
+@Serializable
+data class BonusPassSystemBonusPassEventIdModified(
+    var oldEventId: CalendarEventId,
+    var newEventId: CalendarEventId,
+    var duration: Instant,
+) : BonusPassSystemStatusUpdateGroup()
+
+@Serializable
+data class BonusPassSystemRemoveEvents(
+    var eventIds: List<CalendarEventId>
+) : BonusPassSystemStatusUpdateGroup()
+
+@Serializable
 class BonusPassSystemBenefitFuelRefillsAmountChanged(
     var oldAmount: FreeFuelRefillsAmount,
     var newAmount: FreeFuelRefillsAmount,
@@ -51,40 +85,6 @@ data class BonusPassSystemBenefitTLETicketsRefillsRestored(
 ) : BonusPassSystemStatusUpdateGroup()
 
 @Serializable
-data class BonusPassSystemBonusPassDurationModified(
-    var eventId: CalendarEventId,
-    var previousDuration: Instant,
-    var newDuration: Instant,
-) : BonusPassSystemStatusUpdateGroup()
-
-@Serializable
-data class BonusPassSystemBonusPassEventIdModified(
-    var oldEventId: CalendarEventId,
-    var newEventId: CalendarEventId,
-    var duration: Instant,
-) : BonusPassSystemStatusUpdateGroup()
-
-@Serializable
-class BonusPassSystemBonusPassFinished(
-    var eventId: CalendarEventId,
-    var id: BonusPassId,
-) : BonusPassSystemStatusUpdateGroup()
-
-@Serializable
-data class BonusPassSystemBonusPassStarted(
-    var eventId: CalendarEventId,
-    var id: BonusPassId,
-    var startDate: Instant,
-    var duration: Instant,
-    var type: BonusPassType,
-) : BonusPassSystemStatusUpdateGroup()
-
-@Serializable
 data class BonusPassSystemNextTLETicketsRefillTimeChanged(
     var newRestoreTime: Instant
-) : BonusPassSystemStatusUpdateGroup()
-
-@Serializable
-data class BonusPassSystemRemoveEvents(
-    var eventIds: List<CalendarEventId>
 ) : BonusPassSystemStatusUpdateGroup()

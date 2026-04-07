@@ -4,6 +4,7 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.ByteEnum
 import moe.crx.roadblock.game.serialization.SerializationVersion
+import moe.crx.roadblock.game.serialization.UntilVersion
 import moe.crx.roadblock.game.serialization.Variant
 import moe.crx.roadblock.objects.dailytasks.DailyTaskRaceReadyRewardType
 import moe.crx.roadblock.objects.dailytasks.DailyTaskType
@@ -12,7 +13,7 @@ import moe.crx.roadblock.objects.dailytasks.DailyTaskType
 sealed class DailyTasksStatusUpdateGroup : StatusUpdateGroup() {
     companion object : Variant<DailyTasksStatusUpdateGroup> {
         override fun variants(version: SerializationVersion) = buildList {
-            add(DailyTasksReseted::class)
+            add(DailyTasksReset::class) // DailyTasksReseted
             add(DailyTasksTaskUnlocked::class)
             add(DailyTasksTaskIncreased::class)
             add(DailyTasksTaskCompleted::class)
@@ -25,13 +26,7 @@ sealed class DailyTasksStatusUpdateGroup : StatusUpdateGroup() {
 }
 
 @Serializable
-class DailyTasksRaceReadyClaimed : DailyTasksStatusUpdateGroup()
-
-@Serializable
-class DailyTasksRaceReadyCompleted : DailyTasksStatusUpdateGroup()
-
-@Serializable
-data class DailyTasksReseted(
+data class DailyTasksReset(
     var rewardType: DailyTaskRaceReadyRewardType,
     var completedTaskGoal: UInt,
     var nextResetTime: Instant,
@@ -39,32 +34,43 @@ data class DailyTasksReseted(
 ) : DailyTasksStatusUpdateGroup()
 
 @Serializable
-data class DailyTasksTaskClaimed(
-    @ByteEnum
-    var type: DailyTaskType
-) : DailyTasksStatusUpdateGroup()
-
-@Serializable
-data class DailyTasksTaskCompleted(
-    @ByteEnum
-    var type: DailyTaskType
-) : DailyTasksStatusUpdateGroup()
-
-@Serializable
-data class DailyTasksTaskEnabled(
-    @ByteEnum
-    var type: DailyTaskType
+data class DailyTasksTaskUnlocked(
+    @UntilVersion("24.0.0") @ByteEnum // TODO find exact version
+    var legacyType: DailyTaskType = DailyTaskType.ClaimCardPacks,
+    var type: DailyTaskType = DailyTaskType.ClaimCardPacks,
 ) : DailyTasksStatusUpdateGroup()
 
 @Serializable
 data class DailyTasksTaskIncreased(
-    @ByteEnum
-    var type: DailyTaskType,
+    @UntilVersion("24.0.0") @ByteEnum // TODO find exact version
+    var legacyType: DailyTaskType = DailyTaskType.ClaimCardPacks,
+    var type: DailyTaskType = DailyTaskType.ClaimCardPacks,
     var amount: UInt,
 ) : DailyTasksStatusUpdateGroup()
 
 @Serializable
-data class DailyTasksTaskUnlocked(
-    @ByteEnum
-    var type: DailyTaskType
+data class DailyTasksTaskCompleted(
+    @UntilVersion("24.0.0") @ByteEnum // TODO find exact version
+    var legacyType: DailyTaskType = DailyTaskType.ClaimCardPacks,
+    var type: DailyTaskType = DailyTaskType.ClaimCardPacks,
 ) : DailyTasksStatusUpdateGroup()
+
+@Serializable
+data class DailyTasksTaskClaimed(
+    @UntilVersion("24.0.0") @ByteEnum // TODO find exact version
+    var legacyType: DailyTaskType = DailyTaskType.ClaimCardPacks,
+    var type: DailyTaskType = DailyTaskType.ClaimCardPacks,
+) : DailyTasksStatusUpdateGroup()
+
+@Serializable
+data class DailyTasksTaskEnabled(
+    @UntilVersion("24.0.0") @ByteEnum // TODO find exact version
+    var legacyType: DailyTaskType = DailyTaskType.ClaimCardPacks,
+    var type: DailyTaskType = DailyTaskType.ClaimCardPacks,
+) : DailyTasksStatusUpdateGroup()
+
+@Serializable
+class DailyTasksRaceReadyCompleted : DailyTasksStatusUpdateGroup()
+
+@Serializable
+class DailyTasksRaceReadyClaimed : DailyTasksStatusUpdateGroup()

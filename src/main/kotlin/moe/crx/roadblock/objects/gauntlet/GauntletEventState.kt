@@ -2,14 +2,7 @@ package moe.crx.roadblock.objects.gauntlet
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.objects.CarRank
-import moe.crx.roadblock.objects.EventTrackDefId
-import moe.crx.roadblock.objects.GauntletChallengePoints
-import moe.crx.roadblock.objects.GauntletDivision
-import moe.crx.roadblock.objects.GauntletLeague
-import moe.crx.roadblock.objects.GauntletQualificationId
-import moe.crx.roadblock.objects.GauntletScore
-import moe.crx.roadblock.objects.GauntletTicket
+import moe.crx.roadblock.objects.*
 import moe.crx.roadblock.objects.quarantine.QuarantineEvidenceType
 
 @Serializable
@@ -26,7 +19,7 @@ data class GauntletEventState(
     var refreshTime: Instant,
     var challengePoints: GauntletChallengePoints,
     var rerollsCount: UInt,
-    var ticketsPurchased: GauntletTicket,
+    var ticketsPurchased: UInt,
     var tickets: UShort,
     var score: GauntletScore,
     var isClaimed: Boolean,

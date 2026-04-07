@@ -25,26 +25,26 @@ sealed class StatusUpdateGroup {
             add(BlackMarketStatusUpdateGroup::class)
             add(BonusPassSystemStatusUpdateGroup::class)
             add(CareerStatusUpdateGroup::class)
-            add(ChampionshipSystemStatusUpdateGroup::class) // TODO
+            add(ChampionshipSystemStatusUpdateGroup::class)
             if (version older "45.0.0") { // TODO find exact version
                 add(ClubRaceStatusUpdateGroup::class)
             }
-            add(ClubSystemStatusUpdateGroup::class) // TODO
+            add(ClubSystemStatusUpdateGroup::class)
             if (version older "45.0.0") {
                 add(ClubWarsStatusUpdateGroup::class)
             }
-            add(DailyTasksStatusUpdateGroup::class) // TODO
-            add(GachaSystemStatusUpdateGroup::class) // TODO
+            add(DailyTasksStatusUpdateGroup::class)
+            add(GachaSystemStatusUpdateGroup::class)
             if (version newer "24.5.0") {
-                add(GauntletSystemStatusUpdateGroup::class) // TODO
+                add(GauntletSystemStatusUpdateGroup::class)
             }
             if (version newer "24.0.0") {
                 add(GoldenChestSystemStatusUpdateGroup::class) // TODO
             }
             add(InboxStatusUpdateGroup::class) // TODO
-            add(InventoryStatusUpdateGroup::class) //  TODO
+            add(InventoryStatusUpdateGroup::class) // TODO
             add(LegendFundSystemStatusUpdateGroup::class) // TODO
-            add(MiscellaneousStatusUpdateGroup::class) // TODO
+            add(MiscellaneousStatusUpdateGroup::class)
             if (version older "24.0.0") {
                 add(MultiplayerChallengesStatusUpdateGroup::class)
             }

@@ -130,5 +130,4 @@ typealias GauntletScore = Short // TODO or UShort? (score deltas in question)
 typealias GauntletChallengePoints = Short // TODO or UShort? (points deltas in question)
 typealias GauntletDivision = UByte
 typealias GauntletLeague = UByte
-typealias GauntletTicket = UInt
 typealias GauntletQualificationId = UShort

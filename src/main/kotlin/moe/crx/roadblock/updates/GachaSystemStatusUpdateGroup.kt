@@ -6,6 +6,7 @@ import moe.crx.roadblock.game.serialization.SerializationVersion
 import moe.crx.roadblock.game.serialization.Variant
 import moe.crx.roadblock.objects.CalendarEventId
 import moe.crx.roadblock.objects.gacha.GachaId
+import moe.crx.roadblock.objects.gacha.GachaRewardPack
 
 @Serializable
 sealed class GachaSystemStatusUpdateGroup : StatusUpdateGroup() {
@@ -14,9 +15,17 @@ sealed class GachaSystemStatusUpdateGroup : StatusUpdateGroup() {
             add(GachaSystemLockedStateChanged::class)
             add(GachaSystemNextBoxIsCriticalChanged::class)
             add(GachaSystemRetentionBoxReadyTimeChanged::class)
+            if (version newer "45.0.0") {// TODO find exact version
+                add(GachaSystemStatusUpdateGroup3::class)
+            }
             add(GachaSystemOpenedEventBoxes::class)
             add(GachaSystemRemoveEvents::class)
             add(GachaSystemOpenedBoxes::class)
+            if (version newer "45.0.0") {// TODO find exact version
+                add(GachaSystemStatusUpdateGroup7::class)
+                add(GachaSystemStatusUpdateGroup8::class)
+                add(GachaSystemStatusUpdateGroup9::class)
+            }
             add(OpenedGachaBoxContainer::class)
         }
 
@@ -35,8 +44,15 @@ data class GachaSystemNextBoxIsCriticalChanged(
 ) : GachaSystemStatusUpdateGroup()
 
 @Serializable
-data class GachaSystemOpenedBoxes(
-    var gachaId: GachaId
+data class GachaSystemRetentionBoxReadyTimeChanged(
+    var oldTimePoint: Instant,
+    var newTimePoint: Instant,
+) : GachaSystemStatusUpdateGroup()
+
+@Serializable
+data class GachaSystemStatusUpdateGroup3(
+    var oldTimePoint: Instant,
+    var newTimePoint: Instant,
 ) : GachaSystemStatusUpdateGroup()
 
 @Serializable
@@ -54,9 +70,26 @@ data class GachaSystemRemoveEvents(
 ) : GachaSystemStatusUpdateGroup()
 
 @Serializable
-data class GachaSystemRetentionBoxReadyTimeChanged(
-    var oldTimePoint: Instant,
-    var newTimePoint: Instant,
+data class GachaSystemOpenedBoxes(
+    var gachaId: GachaId
+) : GachaSystemStatusUpdateGroup()
+
+@Serializable
+data class GachaSystemStatusUpdateGroup7(
+    var gachaId: GachaId
+) : GachaSystemStatusUpdateGroup()
+
+@Serializable
+data class GachaSystemStatusUpdateGroup8(
+    var gachaId: GachaId,
+    var reward: GachaRewardPack,
+    var slot: UShort,
+) : GachaSystemStatusUpdateGroup()
+
+@Serializable
+data class GachaSystemStatusUpdateGroup9(
+    var gachaId: GachaId,
+    var slot: UShort,
 ) : GachaSystemStatusUpdateGroup()
 
 @Serializable

@@ -25,10 +25,9 @@ sealed class CareerStatusUpdateGroup : StatusUpdateGroup() {
 }
 
 @Serializable
-data class CareerChapterFlagsChanged(
-    var chapterId: ChapterId,
-    var oldChapterFlags: Flags,
-    var newChapterFlags: Flags,
+data class CareerTotalFlagsChanged(
+    var oldFlags: Flags,
+    var newFlags: Flags,
 ) : CareerStatusUpdateGroup()
 
 @Serializable
@@ -39,10 +38,24 @@ data class CareerChapterStateChanged(
 ) : CareerStatusUpdateGroup()
 
 @Serializable
-data class CareerEventFlagChanged(
-    var eventId: CareerEventId,
-    var flagId: CareerFlagId,
-    var obtained: Boolean,
+data class CareerChapterFlagsChanged(
+    var chapterId: ChapterId,
+    var oldChapterFlags: Flags,
+    var newChapterFlags: Flags,
+) : CareerStatusUpdateGroup()
+
+@Serializable
+data class CareerSeasonStateChanged(
+    var seasonId: SeasonId,
+    var oldState: ProgressState,
+    var newState: ProgressState,
+) : CareerStatusUpdateGroup()
+
+@Serializable
+data class CareerSeasonFlagsChanged(
+    var seasonId: SeasonId,
+    var oldSeasonFlags: Flags,
+    var newSeasonFlags: Flags,
 ) : CareerStatusUpdateGroup()
 
 @Serializable
@@ -60,29 +73,16 @@ data class CareerEventStateChanged(
 ) : CareerStatusUpdateGroup()
 
 @Serializable
+data class CareerEventFlagChanged(
+    var eventId: CareerEventId,
+    var flagId: CareerFlagId,
+    var obtained: Boolean,
+) : CareerStatusUpdateGroup()
+
+@Serializable
 data class CareerRaceFinished(
     var position: Byte,
     var eventId: CareerEventId,
     var hasFinished: Boolean,
     var wasCompleted: Boolean,
-) : CareerStatusUpdateGroup()
-
-@Serializable
-data class CareerSeasonFlagsChanged(
-    var seasonId: SeasonId,
-    var oldSeasonFlags: Flags,
-    var newSeasonFlags: Flags,
-) : CareerStatusUpdateGroup()
-
-@Serializable
-data class CareerSeasonStateChanged(
-    var seasonId: SeasonId,
-    var oldState: ProgressState,
-    var newState: ProgressState,
-) : CareerStatusUpdateGroup()
-
-@Serializable
-data class CareerTotalFlagsChanged(
-    var oldFlags: Flags,
-    var newFlags: Flags,
 ) : CareerStatusUpdateGroup()
