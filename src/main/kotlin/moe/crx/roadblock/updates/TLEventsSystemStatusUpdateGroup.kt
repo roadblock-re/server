@@ -2,15 +2,9 @@ package moe.crx.roadblock.updates
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.game.serialization.Blob
 import moe.crx.roadblock.game.serialization.SerializationVersion
 import moe.crx.roadblock.game.serialization.Variant
-import moe.crx.roadblock.objects.CalendarEventId
-import moe.crx.roadblock.objects.CarId
-import moe.crx.roadblock.objects.CarRank
-import moe.crx.roadblock.objects.LeaderboardPosition
-import moe.crx.roadblock.objects.TLETicket
-import moe.crx.roadblock.objects.TimeLimitedEventProgressionLevel
+import moe.crx.roadblock.objects.*
 import moe.crx.roadblock.objects.tle.*
 
 @Serializable
@@ -63,8 +57,8 @@ data class TLEventsSystemBestTimeChanged(
 data class TLEventsSystemClaimClubDataChanged(
     var eventId: TLEventId,
     var state: ClubTLEventClaimState,
-    var finalProgress: Blob,
-    var claimableRewards: Blob,
+    var finalProgress: List<UByte>,
+    var claimableRewards: List<UByte>,
 ) : TLEventsSystemStatusUpdateGroup()
 
 @Serializable
@@ -94,7 +88,7 @@ data class TLEventsSystemClubRewardClaimed(
 @Serializable
 data class TLEventsSystemClubRewardsCompleted(
     var eventId: TLEventId,
-    var completedRewardIndices: Blob
+    var completedRewardIndices: List<TLEventsRewardIndex>
 ) : TLEventsSystemStatusUpdateGroup()
 
 @Serializable
@@ -165,7 +159,7 @@ data class TLEventsSystemResetCountChanged(
 @Serializable
 data class TLEventsSystemSoloRewardsObtained(
     var calendarEventId: TLEventId,
-    var rewardCountPerRaceConditionIdx: Blob,
+    var rewardCountPerRaceConditionIdx: List<UByte>,
     var rewardBoosts: RewardBoosts,
     var fromAutoclaim: Boolean,
 ) : TLEventsSystemStatusUpdateGroup()

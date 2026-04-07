@@ -2,7 +2,6 @@ package moe.crx.roadblock.updates
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.game.serialization.Blob
 import moe.crx.roadblock.game.serialization.FromVersion
 import moe.crx.roadblock.game.serialization.SerializationVersion
 import moe.crx.roadblock.game.serialization.Variant
@@ -111,7 +110,7 @@ data class ChampionshipSystemPracticeRewardsObtained(
     var eventId: CalendarEventId,
     var stageType: ChampionshipStageType,
     var roundId: ChampionshipRoundId,
-    var obtainedRewardIndices: Blob,
+    var obtainedRewardIndices: List<ChampionshipRewardIndex>,
     var rewardCount: UInt,
 ) : ChampionshipSystemStatusUpdateGroup()
 
