@@ -1,7 +1,9 @@
 package moe.crx.roadblock.updates
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.SerializationVersion
+import moe.crx.roadblock.game.serialization.UntilVersion
 import moe.crx.roadblock.game.serialization.Variant
 import moe.crx.roadblock.objects.CalendarEventId
 import moe.crx.roadblock.objects.RelayOfferTierId
@@ -18,13 +20,6 @@ sealed class RelayOfferSystemStatusUpdateGroup : StatusUpdateGroup() {
 }
 
 @Serializable
-data class RelayOfferPurchaseTierUpdate(
-    var eventId: CalendarEventId,
-    var purchasedTierId: RelayOfferTierId,
-    var walletEventId: CalendarEventId?,
-) : RelayOfferSystemStatusUpdateGroup()
-
-@Serializable
 data class RelayOfferSystemCurrentTierChanged(
     var eventId: CalendarEventId,
     var newCurrentTierId: RelayOfferTierId,
@@ -32,5 +27,14 @@ data class RelayOfferSystemCurrentTierChanged(
 
 @Serializable
 data class RelayOfferSystemRemoveEvents(
+    @SerialName("events")
     var eventIds: List<CalendarEventId>
+) : RelayOfferSystemStatusUpdateGroup()
+
+@Serializable
+data class RelayOfferPurchaseTierUpdate(
+    var eventId: CalendarEventId,
+    var purchasedTierId: RelayOfferTierId,
+    @UntilVersion("45.0.0") // TODO find exact version
+    var walletEventId: CalendarEventId?,
 ) : RelayOfferSystemStatusUpdateGroup()

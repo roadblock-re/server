@@ -35,13 +35,15 @@ sealed class MiscellaneousStatusUpdateGroup : StatusUpdateGroup() {
                 add(MiscellaneousXboxLiveOnlyEnableChanged::class)
             }
             add(MiscellaneousEndRaceOfferHidden::class)
-            add(MiscellaneousStatusUpdateGroup10::class)
-            add(MiscellaneousStatusUpdateGroup11::class)
-            add(MiscellaneousCurrentPlatformChanged::class)
-            add(MiscellaneousStatusUpdateGroup13::class)
-            add(MiscellaneousStatusUpdateGroup14::class)
-            add(MiscellaneousStatusUpdateGroup15::class)
-            add(MiscellaneousStatusUpdateGroup16::class)
+            if (version newer "45.0.0") { // TODO find exact version
+                add(MiscellaneousStatusUpdateGroup10::class)
+                add(MiscellaneousStatusUpdateGroup11::class)
+                add(MiscellaneousCurrentPlatformChanged::class)
+                add(MiscellaneousStatusUpdateGroup13::class)
+                add(MiscellaneousStatusUpdateGroup14::class)
+                add(MiscellaneousStatusUpdateGroup15::class)
+                add(MiscellaneousStatusUpdateGroup16::class)
+            }
         }
     }
 }

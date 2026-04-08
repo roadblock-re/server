@@ -4,14 +4,7 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.SerializationVersion
 import moe.crx.roadblock.game.serialization.Variant
-import moe.crx.roadblock.objects.BlackMarketSlotId
-import moe.crx.roadblock.objects.CalendarEventId
-import moe.crx.roadblock.objects.CarId
-import moe.crx.roadblock.objects.Money
-import moe.crx.roadblock.objects.UberExperience
-import moe.crx.roadblock.objects.UberHazardLevel
-import moe.crx.roadblock.objects.UberLevelId
-import moe.crx.roadblock.objects.UberTierId
+import moe.crx.roadblock.objects.*
 import moe.crx.roadblock.objects.uber.UberPoolMissionId
 
 @Serializable
@@ -36,23 +29,19 @@ sealed class UberSystemStatusUpdateGroup : StatusUpdateGroup() {
 }
 
 @Serializable
-data class UberSystemCarDiscovered(
-    var eventId: CalendarEventId,
-    var carId: CarId,
-) : UberSystemStatusUpdateGroup()
-
-@Serializable
-data class UberSystemCurrencyBeenConvertedChanged(
-    var eventId: CalendarEventId,
-    var hasBeenConverted: Boolean,
-) : UberSystemStatusUpdateGroup()
-
-@Serializable
 data class UberSystemEventParticipated(
     var eventId: CalendarEventId,
     var tierCount: UInt,
     var levelCount: UInt,
     var timePoint: Instant,
+) : UberSystemStatusUpdateGroup()
+
+@Serializable
+data class UberSystemMissionCompleted(
+    var eventId: CalendarEventId,
+    var tierId: UberTierId,
+    var poolMissionId: UberPoolMissionId,
+    var isSkip: Boolean,
 ) : UberSystemStatusUpdateGroup()
 
 @Serializable
@@ -70,17 +59,17 @@ data class UberSystemHazardLevelChanged(
 ) : UberSystemStatusUpdateGroup()
 
 @Serializable
-data class UberSystemMilestoneAchieved(
+data class UberSystemTimesPurchasedForSlotChanged(
     var eventId: CalendarEventId,
-    var milestoneIdx: UInt,
+    var levelId: UberLevelId,
+    var slotId: BlackMarketSlotId,
+    var oldTimesPurchased: UInt,
+    var newTimesPurchased: UInt,
 ) : UberSystemStatusUpdateGroup()
 
 @Serializable
-data class UberSystemMissionCompleted(
-    var eventId: CalendarEventId,
-    var tierId: UberTierId,
-    var poolMissionId: UberPoolMissionId,
-    var isSkip: Boolean,
+data class UberSystemRemoveEvents(
+    var eventIds: List<CalendarEventId>
 ) : UberSystemStatusUpdateGroup()
 
 @Serializable
@@ -92,6 +81,12 @@ data class UberSystemRaceFinished(
 ) : UberSystemStatusUpdateGroup()
 
 @Serializable
+data class UberSystemCarDiscovered(
+    var eventId: CalendarEventId,
+    var carId: CarId,
+) : UberSystemStatusUpdateGroup()
+
+@Serializable
 data class UberSystemRaceReward(
     var eventId: CalendarEventId,
     var tierId: UberTierId,
@@ -99,16 +94,15 @@ data class UberSystemRaceReward(
 ) : UberSystemStatusUpdateGroup()
 
 @Serializable
-data class UberSystemRemoveEvents(
-    var eventIds: List<CalendarEventId>
+data class UberSystemCurrencyBeenConvertedChanged(
+    var eventId: CalendarEventId,
+    var hasBeenConverted: Boolean,
 ) : UberSystemStatusUpdateGroup()
 
 @Serializable
-data class UberSystemUberCurrencyObtainedInPinnedMissionChanged(
+data class UberSystemMilestoneAchieved(
     var eventId: CalendarEventId,
-    var tierId: UberTierId,
-    var oldAmount: Money,
-    var newAmount: Money,
+    var milestoneIdx: UInt,
 ) : UberSystemStatusUpdateGroup()
 
 @Serializable
@@ -120,10 +114,9 @@ data class UberSystemUberExperienceObtainedInMissionsChanged(
 ) : UberSystemStatusUpdateGroup()
 
 @Serializable
-data class UberSystemTimesPurchasedForSlotChanged(
+data class UberSystemUberCurrencyObtainedInPinnedMissionChanged(
     var eventId: CalendarEventId,
-    var levelId: UberLevelId,
-    var slotId: BlackMarketSlotId,
-    var oldTimesPurchased: UInt,
-    var newTimesPurchased: UInt,
+    var tierId: UberTierId,
+    var oldAmount: Money,
+    var newAmount: Money,
 ) : UberSystemStatusUpdateGroup()

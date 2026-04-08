@@ -39,50 +39,50 @@ sealed class StatusUpdateGroup {
                 add(GauntletSystemStatusUpdateGroup::class)
             }
             if (version newer "24.0.0") {
-                add(GoldenChestSystemStatusUpdateGroup::class) // TODO
+                add(GoldenChestSystemStatusUpdateGroup::class)
             }
-            add(InboxStatusUpdateGroup::class) // TODO
-            add(InventoryStatusUpdateGroup::class) // TODO
-            add(LegendFundSystemStatusUpdateGroup::class) // TODO
+            add(InboxStatusUpdateGroup::class)
+            add(InventoryStatusUpdateGroup::class)
+            add(LegendFundSystemStatusUpdateGroup::class)
             add(MiscellaneousStatusUpdateGroup::class)
             if (version older "24.0.0") {
                 add(MultiplayerChallengesStatusUpdateGroup::class)
             }
-            add(MultiplayerSeriesStatusUpdateGroup::class) // TODO
+            add(MultiplayerSeriesStatusUpdateGroup::class)
             if (version newer "24.0.0") {
-                add(OverclockSystemStatusUpdateGroup::class) // TODO
+                add(OverclockSystemStatusUpdateGroup::class)
             }
-            add(PiggyBankSystemStatusUpdateGroup::class) // TODO
-            add(PlayerStatsStatusUpdateGroup::class) // TODO
-            add(PrivateLobbyStatusUpdateGroup::class) // TODO
-            add(QuarantineStatusUpdateGroup::class) // TODO
-            add(RelayOfferSystemStatusUpdateGroup::class) // TODO
-            add(SeasonPassSystemStatusUpdateGroup::class) // TODO
+            add(PiggyBankSystemStatusUpdateGroup::class)
+            add(PlayerStatsStatusUpdateGroup::class)
+            add(PrivateLobbyStatusUpdateGroup::class)
+            add(QuarantineStatusUpdateGroup::class)
+            add(RelayOfferSystemStatusUpdateGroup::class)
+            add(SeasonPassSystemStatusUpdateGroup::class)
             if (version newer "24.0.0") {
                 add(SeasonalCurrencySystemStatusUpdateGroup::class)
             }
             if (version newer "24.1.0") {
-                add(SocialSystemStatusUpdateGroup::class) // TODO
+                add(SocialSystemStatusUpdateGroup::class)
             }
             if (version newer "24.0.0") {
-                add(SponsorshipSystemStatusUpdateGroup::class) // TODO
+                add(SponsorshipSystemStatusUpdateGroup::class)
             }
-            add(TLEventsSystemStatusUpdateGroup::class) // TODO
+            add(TLEventsSystemStatusUpdateGroup::class)
             if (version newer "45.0.0") { // TODO find exact version
                 add(StrangePlacementUpdateGroup::class) // TODO name
             }
-            add(UberSystemStatusUpdateGroup::class) // TODO
+            add(UberSystemStatusUpdateGroup::class)
             if (version newer "24.0.0") {
-                add(UpsellPopupSystemStatusUpdateGroup::class) // TODO
+                add(UpsellPopupSystemStatusUpdateGroup::class)
             }
             if (version newer "45.0.0") { // TODO find exact version
                 add(StrangeEventUpdateGroup::class) // TODO name
             }
             if (version newer "45.0.0") { // TODO find exact version
-                add(VipSystemStatusUpdateGroup::class) // TODO
+                add(VanitySystemStatusUpdateGroup::class)
             }
             if (version newer "24.0.0") {
-                add(VaultSystemStatusUpdateGroup::class) // TODO
+                add(VaultSystemStatusUpdateGroup::class)
             }
         }
     }

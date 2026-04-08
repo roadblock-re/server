@@ -16,14 +16,14 @@ sealed class PrivateLobbyStatusUpdateGroup : StatusUpdateGroup() {
 }
 
 @Serializable
+data class PrivateLobbyRemoveEvents(
+    var eventIds: List<CalendarEventId>
+) : PrivateLobbyStatusUpdateGroup()
+
+@Serializable
 data class PrivateLobbyRaceFinished(
     var eventId: CalendarEventId,
     var position: UByte,
     var laps: UInt,
     var hasFinished: Boolean,
-) : PrivateLobbyStatusUpdateGroup()
-
-@Serializable
-data class PrivateLobbyRemoveEvents(
-    var eventIds: List<CalendarEventId>
 ) : PrivateLobbyStatusUpdateGroup()

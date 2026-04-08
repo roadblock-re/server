@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.SerializationVersion
 import moe.crx.roadblock.game.serialization.Variant
 import moe.crx.roadblock.objects.*
-import moe.crx.roadblock.objects.gauntlet.GauntletChallengeData
+import moe.crx.roadblock.objects.gauntlet.GauntletChallengeEntry
 import moe.crx.roadblock.objects.gauntlet.GauntletDefenceEntry
 import moe.crx.roadblock.objects.gauntlet.GauntletOpponent
 import moe.crx.roadblock.objects.quarantine.QuarantineEvidence
@@ -126,7 +126,7 @@ data class GauntletSystemStatusUpdateGroup9(
 @Serializable
 data class GauntletSystemStatusUpdateGroup10(
     var eventId: CalendarEventId,
-    var challengeData: GauntletChallengeData,
+    var challengeData: GauntletChallengeEntry,
     var revengeLogIndex: UInt?,
 ) : GauntletSystemStatusUpdateGroup()
 

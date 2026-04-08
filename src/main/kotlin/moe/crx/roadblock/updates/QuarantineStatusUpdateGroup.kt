@@ -20,9 +20,9 @@ sealed class QuarantineStatusUpdateGroup : StatusUpdateGroup() {
 }
 
 @Serializable
-data class QuarantineEnterReasonChanged(
-    var oldReason: QuarantineEnterReason,
-    var newReason: QuarantineEnterReason,
+data class QuarantineEvidenceAdded(
+    var evidence: QuarantineEvidence,
+    var weight: Float,
 ) : QuarantineStatusUpdateGroup()
 
 @Serializable
@@ -32,9 +32,9 @@ data class QuarantineEntered(
 ) : QuarantineStatusUpdateGroup()
 
 @Serializable
-data class QuarantineEvidenceAdded(
-    var evidence: QuarantineEvidence,
-    var weight: Float,
+data class QuarantineEnterReasonChanged(
+    var oldReason: QuarantineEnterReason,
+    var newReason: QuarantineEnterReason,
 ) : QuarantineStatusUpdateGroup()
 
 @Serializable

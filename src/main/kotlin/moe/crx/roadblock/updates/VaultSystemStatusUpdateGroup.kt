@@ -6,6 +6,7 @@ import moe.crx.roadblock.game.serialization.SerializationVersion
 import moe.crx.roadblock.game.serialization.Variant
 import moe.crx.roadblock.objects.*
 import moe.crx.roadblock.objects.models.VaultRewardsIndexesState
+import moe.crx.roadblock.objects.tle.TLEventAutoplayData
 import moe.crx.roadblock.objects.vault.VaultEventProgressionRewardStatus
 import kotlin.reflect.KClass
 
@@ -29,6 +30,8 @@ sealed class VaultSystemStatusUpdateGroup : StatusUpdateGroup() {
                 add(VaultSystemEventAlreadyPlayedAdded::class)
                 add(VaultSystemEventUnlockedByRewardAdded::class)
                 add(VaultSystemEventAlreadyPlayedRemoved::class)
+                add(VaultSystemStatusUpdateGroup15::class)
+                add(VaultSystemStatusUpdateGroup16::class)
             }
     }
 }
@@ -126,4 +129,21 @@ data class VaultSystemEventUnlockedByRewardAdded(
 @Serializable
 data class VaultSystemEventAlreadyPlayedRemoved(
     var eventId: VaultEventId,
+) : VaultSystemStatusUpdateGroup()
+
+@Serializable
+data class VaultSystemStatusUpdateGroup15(
+    var eventId: VaultEventId,
+    var stageId: VaultStageId,
+    var timeInMicroseconds: UInt,
+    var carId: CarId,
+    var obtainedRewardIndexes: List<UByte>,
+    var maintenanceEnabled: Boolean,
+) : VaultSystemStatusUpdateGroup()
+
+@Serializable
+data class VaultSystemStatusUpdateGroup16(
+    var eventId: VaultEventId,
+    var stageId: VaultStageId,
+    var optAutoplayDataChangedPayload: TLEventAutoplayData?,
 ) : VaultSystemStatusUpdateGroup()

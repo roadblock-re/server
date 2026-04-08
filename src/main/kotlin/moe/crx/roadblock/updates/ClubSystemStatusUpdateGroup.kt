@@ -35,10 +35,12 @@ sealed class ClubSystemStatusUpdateGroup : StatusUpdateGroup() {
             if (version older "45.0.0") {
                 add(ClubSystemRemoveClubWarsEvents::class)
             }
-            add(ClubSystemStatusUpdateGroup13::class) // TODO name
-            add(ClubSystemStatusUpdateGroup14::class) // TODO name
-            add(ClubSystemStatusUpdateGroup15::class) // TODO name
-            add(ClubSystemStatusUpdateGroup16::class) // TODO name
+            if (version newer "45.0.0") { // TODO find exact version
+                add(ClubSystemStatusUpdateGroup13::class) // TODO name
+                add(ClubSystemStatusUpdateGroup14::class) // TODO name
+                add(ClubSystemStatusUpdateGroup15::class) // TODO name
+                add(ClubSystemStatusUpdateGroup16::class) // TODO name
+            }
         }
     }
 }

@@ -15,6 +15,7 @@ sealed class UpsellPopupSystemStatusUpdateGroup : StatusUpdateGroup() {
             buildList {
                 add(UpsellPopupSystemUpsellPopupEventStarted::class)
                 add(UpsellPopupSystemUpsellPopupEventFinished::class)
+                add(UpsellPopupSystemStatusUpdateGroup2::class)
                 add(UpsellPopupSystemRemoveEvents::class)
                 add(UpsellPopupPurchaseOfferUpdate::class)
             }
@@ -29,6 +30,11 @@ data class UpsellPopupSystemUpsellPopupEventStarted(
 
 @Serializable
 data class UpsellPopupSystemUpsellPopupEventFinished(
+    var eventId: CalendarEventId,
+) : UpsellPopupSystemStatusUpdateGroup()
+
+@Serializable
+data class UpsellPopupSystemStatusUpdateGroup2(
     var eventId: CalendarEventId,
 ) : UpsellPopupSystemStatusUpdateGroup()
 

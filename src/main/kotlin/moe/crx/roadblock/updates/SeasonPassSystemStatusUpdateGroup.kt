@@ -2,17 +2,8 @@ package moe.crx.roadblock.updates
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.game.serialization.ByteEnum
-import moe.crx.roadblock.game.serialization.SerializationVersion
-import moe.crx.roadblock.game.serialization.Variant
-import moe.crx.roadblock.objects.CalendarEventId
-import moe.crx.roadblock.objects.MaintenanceSlots
-import moe.crx.roadblock.objects.SeasonPassBenefitBoost
-import moe.crx.roadblock.objects.SeasonPassEpisodeId
-import moe.crx.roadblock.objects.SeasonPassExperience
-import moe.crx.roadblock.objects.SeasonPassId
-import moe.crx.roadblock.objects.SeasonPassMissionId
-import moe.crx.roadblock.objects.SeasonPassTierId
+import moe.crx.roadblock.game.serialization.*
+import moe.crx.roadblock.objects.*
 import moe.crx.roadblock.objects.seasonpass.*
 
 @Serializable
@@ -29,6 +20,10 @@ sealed class SeasonPassSystemStatusUpdateGroup : StatusUpdateGroup() {
             add(SeasonPassSystemBoostChanged::class)
             add(SeasonPassSystemExtraMaintenanceSlotsChanged::class)
             add(SeasonPassSystemBenefitNextAvailableTLERefillChanged::class) // SeasonPassSystemBenefitNextAvaiableTLERefillChanged
+            if (version newer "45.0.0") { // TODO find exact version
+                add(SeasonPassSystemStatusUpdateGroup10::class)
+                add(SeasonPassSystemStatusUpdateGroup11::class)
+            }
             add(SeasonPassSystemTierRewardStateChanged::class)
             add(SeasonPassSystemEpisodePartialCompletionRewardStateChanged::class)
             add(SeasonPassSystemEpisodesCompletionRewardStateChanged::class)
@@ -36,56 +31,36 @@ sealed class SeasonPassSystemStatusUpdateGroup : StatusUpdateGroup() {
             add(SeasonPassSystemRemoveEvents::class)
             add(SeasonPassSystemNotifyClaimTierRewards::class)
             add(SeasonPassSystemPlayedOnboardingChanged::class)
+            if (version newer "45.0.0") { // TODO find exact version
+                add(SeasonPassSystemStatusUpdateGroup19::class)
+                add(SeasonPassSystemStatusUpdateGroup20::class)
+            }
         }
     }
 }
 
 @Serializable
-data class SeasonPassSystemBenefitNextAvailableTLERefillChanged(
+data class SeasonPassSystemSeasonPassStarted(
     var eventId: CalendarEventId,
-    var nextAvailableTLERefillTimePoint: Instant?,
+    var id: SeasonPassId,
+    var isOnboarding: Boolean,
+    @FromVersion("45.0.0") // TODO find exact version
+    var optActivationId: UInt?,
+    var endDate: Instant,
 ) : SeasonPassSystemStatusUpdateGroup()
 
 @Serializable
-data class SeasonPassSystemBoostChanged(
+data class SeasonPassSystemSeasonPassFinished(
     var eventId: CalendarEventId,
-    @ByteEnum
-    var type: SeasonPassBoostType,
-    var oldBoost: SeasonPassBenefitBoost,
-    var newBoost: SeasonPassBenefitBoost,
+    @FromVersion("45.0.0") // TODO find exact version
+    var optActivationId: UInt?,
 ) : SeasonPassSystemStatusUpdateGroup()
 
 @Serializable
-data class SeasonPassSystemEpisodePartialCompletionRewardStateChanged(
+data class SeasonPassSystemSeasonPassEndDateModified(
     var eventId: CalendarEventId,
-    var episodeId: SeasonPassEpisodeId,
-    @ByteEnum
-    var newState: SeasonPassEpisodePartialCompletionRewardState,
-) : SeasonPassSystemStatusUpdateGroup()
-
-@Serializable
-data class SeasonPassSystemEpisodesCompletionRewardStateChanged(
-    var eventId: CalendarEventId,
-    @ByteEnum
-    var newState: SeasonPassEpisodesCompletionRewardState,
-) : SeasonPassSystemStatusUpdateGroup()
-
-@Serializable
-data class SeasonPassSystemExperienceChanged(
-    var eventId: CalendarEventId,
-    var oldExperience: SeasonPassExperience,
-    var newExperience: SeasonPassExperience,
-    @ByteEnum
-    var origin: SeasonPassExperienceOrigin,
-    var legendPassType: SeasonPassLegendPassType?,
-    var legendPassExtraExperience: SeasonPassExperience?,
-) : SeasonPassSystemStatusUpdateGroup()
-
-@Serializable
-data class SeasonPassSystemExtraMaintenanceSlotsChanged(
-    var eventId: CalendarEventId,
-    var oldSlots: MaintenanceSlots,
-    var newSlots: MaintenanceSlots,
+    var previousEndDate: Instant,
+    var newEndDate: Instant,
 ) : SeasonPassSystemStatusUpdateGroup()
 
 @Serializable
@@ -109,8 +84,92 @@ data class SeasonPassSystemMissionStateChanged(
     var eventId: CalendarEventId,
     var episodeId: SeasonPassEpisodeId,
     var missionId: SeasonPassMissionId,
-    @ByteEnum
+    @UntilVersion("45.0.0") @ByteEnum // TODO find exact version
+    var legacyNewState: SeasonPassMissionState,
+    @FromVersion("45.0.0") // TODO find exact version
     var newState: SeasonPassMissionState,
+) : SeasonPassSystemStatusUpdateGroup()
+
+@Serializable
+data class SeasonPassSystemExperienceChanged(
+    var eventId: CalendarEventId,
+    var oldExperience: SeasonPassExperience,
+    var newExperience: SeasonPassExperience,
+    @UntilVersion("45.0.0") @ByteEnum // TODO find exact version
+    var legacyOrigin: SeasonPassExperienceOrigin,
+    @FromVersion("45.0.0") // TODO find exact version
+    var origin: SeasonPassExperienceOrigin,
+    var legendPassType: SeasonPassLegendPassType?,
+    var legendPassExtraExperience: SeasonPassExperience?,
+) : SeasonPassSystemStatusUpdateGroup()
+
+@Serializable
+data class SeasonPassSystemBoostChanged(
+    var eventId: CalendarEventId,
+    @UntilVersion("45.0.0") @ByteEnum // TODO find exact version
+    var legacyType: SeasonPassBoostType,
+    @FromVersion("45.0.0") // TODO find exact version
+    var type: SeasonPassBoostType,
+    var oldBoost: SeasonPassBenefitBoost,
+    var newBoost: SeasonPassBenefitBoost,
+) : SeasonPassSystemStatusUpdateGroup()
+
+@Serializable
+data class SeasonPassSystemExtraMaintenanceSlotsChanged(
+    var eventId: CalendarEventId,
+    var oldSlots: MaintenanceSlots,
+    var newSlots: MaintenanceSlots,
+) : SeasonPassSystemStatusUpdateGroup()
+
+@Serializable
+data class SeasonPassSystemBenefitNextAvailableTLERefillChanged(
+    var eventId: CalendarEventId,
+    var nextAvailableTLERefillTimePoint: Instant?,
+) : SeasonPassSystemStatusUpdateGroup()
+
+@Serializable
+data class SeasonPassSystemStatusUpdateGroup10(
+    var eventId: CalendarEventId,
+    var hasUnlimitedFuelInCareerMode: Boolean,
+) : SeasonPassSystemStatusUpdateGroup()
+
+@Serializable
+data class SeasonPassSystemStatusUpdateGroup11(
+    var eventId: CalendarEventId,
+    var hasUnlimitedTicketsInTLE: Boolean,
+) : SeasonPassSystemStatusUpdateGroup()
+
+@Serializable
+data class SeasonPassSystemTierRewardStateChanged(
+    var eventId: CalendarEventId,
+    var tier: SeasonPassTierId,
+    @UntilVersion("45.0.0") @ByteEnum // TODO find exact version
+    var legacyType: SeasonPassTierRewardType,
+    @UntilVersion("45.0.0") @ByteEnum // TODO find exact version
+    var legacyNewState: SeasonPassTierRewardState,
+    @FromVersion("45.0.0") // TODO find exact version
+    var type: SeasonPassTierRewardType,
+    @FromVersion("45.0.0") // TODO find exact version
+    var newState: SeasonPassTierRewardState,
+) : SeasonPassSystemStatusUpdateGroup()
+
+@Serializable
+data class SeasonPassSystemEpisodePartialCompletionRewardStateChanged(
+    var eventId: CalendarEventId,
+    var episodeId: SeasonPassEpisodeId,
+    @UntilVersion("45.0.0") @ByteEnum // TODO find exact version
+    var legacyNewState: SeasonPassEpisodePartialCompletionRewardState,
+    @FromVersion("45.0.0") // TODO find exact version
+    var newState: SeasonPassEpisodePartialCompletionRewardState,
+) : SeasonPassSystemStatusUpdateGroup()
+
+@Serializable
+data class SeasonPassSystemEpisodesCompletionRewardStateChanged(
+    var eventId: CalendarEventId,
+    @UntilVersion("45.0.0") @ByteEnum // TODO find exact version
+    var legacyNewState: SeasonPassEpisodesCompletionRewardState,
+    @FromVersion("45.0.0") // TODO find exact version
+    var newState: SeasonPassEpisodesCompletionRewardState,
 ) : SeasonPassSystemStatusUpdateGroup()
 
 @Serializable
@@ -120,11 +179,22 @@ data class SeasonPassSystemNextSeasonDiscountPurchasedChanged(
 ) : SeasonPassSystemStatusUpdateGroup()
 
 @Serializable
+data class SeasonPassSystemRemoveEvents(
+    var eventIds: List<CalendarEventId>
+) : SeasonPassSystemStatusUpdateGroup()
+
+@Serializable
 data class SeasonPassSystemNotifyClaimTierRewards(
     var eventId: CalendarEventId,
     var tierId: SeasonPassTierId,
-    @ByteEnum
+    @UntilVersion("45.0.0") @ByteEnum // TODO find exact version
+    var legacyType: SeasonPassTierRewardType,
+    @FromVersion("45.0.0") // TODO find exact version
     var type: SeasonPassTierRewardType,
+    @FromVersion("45.0.0") // TODO find exact version
+    var isUnlockedByPurchase: Boolean,
+    @FromVersion("45.0.0") // TODO find exact version
+    val isEndOfEventClaim: Boolean,
 ) : SeasonPassSystemStatusUpdateGroup()
 
 @Serializable
@@ -133,36 +203,12 @@ data class SeasonPassSystemPlayedOnboardingChanged(
 ) : SeasonPassSystemStatusUpdateGroup()
 
 @Serializable
-data class SeasonPassSystemRemoveEvents(
-    var eventIds: List<CalendarEventId>
+data class SeasonPassSystemStatusUpdateGroup19(
+    var oldEventId: CalendarEventId,
+    var newEventId: CalendarEventId,
 ) : SeasonPassSystemStatusUpdateGroup()
 
 @Serializable
-data class SeasonPassSystemSeasonPassEndDateModified(
-    var eventId: CalendarEventId,
-    var previousEndDate: Instant,
-    var newEndDate: Instant,
-) : SeasonPassSystemStatusUpdateGroup()
-
-@Serializable
-data class SeasonPassSystemSeasonPassFinished(
-    var eventId: CalendarEventId,
-) : SeasonPassSystemStatusUpdateGroup()
-
-@Serializable
-data class SeasonPassSystemSeasonPassStarted(
-    var eventId: CalendarEventId,
-    var id: SeasonPassId,
-    var isOnboarding: Boolean,
-    var endDate: Instant,
-) : SeasonPassSystemStatusUpdateGroup()
-
-@Serializable
-data class SeasonPassSystemTierRewardStateChanged(
-    var eventId: CalendarEventId,
-    var tier: SeasonPassTierId,
-    @ByteEnum
-    var type: SeasonPassTierRewardType,
-    @ByteEnum
-    var newState: SeasonPassTierRewardState,
+data class SeasonPassSystemStatusUpdateGroup20(
+    var bonus: UInt,
 ) : SeasonPassSystemStatusUpdateGroup()

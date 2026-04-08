@@ -2,6 +2,7 @@ package moe.crx.roadblock.updates
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
+import moe.crx.roadblock.game.serialization.FromVersion
 import moe.crx.roadblock.game.serialization.SerializationVersion
 import moe.crx.roadblock.game.serialization.Variant
 import moe.crx.roadblock.objects.CalendarEventId
@@ -21,9 +22,31 @@ sealed class PiggyBankSystemStatusUpdateGroup : StatusUpdateGroup() {
             add(PiggyBankSystemPiggyBankFilledTimestampChanged::class)
             add(PiggyBankSystemPiggyBankNotifyTierClaimed::class)
             add(PiggyBankSystemPiggyBankTierAttemptsIncreased::class)
+            if (version newer "45.0.0") { // TODO find exact version
+                add(PiggyBankSystemStatusUpdateGroup8::class)
+            }
         }
     }
 }
+
+@Serializable
+data class PiggyBankSystemPiggyBankStarted(
+    var eventId: CalendarEventId,
+    var id: PiggyBankEventId,
+    var startDate: Instant,
+    var initialProgress: Money,
+) : PiggyBankSystemStatusUpdateGroup()
+
+@Serializable
+data class PiggyBankSystemPiggyBankFinished(
+    var eventId: CalendarEventId,
+    var id: PiggyBankEventId,
+) : PiggyBankSystemStatusUpdateGroup()
+
+@Serializable
+data class PiggyBankSystemRemoveEvents(
+    var eventIds: List<CalendarEventId>
+) : PiggyBankSystemStatusUpdateGroup()
 
 @Serializable
 data class PiggyBankSystemPiggyBankCurrentProgressChanged(
@@ -37,18 +60,14 @@ data class PiggyBankSystemPiggyBankCurrentTierChanged(
     var eventId: CalendarEventId,
     var oldTier: PiggyBankTierId,
     var newTier: PiggyBankTierId,
+    @FromVersion("45.0.0") // TODO find exact version
+    var changedCapping: UInt,
 ) : PiggyBankSystemStatusUpdateGroup()
 
 @Serializable
 data class PiggyBankSystemPiggyBankFilledTimestampChanged(
     var eventId: CalendarEventId,
     var filledTimestamp: Instant?,
-) : PiggyBankSystemStatusUpdateGroup()
-
-@Serializable
-data class PiggyBankSystemPiggyBankFinished(
-    var eventId: CalendarEventId,
-    var id: PiggyBankEventId,
 ) : PiggyBankSystemStatusUpdateGroup()
 
 @Serializable
@@ -60,20 +79,13 @@ data class PiggyBankSystemPiggyBankNotifyTierClaimed(
 ) : PiggyBankSystemStatusUpdateGroup()
 
 @Serializable
-data class PiggyBankSystemPiggyBankStarted(
-    var eventId: CalendarEventId,
-    var id: PiggyBankEventId,
-    var startDate: Instant,
-    var initialProgress: Money,
-) : PiggyBankSystemStatusUpdateGroup()
-
-@Serializable
 data class PiggyBankSystemPiggyBankTierAttemptsIncreased(
     var eventId: CalendarEventId,
     var tierId: PiggyBankTierId,
 ) : PiggyBankSystemStatusUpdateGroup()
 
 @Serializable
-data class PiggyBankSystemRemoveEvents(
-    var eventIds: List<CalendarEventId>
+data class PiggyBankSystemStatusUpdateGroup8(
+    var oldEventId: CalendarEventId,
+    var newEventId: CalendarEventId,
 ) : PiggyBankSystemStatusUpdateGroup()

@@ -1,7 +1,9 @@
 package moe.crx.roadblock.updates
 
 import kotlinx.serialization.Serializable
+import moe.crx.roadblock.game.serialization.FromVersion
 import moe.crx.roadblock.game.serialization.SerializationVersion
+import moe.crx.roadblock.game.serialization.UntilVersion
 import moe.crx.roadblock.game.serialization.Variant
 import moe.crx.roadblock.objects.GarageLevel
 import moe.crx.roadblock.objects.LegendFundTierId
@@ -18,13 +20,16 @@ sealed class LegendFundSystemStatusUpdateGroup : StatusUpdateGroup() {
 }
 
 @Serializable
-data class LegendFundSystemLegendFundMilestoneClaimed(
-    var level: GarageLevel
+data class LegendFundSystemLegendFundOwnedChanged(
+    var currentOwnedTierId: LegendFundTierId
 ) : LegendFundSystemStatusUpdateGroup()
 
 @Serializable
-data class LegendFundSystemLegendFundOwnedChanged(
-    var currentOwnedTierId: LegendFundTierId
+data class LegendFundSystemLegendFundMilestoneClaimed(
+    @UntilVersion("45.0.0") // TODO find exact version
+    var level: GarageLevel = 0u,
+    @FromVersion("45.0.0") // TODO find exact version
+    var levels: List<GarageLevel> = listOf(),
 ) : LegendFundSystemStatusUpdateGroup()
 
 @Serializable
