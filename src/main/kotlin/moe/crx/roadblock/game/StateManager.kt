@@ -23,11 +23,15 @@ class StateManager(workingDirectory: String) {
     }
 
     var stateFile = File(workingDirectory, "gamestate.saved.json")
+    var stateBackupFile = File(workingDirectory, "gamestate.saved.json.bak")
 
     fun read(ver: SerializationVersion): State {
         lock.withLock {
             runCatching {
                 return json.decodeFromString(stateFile.readText())
+            }.onFailure {
+                stateFile.copyTo(stateBackupFile)
+                it.printStackTrace()
             }
 
             return default(ver)

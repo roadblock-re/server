@@ -56,3 +56,4 @@ uploads
 *.report
 config.json
 gamestate.saved.json
+gamestate.saved.json.bak
