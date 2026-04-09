@@ -6,6 +6,7 @@ import moe.crx.roadblock.objects.playerstats.MenuTutorialType
 import moe.crx.roadblock.objects.playerstats.TutorialState
 import moe.crx.roadblock.rpc.base.RequestPacket
 import moe.crx.roadblock.rpc.base.UpdatesQueueWithRootReactionsResponse
+import moe.crx.roadblock.updates.PlayerStatsMenuTutorialStateChanged
 
 @Serializable
 data class ChangeMenuTutorialStateRequest(
@@ -21,5 +22,13 @@ suspend fun handleChangeMenuTutorialState(
     session: GameConnection,
     request: ChangeMenuTutorialStateRequest
 ) {
-    session.sendResponse(ChangeMenuTutorialStateResponse())
+    val reaction = PlayerStatsMenuTutorialStateChanged(
+        type = request.menuTutorialType,
+        oldState = session.gameState.playerStats.menuTutorials[request.menuTutorialType],
+        newState = request.tutorialState,
+    )
+
+    session.gameState.playerStats.menuTutorials[request.menuTutorialType] = request.tutorialState
+
+    session.sendResponse(ChangeMenuTutorialStateResponse().flatten(reaction))
 }

@@ -19,7 +19,6 @@ import moe.crx.roadblock.objects.ConfigData
 import moe.crx.roadblock.objects.ServerDBDataSerialization
 import moe.crx.roadblock.objects.playerstats.GameplayTutorialType
 import moe.crx.roadblock.objects.playerstats.MenuTutorialType
-import moe.crx.roadblock.objects.playerstats.TutorialState
 import moe.crx.roadblock.rpc.SendTrackingEventsRequest
 import moe.crx.roadblock.rpc.base.*
 import org.fusesource.jansi.Ansi.ansi
@@ -199,11 +198,11 @@ class GameConnection(
                 playerStats = gameState.playerStats.copy().apply {
                     menuTutorials =
                         enumListOf(MenuTutorialType.lastEntryFor(ver)) {
-                            gameState.playerStats.menuTutorials[it] ?: TutorialState.Pending
+                            gameState.playerStats.menuTutorials[it]
                         }
                     gameplayTutorials =
                         enumListOf(GameplayTutorialType.lastEntryFor(ver)) {
-                            gameState.playerStats.gameplayTutorials[it] ?: TutorialState.Pending
+                            gameState.playerStats.gameplayTutorials[it]
                         }
                 }
             }
