@@ -24,5 +24,7 @@ suspend fun handleMiscellaneousUpdateProfileConsent(
     session: GameConnection,
     request: MiscellaneousUpdateProfileConsentRequest
 ) {
+    session.gameState.miscellaneous.consentNoticeShown = true
+
     session.sendResponse(MiscellaneousUpdateProfileConsentResponse())
 }
