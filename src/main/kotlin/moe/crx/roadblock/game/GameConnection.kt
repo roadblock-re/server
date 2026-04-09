@@ -182,7 +182,7 @@ class GameConnection(
                 state = gameState,
             )
 
-            gameState.apply {
+            loginResponse.state.apply {
                 clubSystem.clubData = null
                 miscellaneous.resetAdsReplacementTimepoint = now().midnight().plus(24, HOUR)
                 blackMarket.nextAutoRefreshTime = now().midnight().plus(24, HOUR)
@@ -194,18 +194,16 @@ class GameConnection(
                 clubWars.market.nextAutoRefreshTime = now().midnight().plus(24, HOUR)
             }
 
-            loginResponse.apply {
-                state = gameState.copy().apply {
-                    playerStats = gameState.playerStats.copy().apply {
-                        menuTutorials =
-                            enumListOf(MenuTutorialType.lastEntryFor(ver)) {
-                                gameState.playerStats.menuTutorials[it] ?: TutorialState.Pending
-                            }
-                        gameplayTutorials =
-                            enumListOf(GameplayTutorialType.lastEntryFor(ver)) {
-                                gameState.playerStats.gameplayTutorials[it] ?: TutorialState.Pending
-                            }
-                    }
+            loginResponse.state = loginResponse.state.copy().apply {
+                playerStats = gameState.playerStats.copy().apply {
+                    menuTutorials =
+                        enumListOf(MenuTutorialType.lastEntryFor(ver)) {
+                            gameState.playerStats.menuTutorials[it] ?: TutorialState.Pending
+                        }
+                    gameplayTutorials =
+                        enumListOf(GameplayTutorialType.lastEntryFor(ver)) {
+                            gameState.playerStats.gameplayTutorials[it] ?: TutorialState.Pending
+                        }
                 }
             }
 
