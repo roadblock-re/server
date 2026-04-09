@@ -20,6 +20,7 @@ import moe.crx.roadblock.objects.ServerDBDataSerialization
 import moe.crx.roadblock.objects.playerstats.GameplayTutorialType
 import moe.crx.roadblock.objects.playerstats.MenuTutorialType
 import moe.crx.roadblock.objects.playerstats.TutorialState
+import moe.crx.roadblock.rpc.SendTrackingEventsRequest
 import moe.crx.roadblock.rpc.base.*
 import org.fusesource.jansi.Ansi.ansi
 import org.slf4j.Logger
@@ -256,7 +257,7 @@ class GameConnection(
             val serializer = handlerEntry.requestClass.serializer() as KSerializer<RequestPacket>
             val deserialized = format.decodeFromByteArray(serializer, bytes)
 
-            if (config.checkReceivedRequestSize && handlerEntry.requestClass != moe.crx.roadblock.rpc.SendTrackingEventsRequest::class) {
+            if (config.checkReceivedRequestSize && handlerEntry.requestClass != SendTrackingEventsRequest::class) {
                 val serializedBytes = format.encodeToByteArray(serializer, deserialized)
                 val byteDelta = bytes.size - serializedBytes.size
                 check(byteDelta == 0) { "Packet isn't read until the end, $byteDelta bytes still available" }
