@@ -13,7 +13,7 @@ fun Application.configureApiRouting(workingDirectory: String, config: Configurat
         rateLimit {
             // Eve server
             eveAbout()
-            octConnectionStatus()
+            octConnectionStatus(config)
             clubConnect()
 
             route("/config") {
@@ -33,7 +33,7 @@ fun Application.configureApiRouting(workingDirectory: String, config: Configurat
             }
             // Eve config -> online_connectivity
             route("/oct") {
-                octConnectionStatus()
+                octConnectionStatus(config)
             }
             // Eve config -> pandora
             route("/pandora") {

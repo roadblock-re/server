@@ -23,6 +23,7 @@ data class Configuration(
     val downloadResources: Boolean = true,
     val forceWebsocket: Boolean = true,
     val checkReceivedRequestSize: Boolean = false,
+    val reportOctStatus: Boolean = true,
     val eveDomain: String = "eve.gameloft.com",
     val messageOfTheDay: String? = "Welcome to Roadblock!",
 )
