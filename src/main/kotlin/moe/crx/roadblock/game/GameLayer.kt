@@ -278,11 +278,11 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
             register(::handleClaimDailyTasks)
         }
         if (ver older "3.8.0") {
-            register("::handleClaimDailyTask")
+            register(::handleClaimDailyTask)
         }
         register(::handleDailyTasksReset)
         if (ver older "3.8.0") {
-            register("::handleClaimDailyTaskRaceReady")
+            register(::handleClaimDailyTaskRaceReady)
         }
         register(::handleBuyRelayOfferTier)
         register(::handleValidateIAPRelayOfferPurchase)
