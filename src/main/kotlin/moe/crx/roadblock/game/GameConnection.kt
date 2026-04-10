@@ -276,15 +276,21 @@ class GameConnection(
             return
         }.getOrThrow()
 
+        val packetDesc = if (config.printFullPackets) {
+            request.toString()
+        } else {
+            request.javaClass.simpleName
+        }
+
         runCatching {
             handler(this, request)
         }.onSuccess {
-            LOG.info("[I] Handled packet {} (ID {})", request.javaClass.simpleName, request.type)
+            LOG.info("[I] Handled packet {} (ID {})", packetDesc, request.type)
         }.onFailure { throwable ->
-            LOG.error("[I] Error handling packet {} (ID {})", request.javaClass.simpleName, request.type)
+            LOG.error("[I] Error handling packet {} (ID {})", packetDesc, request.type)
             throwable.printStackTrace()
 
-            reportHandlingError(request.javaClass.simpleName, request.type, bytes, throwable)
+            reportHandlingError(request.toString(), request.type, bytes, throwable)
 
             //sendConcurrentAccess() // TODO config option
         }
