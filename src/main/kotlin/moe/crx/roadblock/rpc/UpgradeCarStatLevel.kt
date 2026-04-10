@@ -8,6 +8,7 @@ import moe.crx.roadblock.objects.CarUpgradeLevel
 import moe.crx.roadblock.objects.inventory.CarStatType
 import moe.crx.roadblock.rpc.base.RequestPacket
 import moe.crx.roadblock.rpc.base.UpdatesQueueWithRootReactionsResponse
+import moe.crx.roadblock.updates.InventoryCarUpgradeLevelChanged
 
 @Serializable
 data class UpgradeCarStatLevelRequest(
@@ -24,5 +25,20 @@ suspend fun handleUpgradeCarStatLevel(
     session: GameConnection,
     request: UpgradeCarStatLevelRequest
 ) {
-    session.sendResponse(UpgradeCarStatLevelResponse())
+    val car = session.gameState.inventory.cars[request.carId]
+    checkNotNull(car)
+
+    val stat = car.carTuningState.stats[request.statType]
+    stat.currentUpgradeLevel++
+
+    val reaction = InventoryCarUpgradeLevelChanged(
+        carId = request.carId,
+        carStat = request.statType,
+        oldLevel = request.upgradeLevel,
+        newLevel = stat.currentUpgradeLevel,
+    )
+
+    // TODO spend money from wallet
+
+    session.sendResponse(UpgradeCarStatLevelResponse().flatten(reaction))
 }
