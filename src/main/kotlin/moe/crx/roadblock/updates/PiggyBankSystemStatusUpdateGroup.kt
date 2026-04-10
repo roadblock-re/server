@@ -61,7 +61,7 @@ data class PiggyBankSystemPiggyBankCurrentTierChanged(
     var oldTier: PiggyBankTierId,
     var newTier: PiggyBankTierId,
     @FromVersion("45.0.0") // TODO find exact version
-    var changedCapping: UInt,
+    var changedCapping: UInt = 0u,
 ) : PiggyBankSystemStatusUpdateGroup()
 
 @Serializable

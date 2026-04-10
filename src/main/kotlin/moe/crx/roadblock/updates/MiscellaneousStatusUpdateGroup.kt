@@ -59,7 +59,7 @@ data class MiscellaneousUserNameChanged(
     var oldUsername: String,
     var newUsername: String,
     @FromVersion("24.0.0")
-    var isForcedChange: Boolean,
+    var isForcedChange: Boolean = false,
 ) : MiscellaneousStatusUpdateGroup()
 
 @Serializable

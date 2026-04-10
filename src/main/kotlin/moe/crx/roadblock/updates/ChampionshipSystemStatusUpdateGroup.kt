@@ -180,7 +180,7 @@ data class ChampionshipSystemResetBestNitroGhostTime(
     var eventId: CalendarEventId,
     var trackDefId: EventTrackDefId,
     @FromVersion("24.0.0") // TODO Find exact version
-    var ghostTimeMicroseconds: UInt,
+    var ghostTimeMicroseconds: UInt = 0u,
 ) : ChampionshipSystemStatusUpdateGroup()
 
 @Serializable

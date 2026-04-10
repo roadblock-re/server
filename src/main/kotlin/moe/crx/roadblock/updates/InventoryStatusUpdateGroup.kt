@@ -233,11 +233,11 @@ data class InventoryWalletBalanceChanged(
     var oldBalance: Money,
     var newBalance: Money,
     @UntilVersion("45.0.0") // TODO find exact version
-    var seasonPassBonus: Money?,
+    var seasonPassBonus: Money? = null,
     @UntilVersion("45.0.0") // TODO find exact version
-    var bonusPassExtra: Money?,
+    var bonusPassExtra: Money? = null,
     @UntilVersion("45.0.0") // TODO find exact version
-    var eventId: CalendarEventId?,
+    var eventId: CalendarEventId? = null,
 ) : InventoryStatusUpdateGroup()
 
 @Serializable
@@ -245,9 +245,9 @@ data class InventoryWalletAdded(
     var currencyType: CurrencyType,
     var balanceGain: Money,
     @UntilVersion("45.0.0") // TODO find exact version
-    var eventId: CalendarEventId?,
+    var eventId: CalendarEventId? = null,
     @FromVersion("45.0.0") // TODO find exact version
-    var adLocation: String,
+    var adLocation: String = "",
 ) : InventoryStatusUpdateGroup()
 
 @Serializable
@@ -316,7 +316,7 @@ data class InventoryCarVisualConfigurationChanged(
     var carId: CarId,
     var visualConfiguration: CarVisualConfiguration,
     @FromVersion("45.0.0") // TODO find exact version
-    var timeSpentInCustomizationMenu: ULong,
+    var timeSpentInCustomizationMenu: ULong = 0u,
 ) : InventoryStatusUpdateGroup()
 
 @Serializable

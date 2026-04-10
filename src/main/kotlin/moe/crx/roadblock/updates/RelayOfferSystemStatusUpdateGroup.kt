@@ -36,5 +36,5 @@ data class RelayOfferPurchaseTierUpdate(
     var eventId: CalendarEventId,
     var purchasedTierId: RelayOfferTierId,
     @UntilVersion("45.0.0") // TODO find exact version
-    var walletEventId: CalendarEventId?,
+    var walletEventId: CalendarEventId? = null,
 ) : RelayOfferSystemStatusUpdateGroup()

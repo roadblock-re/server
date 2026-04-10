@@ -1,5 +1,6 @@
 package moe.crx.roadblock.updates
 
+import kotlinx.datetime.Clock.System.now
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.*
@@ -67,7 +68,7 @@ data class MultiplayerSeriesEventClaimed(
     var eventId: CalendarEventId,
     var eloForNextEvent: PlayerElo,
     @FromVersion("45.0.0") // TODO find exact version
-    var timepoint: Instant,
+    var timepoint: Instant = now(),
 ) : MultiplayerSeriesStatusUpdateGroup()
 
 @Serializable
@@ -146,9 +147,9 @@ data class MultiplayerSeriesScoreChanged(
     var oldMultiplayerSeriesScore: MultiplayerSeriesScore,
     var newMultiplayerSeriesScore: MultiplayerSeriesScore,
     @FromVersion("45.0.0") // TODO find exact version
-    var baseScore: UInt,
+    var baseScore: UInt = 0u,
     @FromVersion("45.0.0") // TODO find exact version
-    var bonusScore: UInt,
+    var bonusScore: UInt = 0u,
 ) : MultiplayerSeriesStatusUpdateGroup()
 
 @Serializable
@@ -162,7 +163,7 @@ data class MultiplayerSeriesMilestoneChanged(
     var eventId: CalendarEventId,
     var milestoneId: MultiplayerSeriesScoreMilestoneId,
     @ByteEnum @UntilVersion("45.0.0") // TODO find exact version
-    var state: MultiplayerSeriesScoreMilestoneRewardState,
+    var state: MultiplayerSeriesScoreMilestoneRewardState = MultiplayerSeriesScoreMilestoneRewardState.Locked,
     var isBonusPassExclusive: Boolean,
 ) : MultiplayerSeriesStatusUpdateGroup()
 

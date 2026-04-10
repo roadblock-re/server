@@ -45,7 +45,7 @@ data class SeasonPassSystemSeasonPassStarted(
     var id: SeasonPassId,
     var isOnboarding: Boolean,
     @FromVersion("45.0.0") // TODO find exact version
-    var optActivationId: UInt?,
+    var optActivationId: UInt? = null,
     var endDate: Instant,
 ) : SeasonPassSystemStatusUpdateGroup()
 
@@ -53,7 +53,7 @@ data class SeasonPassSystemSeasonPassStarted(
 data class SeasonPassSystemSeasonPassFinished(
     var eventId: CalendarEventId,
     @FromVersion("45.0.0") // TODO find exact version
-    var optActivationId: UInt?,
+    var optActivationId: UInt? = null,
 ) : SeasonPassSystemStatusUpdateGroup()
 
 @Serializable
@@ -85,9 +85,9 @@ data class SeasonPassSystemMissionStateChanged(
     var episodeId: SeasonPassEpisodeId,
     var missionId: SeasonPassMissionId,
     @UntilVersion("45.0.0") @ByteEnum // TODO find exact version
-    var legacyNewState: SeasonPassMissionState,
+    var legacyNewState: SeasonPassMissionState = SeasonPassMissionState.Ready,
     @FromVersion("45.0.0") // TODO find exact version
-    var newState: SeasonPassMissionState,
+    var newState: SeasonPassMissionState = SeasonPassMissionState.Ready,
 ) : SeasonPassSystemStatusUpdateGroup()
 
 @Serializable
@@ -96,9 +96,9 @@ data class SeasonPassSystemExperienceChanged(
     var oldExperience: SeasonPassExperience,
     var newExperience: SeasonPassExperience,
     @UntilVersion("45.0.0") @ByteEnum // TODO find exact version
-    var legacyOrigin: SeasonPassExperienceOrigin,
+    var legacyOrigin: SeasonPassExperienceOrigin = SeasonPassExperienceOrigin.MissionCompleted,
     @FromVersion("45.0.0") // TODO find exact version
-    var origin: SeasonPassExperienceOrigin,
+    var origin: SeasonPassExperienceOrigin = SeasonPassExperienceOrigin.MissionCompleted,
     var legendPassType: SeasonPassLegendPassType?,
     var legendPassExtraExperience: SeasonPassExperience?,
 ) : SeasonPassSystemStatusUpdateGroup()
@@ -107,9 +107,9 @@ data class SeasonPassSystemExperienceChanged(
 data class SeasonPassSystemBoostChanged(
     var eventId: CalendarEventId,
     @UntilVersion("45.0.0") @ByteEnum // TODO find exact version
-    var legacyType: SeasonPassBoostType,
+    var legacyType: SeasonPassBoostType = SeasonPassBoostType.Reputation,
     @FromVersion("45.0.0") // TODO find exact version
-    var type: SeasonPassBoostType,
+    var type: SeasonPassBoostType = SeasonPassBoostType.Reputation,
     var oldBoost: SeasonPassBenefitBoost,
     var newBoost: SeasonPassBenefitBoost,
 ) : SeasonPassSystemStatusUpdateGroup()
@@ -144,13 +144,13 @@ data class SeasonPassSystemTierRewardStateChanged(
     var eventId: CalendarEventId,
     var tier: SeasonPassTierId,
     @UntilVersion("45.0.0") @ByteEnum // TODO find exact version
-    var legacyType: SeasonPassTierRewardType,
+    var legacyType: SeasonPassTierRewardType = SeasonPassTierRewardType.Free,
     @UntilVersion("45.0.0") @ByteEnum // TODO find exact version
-    var legacyNewState: SeasonPassTierRewardState,
+    var legacyNewState: SeasonPassTierRewardState = SeasonPassTierRewardState.Locked,
     @FromVersion("45.0.0") // TODO find exact version
-    var type: SeasonPassTierRewardType,
+    var type: SeasonPassTierRewardType = SeasonPassTierRewardType.Free,
     @FromVersion("45.0.0") // TODO find exact version
-    var newState: SeasonPassTierRewardState,
+    var newState: SeasonPassTierRewardState = SeasonPassTierRewardState.Locked,
 ) : SeasonPassSystemStatusUpdateGroup()
 
 @Serializable
@@ -158,18 +158,18 @@ data class SeasonPassSystemEpisodePartialCompletionRewardStateChanged(
     var eventId: CalendarEventId,
     var episodeId: SeasonPassEpisodeId,
     @UntilVersion("45.0.0") @ByteEnum // TODO find exact version
-    var legacyNewState: SeasonPassEpisodePartialCompletionRewardState,
+    var legacyNewState: SeasonPassEpisodePartialCompletionRewardState = SeasonPassEpisodePartialCompletionRewardState.Locked,
     @FromVersion("45.0.0") // TODO find exact version
-    var newState: SeasonPassEpisodePartialCompletionRewardState,
+    var newState: SeasonPassEpisodePartialCompletionRewardState = SeasonPassEpisodePartialCompletionRewardState.Locked,
 ) : SeasonPassSystemStatusUpdateGroup()
 
 @Serializable
 data class SeasonPassSystemEpisodesCompletionRewardStateChanged(
     var eventId: CalendarEventId,
     @UntilVersion("45.0.0") @ByteEnum // TODO find exact version
-    var legacyNewState: SeasonPassEpisodesCompletionRewardState,
+    var legacyNewState: SeasonPassEpisodesCompletionRewardState = SeasonPassEpisodesCompletionRewardState.Locked,
     @FromVersion("45.0.0") // TODO find exact version
-    var newState: SeasonPassEpisodesCompletionRewardState,
+    var newState: SeasonPassEpisodesCompletionRewardState = SeasonPassEpisodesCompletionRewardState.Locked,
 ) : SeasonPassSystemStatusUpdateGroup()
 
 @Serializable
@@ -188,13 +188,13 @@ data class SeasonPassSystemNotifyClaimTierRewards(
     var eventId: CalendarEventId,
     var tierId: SeasonPassTierId,
     @UntilVersion("45.0.0") @ByteEnum // TODO find exact version
-    var legacyType: SeasonPassTierRewardType,
+    var legacyType: SeasonPassTierRewardType = SeasonPassTierRewardType.Free,
     @FromVersion("45.0.0") // TODO find exact version
-    var type: SeasonPassTierRewardType,
+    var type: SeasonPassTierRewardType = SeasonPassTierRewardType.Free,
     @FromVersion("45.0.0") // TODO find exact version
-    var isUnlockedByPurchase: Boolean,
+    var isUnlockedByPurchase: Boolean = false,
     @FromVersion("45.0.0") // TODO find exact version
-    val isEndOfEventClaim: Boolean,
+    val isEndOfEventClaim: Boolean = false,
 ) : SeasonPassSystemStatusUpdateGroup()
 
 @Serializable

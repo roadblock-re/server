@@ -81,7 +81,7 @@ data class CareerEventFlagChanged(
 
 @Serializable
 data class CareerRaceFinished(
-    var position: Byte,
+    var position: UByte,
     var eventId: CareerEventId,
     var hasFinished: Boolean,
     var wasCompleted: Boolean,
