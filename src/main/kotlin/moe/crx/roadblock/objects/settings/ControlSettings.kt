@@ -11,7 +11,7 @@ data class ControlSettings(
     var gamepadsSettings: Map<GamepadId, GamepadSettings> = mapOf(),
     var keyboardSettings: KeyboardSettings = KeyboardSettings(),
     var isAutoAccelerationEnabled: Boolean = false,
-    var isManualAccelerationTutorialNeeded: Boolean = false,
+    var isManualAccelerationTutorialNeeded: Boolean = true,
     @FromVersion("24.0.0")
     var isRumbleEnabled: Boolean = true,
 )
