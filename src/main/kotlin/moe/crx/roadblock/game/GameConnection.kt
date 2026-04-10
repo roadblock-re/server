@@ -313,6 +313,7 @@ class GameConnection(
     }
 
     fun close() {
+        saveState()
         LOG.info("Game connection closed")
     }
 

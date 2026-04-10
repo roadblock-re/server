@@ -30,7 +30,7 @@ class StateManager(workingDirectory: String) {
             runCatching {
                 return json.decodeFromString(stateFile.readText())
             }.onFailure {
-                stateFile.copyTo(stateBackupFile)
+                runCatching { stateFile.copyTo(stateBackupFile) }
                 it.printStackTrace()
             }
 
