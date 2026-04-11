@@ -13,10 +13,7 @@ import moe.crx.roadblock.game.serialization.Blob
 import moe.crx.roadblock.game.serialization.RoadblockFormat
 import moe.crx.roadblock.game.serialization.SerializationVersion
 import moe.crx.roadblock.game.serialization.enumListOf
-import moe.crx.roadblock.objects.ActionResponseHeader
-import moe.crx.roadblock.objects.CompressionType
-import moe.crx.roadblock.objects.ConfigData
-import moe.crx.roadblock.objects.ServerDBDataSerialization
+import moe.crx.roadblock.objects.*
 import moe.crx.roadblock.objects.playerstats.GameplayTutorialType
 import moe.crx.roadblock.objects.playerstats.MenuTutorialType
 import moe.crx.roadblock.rpc.SendTrackingEventsRequest
@@ -84,6 +81,12 @@ class GameConnection(
             header.lastCommittedActionId = lastRequestSequence.toUInt()
             header.serverTime = customTimestamp ?: now()
             type = requestType
+        }
+
+        if (config.stripUpdatesQueues) {
+            (response as? UpdatesQueueWithRootReactionsResponse)?.apply {
+                updates = StatusUpdatesQueueWithRootReactions()
+            }
         }
 
         lastRequestSequence = requestSequence

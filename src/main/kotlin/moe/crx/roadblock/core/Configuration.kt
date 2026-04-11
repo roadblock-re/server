@@ -25,6 +25,7 @@ data class Configuration(
     val checkReceivedRequestSize: Boolean = false,
     val reportOctStatus: Boolean = true,
     val printFullPackets: Boolean = false,
+    val stripUpdatesQueues: Boolean = false,
     val eveDomain: String = "eve.gameloft.com",
     val messageOfTheDay: String? = "Welcome to Roadblock!",
 )
