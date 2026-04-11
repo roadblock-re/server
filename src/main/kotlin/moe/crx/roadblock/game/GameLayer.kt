@@ -76,7 +76,7 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
         if (ver newer "3.7.0") {
             register(::handleConvertWildcardBlueprints)
         }
-        if (ver newer "47.1.0") {
+        if (ver newer "47.0.0") {
             register(::handleApplyWildcardStarUpItem)
         }
         register(::handleTrashItem)
@@ -87,7 +87,7 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
             register(::handleEquipEvoTuningNOS)
             register(::handleEquipEvoTuningSKit)
         }
-        if (ver newer "47.1.0") {
+        if (ver newer "47.0.0") {
             register(::handleReceiveEvoTicketsOnCarMaxed)
         }
         register(::handleGainAllCarItemsCheat)
@@ -103,7 +103,7 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
         if (ver newer "24.6.0") {
             register(::handleGainWildcardUpgradeItemsCheat)
         }
-        if (ver newer "47.1.0") {
+        if (ver newer "47.0.0") {
             register(::handleGainWildcardStarUpItemsCheat)
         }
         if (ver newer "45.0.0") {
@@ -115,7 +115,7 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
         if (ver newer "24.0.0") {
             register(::handleClaimSponsorshipGachaBox)
         }
-        if (ver newer "47.1.0") {
+        if (ver newer "47.0.0") {
             register(::handleConvertEvoTicketsToCurrency)
             register(::handleBuyEvoGachaBox)
         }
@@ -258,7 +258,7 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
         if (ver newer "3.9.0") {
             register(::handleTLEventResetNitroGhost)
         }
-        if (ver newer "47.1.0") {
+        if (ver newer "47.0.0") {
             register(::handleTLEventEquipEvoEngineFreeTry)
             register(::handleTLEventEquipEvoDriveTrainFreeTry)
             register(::handleTLEventEquipEvoNOSFreeTry)
