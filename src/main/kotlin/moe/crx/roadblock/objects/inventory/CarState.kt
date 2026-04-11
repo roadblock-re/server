@@ -11,8 +11,17 @@ import moe.crx.roadblock.objects.customization.CarCustomizationState
 
 @Serializable
 data class CarState(
+    /**
+     * Total amount of gained blueprints for this car.
+     */
     var blueprints: Blueprints = 0u,
+    /**
+     * Should always be not nil, even when car is locked.
+     */
     var unlockedTiers: CarUpgradeTier = 1u,
+    /**
+     * Should always be not nil, even when car is locked.
+     */
     var unlockedLevels: CarUpgradeLevel = 4u,
     var carTuningState: CarTuningState = CarTuningState(),
     var epicUpgradeItems: UpgradeItems = 0u,
@@ -24,6 +33,9 @@ data class CarState(
     @FromVersion("47.1.0")
     var hasReceivedEvoTickets: Boolean = false,
     var customization: CarCustomizationState = CarCustomizationState(),
+    /**
+     * Amount of blueprints to unlock car or upgrade to the next tier.
+     */
     var tierBlueprints: Blueprints = 0u,
     var ownedDecalVisuals: List<CarDecalVisualId> = listOf(),
     var isOwned: Boolean = false,
