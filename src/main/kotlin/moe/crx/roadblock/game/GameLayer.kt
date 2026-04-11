@@ -21,12 +21,16 @@ class GameLayer(private val workingDirectory: String, private val ver: Serializa
                 return SerializationVersion("3.9.2")
             }
 
-            if (ver eq "3.6.3") {
-                return SerializationVersion("3.6.2000")
+            if (ver eq "3.8.0") {
+                return SerializationVersion("3.8.5")
             }
 
             if (ver eq "3.7.5") {
                 return SerializationVersion("3.7.1002")
+            }
+
+            if (ver eq "3.6.3") {
+                return SerializationVersion("3.6.2000")
             }
 
             return ver

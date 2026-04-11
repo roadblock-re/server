@@ -21,9 +21,9 @@ data class ProcessPendingSeshatTransactionsRequest(
     var carIdForRefill: CarId?,
     var iapTransactionInfo: IAPTransactionInfo?,
     var dynamicGiftTransactionInfo: DynamicGiftTransactionInfo?,
-    @FromVersion("3.9.0") // TODO find exact version
+    @FromVersion("3.9.0")
     var calendarEventId: CalendarEventId? = null,
-    @FromVersion("3.9.0") // TODO find exact version
+    @FromVersion("3.9.0")
     var relayOfferTierId: RelayOfferTierId? = null,
     @FromVersion("24.0.0")
     var entitlementQueryResponse: EntitlementQueryResponse? = null,

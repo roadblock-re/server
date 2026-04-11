@@ -15,7 +15,7 @@ data class TLEventData(
     var timestamp: Instant,
     var forceQuarantine: Boolean,
     var isAutoClaimed: Boolean,
-    @FromVersion("3.6.0")
+    @FromVersion("3.9.0")
     var nitroGhostResetCount: UInt = 0u,
     @FromVersion("3.9.0")
     var bestNitroGhostTimeInSeconds: UInt = 0u,

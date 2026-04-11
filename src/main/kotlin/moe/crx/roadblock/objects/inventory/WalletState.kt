@@ -11,8 +11,8 @@ data class WalletState(
     @FromVersion("45.0.0")
     var currency: CurrencyType = CurrencyType.Credits,
     var balance: Money = 0,
-    @FromVersion("3.9.0") @UntilVersion("45.0.0")
+    @FromVersion("3.8.0") @UntilVersion("45.0.0")
     var legacyCurrency: CurrencyType = currency,
-    @FromVersion("3.9.0") @UntilVersion("24.6.0")
+    @FromVersion("3.8.0") @UntilVersion("24.6.0")
     var eventId: CalendarEventId? = null,
 )
