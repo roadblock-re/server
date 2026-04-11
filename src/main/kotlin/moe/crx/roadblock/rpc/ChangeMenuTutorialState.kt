@@ -6,6 +6,7 @@ import moe.crx.roadblock.objects.playerstats.MenuTutorialType
 import moe.crx.roadblock.objects.playerstats.TutorialState
 import moe.crx.roadblock.rpc.base.RequestPacket
 import moe.crx.roadblock.rpc.base.UpdatesQueueWithRootReactionsResponse
+import moe.crx.roadblock.rpc.base.flatten
 import moe.crx.roadblock.updates.PlayerStatsMenuTutorialStateChanged
 
 @Serializable

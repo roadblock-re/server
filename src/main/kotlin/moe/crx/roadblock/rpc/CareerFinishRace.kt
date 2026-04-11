@@ -11,6 +11,7 @@ import moe.crx.roadblock.objects.quarantine.QuarantineData
 import moe.crx.roadblock.objects.transactions.CustomMultiplierType
 import moe.crx.roadblock.rpc.base.RequestPacket
 import moe.crx.roadblock.rpc.base.UpdatesQueueWithRootReactionsResponse
+import moe.crx.roadblock.rpc.base.flatten
 
 @Serializable
 data class CareerFinishRaceRequest(

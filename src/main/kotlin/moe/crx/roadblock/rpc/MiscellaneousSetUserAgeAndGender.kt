@@ -7,6 +7,7 @@ import moe.crx.roadblock.objects.Age
 import moe.crx.roadblock.objects.miscellaneous.Gender
 import moe.crx.roadblock.rpc.base.RequestPacket
 import moe.crx.roadblock.rpc.base.UpdatesQueueWithRootReactionsResponse
+import moe.crx.roadblock.rpc.base.flatten
 import moe.crx.roadblock.updates.MiscellaneousUnderageDisclaimerShownChanged
 import moe.crx.roadblock.updates.MiscellaneousUserAgeAndGenderChanged
 

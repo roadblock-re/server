@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.GameConnection
 import moe.crx.roadblock.rpc.base.RequestPacket
 import moe.crx.roadblock.rpc.base.UpdatesQueueWithRootReactionsResponse
+import moe.crx.roadblock.rpc.base.flatten
 import moe.crx.roadblock.updates.MiscellaneousUserNameChanged
 
 @Serializable

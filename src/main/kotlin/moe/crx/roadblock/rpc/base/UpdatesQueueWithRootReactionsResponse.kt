@@ -8,9 +8,9 @@ import moe.crx.roadblock.updates.StatusUpdateGroup
 @Serializable
 open class UpdatesQueueWithRootReactionsResponse(
     var updates: StatusUpdatesQueueWithRootReactions = StatusUpdatesQueueWithRootReactions(),
-) : ResponsePacket() {
-    fun flatten(vararg rootEntries: StatusUpdateGroup): UpdatesQueueWithRootReactionsResponse {
-        updates = flat(*rootEntries)
-        return this
-    }
+) : ResponsePacket()
+
+fun <R : UpdatesQueueWithRootReactionsResponse> R.flatten(vararg rootEntries: StatusUpdateGroup): R {
+    updates = flat(*rootEntries)
+    return this
 }

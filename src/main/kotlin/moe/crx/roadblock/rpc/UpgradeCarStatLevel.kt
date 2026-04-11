@@ -8,6 +8,7 @@ import moe.crx.roadblock.objects.CarUpgradeLevel
 import moe.crx.roadblock.objects.inventory.CarStatType
 import moe.crx.roadblock.rpc.base.RequestPacket
 import moe.crx.roadblock.rpc.base.UpdatesQueueWithRootReactionsResponse
+import moe.crx.roadblock.rpc.base.flatten
 import moe.crx.roadblock.updates.InventoryCarUpgradeLevelChanged
 
 @Serializable

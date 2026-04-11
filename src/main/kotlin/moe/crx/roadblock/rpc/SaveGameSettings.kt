@@ -5,6 +5,7 @@ import moe.crx.roadblock.game.GameConnection
 import moe.crx.roadblock.objects.settings.GameSettings
 import moe.crx.roadblock.rpc.base.RequestPacket
 import moe.crx.roadblock.rpc.base.UpdatesQueueWithRootReactionsResponse
+import moe.crx.roadblock.rpc.base.flatten
 import moe.crx.roadblock.updates.MiscellaneousGameSettingsChanged
 
 @Serializable

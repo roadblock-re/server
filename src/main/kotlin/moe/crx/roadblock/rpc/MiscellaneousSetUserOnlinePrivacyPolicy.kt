@@ -7,6 +7,7 @@ import moe.crx.roadblock.game.serialization.UntilVersion
 import moe.crx.roadblock.objects.miscellaneous.GDPRCompliancy
 import moe.crx.roadblock.rpc.base.RequestPacket
 import moe.crx.roadblock.rpc.base.UpdatesQueueWithRootReactionsResponse
+import moe.crx.roadblock.rpc.base.flatten
 import moe.crx.roadblock.updates.MiscellaneousUserGPDRComplianceChanged
 
 @Serializable
