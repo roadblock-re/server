@@ -1,15 +1,11 @@
 package moe.crx.roadblock.objects.tle
 
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.game.serialization.ByteEnum
-import moe.crx.roadblock.game.serialization.FromVersion
-import moe.crx.roadblock.game.serialization.UntilVersion
+import moe.crx.roadblock.game.serialization.ByteEnumUntil
 
 @Serializable
 data class RankTLEventClaimData(
-    @FromVersion("24.0.0")
+    @ByteEnumUntil("24.0.0")
     var state: RankTLEventClaimState = RankTLEventClaimState.Unknown,
-    @UntilVersion("24.0.0") @ByteEnum
-    var legacyState: RankTLEventClaimState = RankTLEventClaimState.Unknown,
     var rankRewardIdx: UByte,
 )

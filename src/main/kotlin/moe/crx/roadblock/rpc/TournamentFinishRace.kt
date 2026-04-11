@@ -3,10 +3,10 @@ package moe.crx.roadblock.rpc
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.GameConnection
 import moe.crx.roadblock.game.serialization.Blob
-import moe.crx.roadblock.game.serialization.ByteEnum
-import moe.crx.roadblock.objects.transactions.CustomMultiplierType
+import moe.crx.roadblock.game.serialization.ByteEnumUntil
 import moe.crx.roadblock.objects.RaceToken
 import moe.crx.roadblock.objects.multiplayer.RaceStats
+import moe.crx.roadblock.objects.transactions.CustomMultiplierType
 import moe.crx.roadblock.rpc.base.RequestPacket
 import moe.crx.roadblock.rpc.base.UpdatesQueueWithRootReactionsResponse
 
@@ -24,9 +24,9 @@ data class TournamentFinishRaceRequest(
 
 @Serializable
 data class TournamentFinishRaceResponse(
-    @ByteEnum
+    @ByteEnumUntil("45.0.0") // TODO find exact version
     var customAdsMultiplier: CustomMultiplierType? = null,
-    @ByteEnum
+    @ByteEnumUntil("45.0.0") // TODO find exact version
     var defaultAdsMultiplier: CustomMultiplierType? = null,
 ) : UpdatesQueueWithRootReactionsResponse()
 

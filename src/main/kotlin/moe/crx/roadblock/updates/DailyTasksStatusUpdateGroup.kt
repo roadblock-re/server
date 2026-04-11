@@ -2,9 +2,8 @@ package moe.crx.roadblock.updates
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import moe.crx.roadblock.game.serialization.ByteEnum
+import moe.crx.roadblock.game.serialization.ByteEnumUntil
 import moe.crx.roadblock.game.serialization.SerializationVersion
-import moe.crx.roadblock.game.serialization.UntilVersion
 import moe.crx.roadblock.game.serialization.Variant
 import moe.crx.roadblock.objects.dailytasks.DailyTaskRaceReadyRewardType
 import moe.crx.roadblock.objects.dailytasks.DailyTaskType
@@ -35,37 +34,32 @@ data class DailyTasksReset(
 
 @Serializable
 data class DailyTasksTaskUnlocked(
-    @UntilVersion("24.0.0") @ByteEnum // TODO find exact version
-    var legacyType: DailyTaskType = DailyTaskType.ClaimCardPacks,
+    @ByteEnumUntil("45.0.0") // TODO find exact version
     var type: DailyTaskType = DailyTaskType.ClaimCardPacks,
 ) : DailyTasksStatusUpdateGroup()
 
 @Serializable
 data class DailyTasksTaskIncreased(
-    @UntilVersion("24.0.0") @ByteEnum // TODO find exact version
-    var legacyType: DailyTaskType = DailyTaskType.ClaimCardPacks,
+    @ByteEnumUntil("45.0.0") // TODO find exact version
     var type: DailyTaskType = DailyTaskType.ClaimCardPacks,
     var amount: UInt,
 ) : DailyTasksStatusUpdateGroup()
 
 @Serializable
 data class DailyTasksTaskCompleted(
-    @UntilVersion("24.0.0") @ByteEnum // TODO find exact version
-    var legacyType: DailyTaskType = DailyTaskType.ClaimCardPacks,
+    @ByteEnumUntil("45.0.0") // TODO find exact version
     var type: DailyTaskType = DailyTaskType.ClaimCardPacks,
 ) : DailyTasksStatusUpdateGroup()
 
 @Serializable
 data class DailyTasksTaskClaimed(
-    @UntilVersion("24.0.0") @ByteEnum // TODO find exact version
-    var legacyType: DailyTaskType = DailyTaskType.ClaimCardPacks,
+    @ByteEnumUntil("45.0.0") // TODO find exact version
     var type: DailyTaskType = DailyTaskType.ClaimCardPacks,
 ) : DailyTasksStatusUpdateGroup()
 
 @Serializable
 data class DailyTasksTaskEnabled(
-    @UntilVersion("24.0.0") @ByteEnum // TODO find exact version
-    var legacyType: DailyTaskType = DailyTaskType.ClaimCardPacks,
+    @ByteEnumUntil("45.0.0") // TODO find exact version
     var type: DailyTaskType = DailyTaskType.ClaimCardPacks,
 ) : DailyTasksStatusUpdateGroup()
 
