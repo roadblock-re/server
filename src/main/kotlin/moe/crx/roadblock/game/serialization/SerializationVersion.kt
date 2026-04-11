@@ -7,16 +7,25 @@ data class SerializationVersion(var major: UShort, var minor: UShort, var build:
     Comparable<SerializationVersion> {
 
     companion object {
+        val cache = mutableMapOf<String, SerializationVersion>()
         val versionRegex = Regex("(\\d+)\\.(\\d+)\\.(\\d+)(\\w*)")
     }
 
     constructor() : this(0u, 0u, 0u)
 
     constructor(version: String) : this() {
-        val match = versionRegex.find(version)
-        major = match?.groups[1]?.value?.toShortOrNull()?.toUShort() ?: 0u
-        minor = match?.groups[2]?.value?.toShortOrNull()?.toUShort() ?: 0u
-        build = match?.groups[3]?.value?.toShortOrNull()?.toUShort() ?: 0u
+        val cachedVersion = cache.computeIfAbsent(version) {
+            val match = versionRegex.find(version)
+            SerializationVersion().apply {
+                major = match?.groups[1]?.value?.toShortOrNull()?.toUShort() ?: 0u
+                minor = match?.groups[2]?.value?.toShortOrNull()?.toUShort() ?: 0u
+                build = match?.groups[3]?.value?.toShortOrNull()?.toUShort() ?: 0u
+            }
+        }
+
+        major = cachedVersion.major
+        minor = cachedVersion.minor
+        build = cachedVersion.build
     }
 
     override fun compareTo(other: SerializationVersion): Int {

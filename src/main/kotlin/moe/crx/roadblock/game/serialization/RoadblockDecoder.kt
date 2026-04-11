@@ -137,6 +137,12 @@ class RoadblockDecoder(
         ) {
             decodeByte().toInt() and 0xFF
         } else if (
+            enumDescriptor.annotations.isByteEnumUntil(version)
+            || elementAnnotations.isByteEnumUntil(version)
+            || currentDescriptor?.getElementAnnotations(elementIndex).isByteEnumUntil(version)
+        ) {
+            decodeByte().toInt() and 0xFF
+        } else if (
             enumDescriptor.annotations.isStringEnum()
             || elementAnnotations.isStringEnum()
             || currentDescriptor?.getElementAnnotations(elementIndex).isStringEnum()
