@@ -14,6 +14,7 @@ import moe.crx.roadblock.objects.inventory.*
 // In 3.6 both wallets and iapWallets were List<WalletState> with currency and balance fields.
 // From 3.8 iapWallets became Map<CurrencyType, WalletState> and WalletState fields were changed.
 // And from 45.0.0 they've changed WalletState fields back again! Why? What a disaster.
+// Well... There are also could be an enum list so wrong wallets count caused game to crash. Ugh.
 
 // 3.6
 // WalletState: currency, balance
