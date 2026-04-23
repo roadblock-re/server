@@ -2,7 +2,6 @@ package moe.crx.roadblock.rpc.base
 
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.FromVersion
-import moe.crx.roadblock.game.serialization.SerializationVersion
 import moe.crx.roadblock.game.serialization.UntilVersion
 import moe.crx.roadblock.objects.*
 import moe.crx.roadblock.objects.models.State
@@ -35,17 +34,13 @@ data class GameLoginResponse(
     var isVipPlayer: Boolean = false,
     @FromVersion("24.0.0") @UntilVersion("50.1.0") // TODO Find exact version
     var isForcedUserName: Boolean = false,
-    var signatureValue: UInt = GAME_SIGNATURE,
-    var serializationVersion: SerializationVersion,
     var state: State,
 ) {
     companion object {
         const val MAGIC: UByte = 0u
-        const val GAME_SIGNATURE: UInt = 0x47DCEC79u
     }
 
     init {
         check(magic == MAGIC)
-        check(signatureValue == GAME_SIGNATURE)
     }
 }

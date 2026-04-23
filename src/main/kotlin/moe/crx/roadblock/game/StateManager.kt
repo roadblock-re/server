@@ -20,6 +20,34 @@ class StateManager(workingDirectory: String) {
         }
 
         var lock: ReentrantLock = ReentrantLock()
+
+        fun saveVersion(ver: SerializationVersion): SerializationVersion {
+            if (ver eq "24.0.1") {
+                return SerializationVersion("24.0.14")
+            }
+
+            if (ver eq "3.9.0") {
+                return SerializationVersion("3.9.2")
+            }
+
+            if (ver eq "3.8.0") {
+                return SerializationVersion("3.8.5")
+            }
+
+            if (ver eq "3.7.5") {
+                return SerializationVersion("3.7.1002")
+            }
+
+            if (ver eq "3.6.3") {
+                return SerializationVersion("3.6.2000")
+            }
+
+            if (ver eq "50.1.1") {
+                return SerializationVersion("50.0.2")
+            }
+
+            return ver
+        }
     }
 
     var stateFile = File(workingDirectory, "gamestate.saved.json")
@@ -46,6 +74,6 @@ class StateManager(workingDirectory: String) {
     }
 
     fun default(ver: SerializationVersion): State {
-        return State()
+        return State(version = saveVersion(ver))
     }
 }

@@ -2,10 +2,13 @@ package moe.crx.roadblock.objects.models
 
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.FromVersion
+import moe.crx.roadblock.game.serialization.SerializationVersion
 import moe.crx.roadblock.game.serialization.UntilVersion
 
 @Serializable
 data class State(
+    var signature: UInt = GAME_SIGNATURE,
+    var version: SerializationVersion,
     var blackMarket: BlackMarketState = BlackMarketState(),
     var career: CareerState = CareerState(),
     var gachaSystem: GachaSystemState = GachaSystemState(),
@@ -58,4 +61,12 @@ data class State(
     var tournamentSystem: TournamentSystemState = TournamentSystemState(),
     @FromVersion("45.0.0")
     var userCustomizableBundleSystem: UserCustomizableBundleSystemState = UserCustomizableBundleSystemState(),
-)
+) {
+    companion object {
+        const val GAME_SIGNATURE: UInt = 0x47DCEC79u
+    }
+
+    init {
+        check(signature == GAME_SIGNATURE)
+    }
+}
