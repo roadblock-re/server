@@ -181,7 +181,7 @@ class GameConnection(
                         data = Blob(layer.getGameDb().readBytes()),
                     )
                 ),
-                serializationVersion = GameLayer.reportVersion(loginHeader.gameVersion),
+                serializationVersion = GameLayer.reportVersion(ver),
                 state = gameState,
             )
 

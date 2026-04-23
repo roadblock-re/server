@@ -9,9 +9,7 @@ import kotlin.reflect.KClass
 class GameLayer(private val workingDirectory: String, private val ver: SerializationVersion) {
 
     companion object {
-        fun reportVersion(gameVersion: String): SerializationVersion {
-            val ver = SerializationVersion(gameVersion)
-
+        fun reportVersion(ver: SerializationVersion): SerializationVersion {
             // TODO Investigate this phenomena and add more versions
             if (ver eq "24.0.1") {
                 return SerializationVersion("24.0.14")
