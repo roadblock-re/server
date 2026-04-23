@@ -3,11 +3,8 @@ package moe.crx.roadblock.rpc.base
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.FromVersion
 import moe.crx.roadblock.game.serialization.SerializationVersion
-import moe.crx.roadblock.objects.ActionResponseHeader
-import moe.crx.roadblock.objects.ConfigData
-import moe.crx.roadblock.objects.ServerDBDataSerialization
-import moe.crx.roadblock.objects.ServerError
-import moe.crx.roadblock.objects.StatusUpdatesQueueWithRootReactions
+import moe.crx.roadblock.game.serialization.UntilVersion
+import moe.crx.roadblock.objects.*
 import moe.crx.roadblock.objects.models.State
 
 @Serializable
@@ -18,19 +15,25 @@ data class GameLoginResponse(
     var revision: String = "b1610",
     var actionResponseParams: ActionResponseHeader,
     var lastServerActionId: UInt,
+    @UntilVersion("50.1.0") // TODO Find exact version
     var updatesQueue: StatusUpdatesQueueWithRootReactions = StatusUpdatesQueueWithRootReactions(),
     var configData: ConfigData,
     var serverDBs: ServerDBDataSerialization,
+    @FromVersion("50.1.0") // TODO Find exact version
+    var someByte: Byte = 0,
     var serverSyslogId: String = "a9b-aaaaaaaa-bbbbbbbb",
     var buildId: String = "b1610",
     @FromVersion("24.6.0")
     var instance: String = "",
+    @UntilVersion("50.1.0") // TODO Find exact version
     var didMaintenanceFreeRefill: Boolean = false,
+    @UntilVersion("50.1.0") // TODO Find exact version
     var remindNewGarageLevel: Boolean = false,
+    @UntilVersion("50.1.0") // TODO Find exact version
     var isClientReloadNeeded: Boolean = false,
-    @FromVersion("3.7.0")
+    @FromVersion("3.7.0") @UntilVersion("50.1.0") // TODO Find exact version
     var isVipPlayer: Boolean = false,
-    @FromVersion("24.0.0")
+    @FromVersion("24.0.0") @UntilVersion("50.1.0") // TODO Find exact version
     var isForcedUserName: Boolean = false,
     var signatureValue: UInt = GAME_SIGNATURE,
     var serializationVersion: SerializationVersion,
