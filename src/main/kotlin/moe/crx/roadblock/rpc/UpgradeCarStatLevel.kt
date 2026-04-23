@@ -29,7 +29,7 @@ suspend fun handleUpgradeCarStatLevel(
     val car = session.gameState.inventory.cars[request.carId]
     checkNotNull(car)
 
-    val stat = car.carTuningState.stats[request.statType]
+    val stat = car.carTuning.stats[request.statType]
     stat.currentUpgradeLevel++
 
     val reaction = InventoryCarUpgradeLevelChanged(

@@ -9,7 +9,7 @@ import moe.crx.roadblock.objects.RaceCount
 @Serializable
 data class CarUsageStats(
     var lastUsage: Instant? = null,
-    var consecutiveUsedDays: ConsecutiveDays? = null,
+    var consecutiveDays: ConsecutiveDays? = null,
     var numRacesCareer: RaceCount = 0u,
     var numRacesMultiplayer: RaceCount = 0u,
     var numRacesTLE: RaceCount = 0u,

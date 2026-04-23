@@ -1,6 +1,7 @@
 package moe.crx.roadblock.objects.inventory
 
 import kotlinx.datetime.Instant
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.EnumList
 import moe.crx.roadblock.game.serialization.FromVersion
@@ -23,9 +24,9 @@ data class CarState(
      * Should always be not nil, even when car is locked.
      */
     var unlockedLevels: CarUpgradeLevel = 4u,
-    var carTuningState: CarTuningState = CarTuningState(),
-    var epicUpgradeItems: UpgradeItems = 0u,
-    var freeUpgradesForStat: EnumList<FreeUpgrades, CarStatType> = enumListOf { 0u },
+    var carTuning: CarTuningState = CarTuningState(),
+    var epicItems: UpgradeItems = 0u,
+    var freeUpgrades: EnumList<FreeUpgrades, CarStatType> = enumListOf { 0u },
     var maintenance: CarMaintenanceState,
     var usageStats: CarUsageStats = CarUsageStats(),
     @FromVersion("45.0.0")
@@ -38,7 +39,9 @@ data class CarState(
      */
     var tierBlueprints: Blueprints = 0u,
     var ownedDecalVisuals: List<CarDecalVisualId> = listOf(),
+    @SerialName("owned")
     var isOwned: Boolean = false,
+    @SerialName("unlockItemOwned")
     var isCarKeyOwned: Boolean = false,
     var ownedCustomParts: List<CarCustomPartId> = listOf(),
     @UntilVersion("24.0.0")
