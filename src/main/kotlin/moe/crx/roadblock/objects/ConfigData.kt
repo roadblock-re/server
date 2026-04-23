@@ -17,6 +17,7 @@ import net.jpountz.lz4.LZ4FastDecompressor
 
 @Serializable(ConfigDataSerializer::class)
 data class ConfigData(
+    @ByteEnum
     var compression: CompressionType,
     var data: Blob,
 )
