@@ -65,7 +65,7 @@ class GameConnection(
     var requestType: UShort = 0u
 
     val stateManager = StateManager(workingDirectory)
-    var gameState = stateManager.default(ver)
+    var gameState = stateManager.default()
 
     suspend fun send(bytes: ByteArray, preferDeflated: Boolean = false) {
         // TODO print received packets ANSI
@@ -111,7 +111,7 @@ class GameConnection(
         if (bytes.first().toInt() == 2 && connectionState == ConnectionState.NOT_AUTHORIZED) {
             connectionState = ConnectionState.AUTHORIZED
 
-            gameState = stateManager.read(ver)
+            gameState = stateManager.read()
 
             sendObject(
                 ReconnectionResponse(
@@ -155,10 +155,11 @@ class GameConnection(
             format = RoadblockFormat(ver)
             layer = GameLayer(workingDirectory, ver)
 
-            format.decodeFromByteArray<GameLoginRequest>(bytes)
+            val loginRequest = format.decodeFromByteArray<GameLoginRequest>(bytes)
 
             LOG.info(
-                "[I] Game authorized, negotiated version {}.{}.{}, {} packet types",
+                "[I] Client {} authorized, negotiated version {}.{}.{}, {} packet types",
+                loginRequest.clientId,
                 ver.major,
                 ver.minor,
                 ver.build,
@@ -166,7 +167,7 @@ class GameConnection(
             )
             connectionState = ConnectionState.AUTHORIZED
 
-            gameState = stateManager.read(ver)
+            gameState = stateManager.read()
 
             val loginResponse = GameLoginResponse(
                 lastServerActionId = 0u,
@@ -183,6 +184,8 @@ class GameConnection(
                 ),
                 state = gameState,
             )
+
+            loginResponse.state.version = StateManager.saveVersion(ver)
 
             loginResponse.state.apply {
                 clubSystem.clubData = null
@@ -326,6 +329,6 @@ class GameConnection(
     }
 
     fun saveState() {
-        stateManager.write(gameState, ver)
+        stateManager.write(gameState)
     }
 }

@@ -8,7 +8,7 @@ import moe.crx.roadblock.game.serialization.UntilVersion
 @Serializable
 data class State(
     var signature: UInt = GAME_SIGNATURE,
-    var version: SerializationVersion,
+    var version: SerializationVersion = SerializationVersion(),
     var blackMarket: BlackMarketState = BlackMarketState(),
     var career: CareerState = CareerState(),
     var gachaSystem: GachaSystemState = GachaSystemState(),

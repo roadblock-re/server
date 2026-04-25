@@ -53,7 +53,7 @@ class StateManager(workingDirectory: String) {
     var stateFile = File(workingDirectory, "gamestate.saved.json")
     var stateBackupFile = File(workingDirectory, "gamestate.saved.json.bak")
 
-    fun read(ver: SerializationVersion): State {
+    fun read(): State {
         lock.withLock {
             runCatching {
                 return json.decodeFromString(stateFile.readText())
@@ -62,18 +62,18 @@ class StateManager(workingDirectory: String) {
                 it.printStackTrace()
             }
 
-            return default(ver)
+            return default()
         }
     }
 
     // TODO Remove state argument, StateManager should store state
-    fun write(state: State, ver: SerializationVersion) {
+    fun write(state: State) {
         lock.withLock {
             stateFile.writeText(json.encodeToString(state))
         }
     }
 
-    fun default(ver: SerializationVersion): State {
-        return State(version = saveVersion(ver))
+    fun default(): State {
+        return State()
     }
 }
