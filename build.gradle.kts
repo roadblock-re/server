@@ -12,6 +12,7 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
     id("io.ktor.plugin")
+    id("com.gorylenko.gradle-git-properties") version "2.5.7"
 }
 
 application {
@@ -32,8 +33,8 @@ tasks.named<ShadowJar>("shadowJar") {
 
 dependencies {
     implementation("org.fusesource.jansi:jansi:2.4.2")
-    implementation("org.bouncycastle:bcpkix-jdk18on:1.80")
-    implementation("org.bouncycastle:bcprov-jdk18on:1.80")
+    implementation("org.bouncycastle:bcpkix-jdk18on:1.84")
+    implementation("org.bouncycastle:bcprov-jdk18on:1.84")
     implementation("org.lz4:lz4-java:1.8.0")
 
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinxDatetimeVersion")
