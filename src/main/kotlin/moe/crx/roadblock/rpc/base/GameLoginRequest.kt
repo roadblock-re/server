@@ -2,6 +2,7 @@ package moe.crx.roadblock.rpc.base
 
 import kotlinx.serialization.Serializable
 import moe.crx.roadblock.game.serialization.FromVersion
+import moe.crx.roadblock.game.serialization.SerializationVersion
 import moe.crx.roadblock.objects.ActionRequestHeader
 import moe.crx.roadblock.objects.ActionResponseHeader
 import moe.crx.roadblock.objects.CalendarEventId
@@ -35,6 +36,8 @@ data class GameLoginRequest(
     var platformUsername: String? = null,
     @FromVersion("24.0.0")
     var psnIssuerId: PsnIssuerId? = null,
+    @FromVersion("50.1.0") // TODO Find exact version
+    var gameStateVersion: SerializationVersion = SerializationVersion(),
     @FromVersion("24.0.0")
     var serverDeltaTimeMinutes: UInt = 0u,
     var clientCachedEvents: List<CachedEventInfo>,

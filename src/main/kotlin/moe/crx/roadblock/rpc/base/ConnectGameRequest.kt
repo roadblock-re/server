@@ -8,5 +8,5 @@ data class ConnectGameRequest(
     @SerialName("fed_id")
     var fedId: String,
     @SerialName("room_id")
-    var roomId: String,
+    var roomId: String = "",
 )
