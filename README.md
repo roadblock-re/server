@@ -12,17 +12,18 @@ Server code is licensed under AGPL. Please, respect that and publish your code c
 * 🟡 - game starts and goes past tutorial
 * 🔴 - not working
 
-| Game version   | Status |
-|----------------|--------|
-| 47.1.0         | 🟢     |
-| 45.0.x         | 🟡     |
-| 24.6.x         | 🟡     |
-| 24.0.x         | 🟡     |
-| 3.9.x          | 🟢     |
-| 3.8.x          | 🟡     |
-| 3.7.x          | 🟡     |
-| 3.6.x          | 🟡     |
-| Other versions | 🔴     |
+| Game version   | Status | Notes                                |
+|----------------|--------|--------------------------------------|
+| 50.1.1         | 🔴     | Something was changed in login flow. |
+| 47.1.0         | 🟢     |                                      |
+| 45.0.x         | 🟡     |                                      |
+| 24.6.x         | 🟡     |                                      |
+| 24.0.x         | 🟡     |                                      |
+| 3.9.x          | 🟢     |                                      |
+| 3.8.x          | 🟡     |                                      |
+| 3.7.x          | 🟡     |                                      |
+| 3.6.x          | 🟡     |                                      |
+| Other versions | 🔴     |                                      |
 
 More versions may be supported in the future.
 
